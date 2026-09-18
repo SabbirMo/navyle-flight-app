@@ -15,7 +15,6 @@ class AppColors {
   static const Color shadowColor = Color(0xFF48626B); //#48626B
   static const Color blueShadow = Color(0xFF3B82F6); //#3B82F6
   static const Color blueColor = Color(0xFF2664EB); //#2664EB
-  static const Color blackShadow = Color(0xFF0F172A); //#0F172A
 
   static const Gradient splashGradient = LinearGradient(
     colors: [lightWhite, white, white],
@@ -23,4 +22,7 @@ class AppColors {
     end: Alignment.bottomCenter,
     stops: [0.0, 0.45, 1.0],
   );
+
+  // Black Theme
+  static const Color blackShadow = Color(0xFF0F172A); //#0F172A
 }

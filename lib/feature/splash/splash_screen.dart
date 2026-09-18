@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_manager.dart';
+import 'package:navyla_flight_app/core/theme/theme_mode_provder.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -92,11 +93,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(themeModeProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(gradient: AppColors.splashGradient),
+        decoration: BoxDecoration(
+          gradient: isDark ? null : AppColors.splashGradient,
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +133,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   position: _effectSlideAnimation,
                   child: ScaleTransition(
                     scale: _effectScaleAnimation,
-                    child: Image.asset(ImageManager.effect),
+                    child: Image.asset(
+                      isDark ? ImageManager.effect2 : ImageManager.effect,
+                    ),
                   ),
                 ),
               ),
