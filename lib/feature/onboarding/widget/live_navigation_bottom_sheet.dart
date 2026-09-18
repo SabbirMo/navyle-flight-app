@@ -8,6 +8,7 @@ import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/core/widgets/start_animation.dart';
 import 'package:navyla_flight_app/feature/onboarding/provider/location_provider.dart';
+import 'package:navyla_flight_app/feature/onboarding/widget/squircke_icon_widget.dart';
 
 class LiveNavigationBottomSheet extends ConsumerStatefulWidget {
   final VoidCallback? onAllow;
@@ -73,7 +74,6 @@ class _LiveNavigationBottomSheetState
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -104,29 +104,7 @@ class _LiveNavigationBottomSheetState
 
             // Location Target Icon with glow
             _animations.buttonTransition(
-              child: Container(
-                width: 76.w,
-                height: 76.w,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2563EB),
-                  borderRadius: BorderRadius.circular(24.r),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF2563EB).withValues(alpha: 0.38),
-                      blurRadius: 28,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.my_location_rounded,
-                    color: Colors.white,
-                    size: 34.sp,
-                  ),
-                ),
-              ),
+              child: SquircleIcon(icon: Icons.my_location_rounded),
             ),
 
             SizedBox(height: 40.h),

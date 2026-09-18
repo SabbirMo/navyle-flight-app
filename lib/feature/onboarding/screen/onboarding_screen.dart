@@ -7,6 +7,7 @@ import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/feature/onboarding/provider/onboarding_provider.dart';
 import 'package:navyla_flight_app/feature/onboarding/widget/live_navigation_bottom_sheet.dart';
+import 'package:navyla_flight_app/feature/onboarding/widget/notification_bottom_sheet.dart';
 import 'package:navyla_flight_app/feature/onboarding/widget/onboarding_screen_four.dart';
 import 'package:navyla_flight_app/feature/onboarding/widget/onboarding_screen_one.dart';
 import 'package:navyla_flight_app/feature/onboarding/widget/onboarding_screen_three.dart';
@@ -30,6 +31,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = ref.watch(onboardingProvider);
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -73,6 +75,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               .nextPage(_pageController, 4);
                         },
                       );
+                    } else if (currentIndex == 2) {
+                      NotificationBottomSheet.show(
+                        context,
+                        onEnable: () {
+                          ref
+                              .read(onboardingProvider.notifier)
+                              .nextPage(_pageController, 4);
+                        },
+                        onSkip: () {
+                          ref
+                              .read(onboardingProvider.notifier)
+                              .nextPage(_pageController, 4);
+                        },
+                      );
                     } else {
                       ref
                           .read(onboardingProvider.notifier)
@@ -82,22 +98,24 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   icon: Icons.arrow_forward_ios,
                 ),
               ),
-              SizedBox(height: 2.h),
-              TextButton(
-                onPressed: () {
-                  _pageController.animateToPage(
-                    3,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-                child: Text(
-                  AppString.skipButton,
-                  style: StyleManager.interMedium12(AppColors.grayColor),
+              if (currentIndex != 3) ...[
+                SizedBox(height: 2.h),
+                TextButton(
+                  onPressed: () {
+                    _pageController.animateToPage(
+                      3,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
+                  },
+                  child: Text(
+                    AppString.skipButton,
+                    style: StyleManager.interMedium12(AppColors.grayColor),
+                  ),
                 ),
-              ),
+              ],
 
-              SizedBox(height: 8.h),
+              SizedBox(height: currentIndex == 3 ? 45.h : 8.h),
             ],
           ),
         ),

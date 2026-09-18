@@ -26,4 +26,13 @@ class AppString {
   static const String allowWhileUsingApp = "Allow While Using App";
   static const String notNow = "Not Now";
   static const String privacyBadgeText = "PRIVACY FIRST • NO DATA SHARED";
+
+  static const String notificationSheetTitle = "Never Miss an Update";
+  static const String notificationSheetDesc =
+      "Stay informed about gate changes, boarding times, \nand travel alerts even when your phone is locked.";
+  static const String notificationSheetNote =
+      "Note : You can enable or disable notification access anytime in Settings.";
+  static const String enableNotification = "Enable Notification";
+  static const String skipForNow = "Skip for Now";
 }
+
