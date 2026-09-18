@@ -12,6 +12,7 @@ class CustomButton extends StatelessWidget {
   final double? borderRadius;
   final Color? iconColor;
   final double? iconSize;
+  final bool boxShadow;
   final bool isLoading;
   final bool isEnabled;
 
@@ -25,6 +26,7 @@ class CustomButton extends StatelessWidget {
     this.borderRadius,
     this.iconColor = AppColors.white,
     this.iconSize,
+    this.boxShadow = false,
     this.isLoading = false,
     this.isEnabled = true,
   });
@@ -40,6 +42,15 @@ class CustomButton extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
         color: isEnabled ? AppColors.primaryColor : AppColors.unSelectColor,
+        boxShadow: boxShadow
+            ? <BoxShadow>[
+                BoxShadow(
+                  color: AppColors.primaryColor.withValues(alpha: 0.42),
+                  blurRadius: 18,
+                  offset: const Offset(0, 8),
+                ),
+              ]
+            : null,
       ),
       child: Material(
         color: Colors.transparent,

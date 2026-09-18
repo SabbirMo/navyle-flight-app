@@ -66,5 +66,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>NAVAYLA needs your location to guide you through the terminal and send proximity alerts for your gate.</string>
 </dict>
 </plist>
