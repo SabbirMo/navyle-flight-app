@@ -1,4 +1,7 @@
 class AppRouterName {
   static const String splashScreen = '/splash';
   static const String onBoardingScreen = '/onBoarding';
+
+  //auth
+  static const String authSelectionScreen = '/authSelection';
 }

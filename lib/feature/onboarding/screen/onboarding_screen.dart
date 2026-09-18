@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/feature/onboarding/provider/onboarding_provider.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 import 'package:navyla_flight_app/feature/onboarding/widget/live_navigation_bottom_sheet.dart';
 import 'package:navyla_flight_app/feature/onboarding/widget/notification_bottom_sheet.dart';
 import 'package:navyla_flight_app/feature/onboarding/widget/onboarding_screen_four.dart';
@@ -89,6 +91,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               .nextPage(_pageController, 4);
                         },
                       );
+                    } else if (currentIndex == 3) {
+                      context.pushReplacement(AppRouterName.authSelectionScreen);
                     } else {
                       ref
                           .read(onboardingProvider.notifier)

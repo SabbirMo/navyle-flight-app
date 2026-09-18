@@ -34,5 +34,13 @@ class AppString {
       "Note : You can enable or disable notification access anytime in Settings.";
   static const String enableNotification = "Enable Notification";
   static const String skipForNow = "Skip for Now";
-}
 
+  // Auth Selection
+  static const String welcomeToNavyla = "Welcome to NAVYLA";
+  static const String authSelectionSubtitle =
+      "Choose how you'd like to get started.";
+  static const String continueWithGoogle = "Continue with google";
+  static const String continueWithApple = "Continue with Apple";
+  static const String orContinueWith = "Or Continue with";
+  static const String continueWithEmail = "Continue with E-mail";
+}

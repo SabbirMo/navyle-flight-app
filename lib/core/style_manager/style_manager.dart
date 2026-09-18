@@ -30,6 +30,15 @@ class StyleManager {
     );
   }
 
+  static TextStyle sfProSemiBold14(Color color) {
+    return TextStyle(
+      fontSize: 14.sp,
+      fontWeight: FontWeight.w400,
+      fontFamily: "SF-Pro",
+      color: color,
+    );
+  }
+
   static TextStyle interMedium12(Color color) {
     return GoogleFonts.inter(
       fontSize: 12.sp,
@@ -50,6 +59,15 @@ class StyleManager {
     return GoogleFonts.roboto(
       fontSize: 20.sp,
       fontWeight: FontWeight.w700,
+      color: color,
+    );
+  }
+
+  //poppins
+  static TextStyle poppinsBold28(Color color) {
+    return GoogleFonts.poppins(
+      fontSize: 28.sp,
+      fontWeight: FontWeight.bold,
       color: color,
     );
   }
