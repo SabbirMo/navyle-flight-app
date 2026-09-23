@@ -10,4 +10,7 @@ class AppRouterName {
   static const String loginScreen = '/login';
   static const String forgotPasswordScreen = '/forgotPassword';
   static const String newPasswordScreen = '/newPassword';
+
+  //Home
+  static const String homeScreen = '/home';
 }

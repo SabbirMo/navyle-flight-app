@@ -11,6 +11,7 @@ import 'package:navyla_flight_app/feature/auth/new_password/screen/new_password_
 import 'package:navyla_flight_app/feature/auth/login_account/screen/login_screen.dart';
 import 'package:navyla_flight_app/feature/auth/verify_otp/model/otp_type.dart';
 import 'package:navyla_flight_app/feature/auth/verify_otp/screen/verify_otp_screen.dart';
+import 'package:navyla_flight_app/feature/home/screen/home_screen.dart';
 import 'package:navyla_flight_app/feature/onboarding/screen/onboarding_screen.dart';
 import 'package:navyla_flight_app/feature/splash/splash_screen.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
@@ -77,10 +78,7 @@ final appPages = Provider<GoRouter>(
 
           return CupertinoPage(
             key: state.pageKey,
-            child: VerificationSuccess(
-              userName: userName,
-              type: type,
-            ),
+            child: VerificationSuccess(userName: userName, type: type),
           );
         },
       ),
@@ -98,10 +96,15 @@ final appPages = Provider<GoRouter>(
       ),
       GoRoute(
         path: AppRouterName.newPasswordScreen,
-        pageBuilder: (context, state) => CupertinoPage(
-          key: state.pageKey,
-          child: const NewPasswordScreen(),
-        ),
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: const NewPasswordScreen()),
+      ),
+
+      //Home
+      GoRoute(
+        path: AppRouterName.homeScreen,
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: const HomeScreen()),
       ),
     ],
     errorBuilder: (context, state) =>

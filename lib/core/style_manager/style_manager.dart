@@ -80,6 +80,14 @@ class StyleManager {
     );
   }
 
+  static TextStyle poppinsBold16(Color color) {
+    return GoogleFonts.poppins(
+      fontSize: 16.sp,
+      fontWeight: FontWeight.bold,
+      color: color,
+    );
+  }
+
   static TextStyle interSemiBold14(Color color) {
     return GoogleFonts.inter(
       fontSize: 14.sp,

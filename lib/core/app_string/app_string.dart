@@ -114,4 +114,27 @@ class AppString {
 
   static const String newToNavyla = "New to NAVYLA? ";
   static const String createAccountLink = "Create account";
+
+  // Home
+  static const String goodMorning = "Good Morning,";
+  static const String defaultUserName = "Radu Iulian";
+
+  // Flight Card
+  static const String departureIn = "DEPARTURE IN";
+  static const String sampleCountdown = "04:42:15";
+  static const String onTime = "On Time";
+  static const String sampleFlightNumber = "BA 0215";
+  static const String ams = "AMS";
+  static const String amsterdam = "AMSTERDAM";
+  static const String fra = "FRA";
+  static const String frankfurt = "FRANKFURT";
+  static const String terminal = "TERMINAL";
+  static const String sampleTerminal = "T5";
+  static const String checkIn = "CHECK IN";
+  static const String sampleCheckInTime = "8:00";
+  static const String am = "am";
+  static const String gate = "GATE";
+  static const String sampleGate = "B24";
+  static const String seat = "SEAT";
+  static const String sampleSeat = "14A";
 }

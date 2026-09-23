@@ -19,4 +19,8 @@ class ImageAssets {
   //lottie animation
 
   static const String verifiedCheckLottie = "$_lottiePath/verified_check.json";
+
+  //home page image assets
+  static const String profile = "$_imagePath/profile.png";
+  static const String homeAir = "$_imagePath/homeAir.png";
 }

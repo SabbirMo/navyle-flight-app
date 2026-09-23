@@ -35,4 +35,27 @@ class AppColors {
   static const Color buttonGradientStart = primaryColor;
   static const Color textDark = black;
   static const Color errorRed = Color(0xFFEF4444);
+
+  //home page
+  static const Color homeAir = Color(0xff01215C); //#01215C
+  static const Color homeAir60 = Color(0x9901215C); //#01215C (60%)
+  static const Color homeAir0 = Color(0x0001215C); //#01215C (0%)
+
+  // Bottom gradient (transparent above runway -> solid homeAir behind terminal info)
+  static const Gradient homeAirBottomGradient = LinearGradient(
+    colors: [homeAir0, homeAir0, homeAir60, homeAir],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    stops: [0.0, 0.46, 0.65, 0.82],
+  );
+
+  // Left gradient (solid homeAir on left -> transparent before airplane)
+  static const Gradient homeAirLeftGradient = LinearGradient(
+    colors: [homeAir, homeAir, homeAir60, homeAir0],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    stops: [0.0, 0.28, 0.42, 0.54],
+  );
+
+  static const Gradient homeAirGradient = homeAirBottomGradient;
 }

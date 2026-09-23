@@ -53,10 +53,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       await Future.delayed(const Duration(milliseconds: 600));
       notifier.setLoading(false);
       if (mounted) {
-        context.push(
-          AppRouterName.verificationSuccessScreen,
-          extra: _emailController.text.trim().split('@').first,
-        );
+        context.go(AppRouterName.homeScreen);
       }
     }
   }
