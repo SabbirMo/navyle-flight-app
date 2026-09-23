@@ -6,14 +6,17 @@ class AuthCommonScreen extends StatelessWidget {
     super.key,
     required this.child,
     this.bottomSafeArea = true,
+    this.resizeToAvoidBottomInset,
   });
 
   final Widget child;
   final bool bottomSafeArea;
+  final bool? resizeToAvoidBottomInset;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       backgroundColor: Colors.white,
       body: Stack(
         fit: StackFit.expand,

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/feature/auth/auth_selection/screen/auth_selection_screen.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/screen/create_account_screen.dart';
+import 'package:navyla_flight_app/feature/auth/verify_otp/screen/verify_otp_screen.dart';
 import 'package:navyla_flight_app/feature/onboarding/screen/onboarding_screen.dart';
 import 'package:navyla_flight_app/feature/splash/splash_screen.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
@@ -36,6 +37,13 @@ final appPages = Provider<GoRouter>(
         pageBuilder: (context, state) => CupertinoPage(
           key: state.pageKey,
           child: const CreateAccountScreen(),
+        ),
+      ),
+      GoRoute(
+        path: AppRouterName.verifyOtpScreen,
+        pageBuilder: (context, state) => CupertinoPage(
+          key: state.pageKey,
+          child: const VerifyOtpScreen(),
         ),
       ),
     ],

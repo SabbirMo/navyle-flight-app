@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
+import 'package:navyla_flight_app/core/utils/app_validator.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
@@ -25,6 +28,7 @@ class CreateAccountScreen extends ConsumerStatefulWidget {
 class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
     with TickerProviderStateMixin {
   late final StartAnimations _animations = StartAnimations(this);
+  final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -155,106 +159,124 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                             20.w,
                             MediaQuery.of(context).padding.bottom + 24.h,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // First name & Last name Row
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: CustomInputField(
-                                      label: AppString.firstName,
-                                      controller: _firstNameController,
-                                      hintText: AppString.jhonHint,
-                                      prefixIcon: Icons.person_outline_rounded,
-                                    ),
-                                  ),
-                                  SizedBox(width: 14.w),
-                                  Expanded(
-                                    child: CustomInputField(
-                                      label: AppString.lastName,
-                                      controller: _lastNameController,
-                                      hintText: AppString.doeHint,
-                                      prefixIcon: Icons.person_outline_rounded,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 16.h),
-
-                              // Email Address Field
-                              CustomInputField(
-                                label: AppString.emailAddress,
-                                controller: _emailController,
-                                hintText: AppString.emailHint,
-                                prefixIcon: Icons.mail_outline_rounded,
-                                keyboardType: TextInputType.emailAddress,
-                              ),
-                              SizedBox(height: 16.h),
-
-                              // Password Field
-                              CustomInputField(
-                                label: AppString.password,
-                                controller: _passwordController,
-                                hintText: AppString.passwordHint,
-                                prefixIcon: Icons.lock_outline_rounded,
-                                obscureText: !state.password,
-                                onChanged: notifier.onPasswordChanged,
-                                suffixIcon: GestureDetector(
-                                  onTap: () => notifier.onPasswordToggle(),
-                                  child: Icon(
-                                    state.password
-                                        ? Icons.visibility_outlined
-                                        : Icons.visibility_off_outlined,
-                                    size: 18.sp,
-                                    color: const Color(0xFF9CA3AF),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 8.h),
-
-                              // Password Strength Indicator
-                              Padding(
-                                padding: EdgeInsets.only(left: 4.w),
-                                child: Row(
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // First name & Last name Row
+                                Row(
                                   children: [
-                                    Text(
-                                      AppString.passwordStrength,
-                                      style: StyleManager.interRegular13(
-                                        AppColors.grayColor,
+                                    Expanded(
+                                      child: CustomInputField(
+                                        validator: AppValidator.validateName,
+                                        label: AppString.firstName,
+                                        controller: _firstNameController,
+                                        hintText: AppString.jhonHint,
+                                        prefixIcon:
+                                            Icons.person_outline_rounded,
                                       ),
                                     ),
-                                    AnimatedDefaultTextStyle(
-                                      duration: const Duration(
-                                        milliseconds: 200,
+                                    SizedBox(width: 14.w),
+                                    Expanded(
+                                      child: CustomInputField(
+                                        label: AppString.lastName,
+                                        validator: AppValidator.validateName,
+                                        controller: _lastNameController,
+                                        hintText: AppString.doeHint,
+                                        prefixIcon:
+                                            Icons.person_outline_rounded,
                                       ),
-                                      style: GoogleFonts.inter(
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w700,
-                                        color: state.passwordStrength.color,
-                                      ),
-                                      child: Text(state.passwordStrength.label),
                                     ),
                                   ],
                                 ),
-                              ),
-                              SizedBox(height: 16.h),
+                                SizedBox(height: 16.h),
 
-                              // Terms of Service & Privacy Policy Checkbox
-                              _buildTermsCheckbox(state, notifier),
-                              SizedBox(height: 24.h),
+                                // Email Address Field
+                                CustomInputField(
+                                  label: AppString.emailAddress,
+                                  validator: AppValidator.validateEmail,
+                                  controller: _emailController,
+                                  hintText: AppString.emailHint,
+                                  prefixIcon: Icons.mail_outline_rounded,
+                                  keyboardType: TextInputType.emailAddress,
+                                ),
+                                SizedBox(height: 16.h),
 
-                              // Create Account Button
-                              // _buildCreateAccountButton(),
-                              CustomButton(
-                                text: "Create Account",
-                                height: 46.h,
-                              ),
-                              SizedBox(height: 18.h),
+                                // Password Field
+                                CustomInputField(
+                                  label: AppString.password,
+                                  validator: AppValidator.validatePassword,
+                                  controller: _passwordController,
+                                  hintText: AppString.passwordHint,
+                                  prefixIcon: Icons.lock_outline_rounded,
+                                  obscureText: !state.password,
+                                  onChanged: notifier.onPasswordChanged,
+                                  suffixIcon: GestureDetector(
+                                    onTap: () => notifier.onPasswordToggle(),
+                                    child: Icon(
+                                      state.password
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                      size: 18.sp,
+                                      color: const Color(0xFF9CA3AF),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
 
-                              // Already have an account? Log in
-                              _buildFooter(),
-                            ],
+                                // Password Strength Indicator
+                                Padding(
+                                  padding: EdgeInsets.only(left: 4.w),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        AppString.passwordStrength,
+                                        style: StyleManager.interRegular13(
+                                          AppColors.grayColor,
+                                        ),
+                                      ),
+                                      AnimatedDefaultTextStyle(
+                                        duration: const Duration(
+                                          milliseconds: 200,
+                                        ),
+                                        style: GoogleFonts.inter(
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w700,
+                                          color: state.passwordStrength.color,
+                                        ),
+                                        child: Text(
+                                          state.passwordStrength.label,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 16.h),
+
+                                // Terms of Service & Privacy Policy Checkbox
+                                _buildTermsCheckbox(state, notifier),
+                                SizedBox(height: 24.h),
+
+                                // Create Account Button
+                                // _buildCreateAccountButton(),
+                                CustomButton(
+                                  text: "Create Account",
+                                  height: 46.h,
+                                  onTap: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      context.push(
+                                        AppRouterName.verifyOtpScreen,
+                                      );
+                                    }
+                                  },
+                                ),
+                                SizedBox(height: 18.h),
+
+                                // Already have an account? Log in
+                                _buildFooter(),
+                              ],
+                            ),
                           ),
                         ),
                       ),

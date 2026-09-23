@@ -25,4 +25,9 @@ class AppColors {
 
   // Black Theme
   static const Color blackShadow = Color(0xFF0F172A); //#0F172A
+
+  // Aliases & Error Colors
+  static const Color buttonGradientStart = primaryColor;
+  static const Color textDark = black;
+  static const Color errorRed = Color(0xFFEF4444);
 }

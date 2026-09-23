@@ -68,5 +68,13 @@ class AppString {
   static const String createAccount = "Create Account";
   static const String alreadyHaveAccount = "Already have an account? ";
   static const String logIn = "Log in";
+
+  // Verify OTP
+  static const String checkYourEmail = "Check Your Email";
+  static const String otpSubtitle =
+      "We've sent a 4-digit verification code to your email.";
+  static const String didntReceiveCode = "Didn't receive the code? ";
+  static const String resend = "Resend";
+  static const String verifyOtp = "Verify OTP";
 }
 
