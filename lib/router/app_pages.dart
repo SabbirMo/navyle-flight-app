@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:navyla_flight_app/core/app_string/app_string.dart';
+import 'package:navyla_flight_app/core/widgets/verification_success.dart';
 import 'package:navyla_flight_app/feature/auth/auth_selection/screen/auth_selection_screen.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/screen/create_account_screen.dart';
+import 'package:navyla_flight_app/feature/auth/login_account/screen/login_screen.dart';
 import 'package:navyla_flight_app/feature/auth/verify_otp/screen/verify_otp_screen.dart';
 import 'package:navyla_flight_app/feature/onboarding/screen/onboarding_screen.dart';
 import 'package:navyla_flight_app/feature/splash/splash_screen.dart';
@@ -41,10 +44,25 @@ final appPages = Provider<GoRouter>(
       ),
       GoRoute(
         path: AppRouterName.verifyOtpScreen,
-        pageBuilder: (context, state) => CupertinoPage(
-          key: state.pageKey,
-          child: const VerifyOtpScreen(),
-        ),
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: const VerifyOtpScreen()),
+      ),
+      GoRoute(
+        path: AppRouterName.verificationSuccessScreen,
+        pageBuilder: (context, state) {
+          final userName = state.extra is String
+              ? state.extra as String
+              : AppString.defaultVerifiedUser;
+          return CupertinoPage(
+            key: state.pageKey,
+            child: VerificationSuccess(userName: userName),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRouterName.loginScreen,
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: const LoginScreen()),
       ),
     ],
     errorBuilder: (context, state) =>

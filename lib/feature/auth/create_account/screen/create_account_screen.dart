@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/utils/app_validator.dart';
+import 'package:navyla_flight_app/core/widgets/auth_footer.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
@@ -109,7 +110,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                             child: Text(
                               AppString.createYourAccount,
                               textAlign: TextAlign.center,
-                              style: StyleManager.poppinsBold24(
+                              style: StyleManager.poppinsBold28(
                                 AppColors.black,
                               ),
                             ),
@@ -274,7 +275,12 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                                 SizedBox(height: 18.h),
 
                                 // Already have an account? Log in
-                                _buildFooter(),
+                                AuthFooter(
+                                  text: AppString.alreadyHaveAccount,
+                                  loginText: AppString.logIn,
+                                  onTap: () =>
+                                      context.push(AppRouterName.loginScreen),
+                                ),
                               ],
                             ),
                           ),
@@ -349,30 +355,6 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                   ),
                 ),
               ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  /// Footer: Already have an account? Log in
-  Widget _buildFooter() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          AppString.alreadyHaveAccount,
-          style: StyleManager.interMedium13(const Color(0xFF6B7280)),
-        ),
-        GestureDetector(
-          onTap: () => Navigator.of(context).maybePop(),
-          child: Text(
-            AppString.logIn,
-            style: GoogleFonts.inter(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w600,
-              color: AppColors.primaryColor,
             ),
           ),
         ),

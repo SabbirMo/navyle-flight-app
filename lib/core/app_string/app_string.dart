@@ -67,7 +67,7 @@ class AppString {
   static const String privacyPolicy = "Privacy Policy";
   static const String createAccount = "Create Account";
   static const String alreadyHaveAccount = "Already have an account? ";
-  static const String logIn = "Log in";
+  static const String logIn = "Login";
 
   // Verify OTP
   static const String checkYourEmail = "Check Your Email";
@@ -76,5 +76,22 @@ class AppString {
   static const String didntReceiveCode = "Didn't receive the code? ";
   static const String resend = "Resend";
   static const String verifyOtp = "Verify OTP";
-}
 
+  // Verification Success
+  static const String verificationSuccessDesc =
+      "Great! Your email has been successfully verified. You're all set to explore the app.";
+  static const String verifiedEmail = "VERIFIED EMAIL";
+  static const String defaultVerifiedUser = "Alex Rivers";
+  static const String continueText = "Continue";
+
+  // Login
+  static const String welcomeBack = "Welcome Back";
+  static const String loginSubtitle =
+      "Experience your smoothest airport journey yet";
+  static const String enterYourPassword = "Enter your password";
+  static const String rememberMe = "Remember me";
+  static const String forgotPassword = "Forgot password?";
+
+  static const String newToNavyla = "New to NAVYLA? ";
+  static const String createAccountLink = "Create account";
+}

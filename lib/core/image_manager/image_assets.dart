@@ -1,6 +1,7 @@
 class ImageAssets {
   static const String _imagePath = "assets/images";
   static const String _svgPath = "assets/svgs";
+  static const String _lottiePath = "assets/lottie";
 
   //images
   static const String appLogo = "$_imagePath/app_logo.png";
@@ -14,4 +15,8 @@ class ImageAssets {
   static const String flight = "$_svgPath/flight.svg";
   static const String google = "$_svgPath/google.svg";
   static const String apple = "$_svgPath/apple.svg";
+
+  //lottie animation
+
+  static const String verifiedCheckLottie = "$_lottiePath/verified_check.json";
 }

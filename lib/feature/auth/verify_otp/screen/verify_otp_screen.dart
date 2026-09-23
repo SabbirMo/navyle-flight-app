@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
@@ -13,6 +14,7 @@ import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button
 import 'package:navyla_flight_app/feature/auth/verify_otp/model/verify_otp_state.dart';
 import 'package:navyla_flight_app/feature/auth/verify_otp/provider/verify_otp_notifer.dart';
 import 'package:navyla_flight_app/feature/auth/verify_otp/widget/circular_countdown_timer.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerifyOtpScreen extends ConsumerStatefulWidget {
@@ -40,6 +42,7 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen>
 
   void _handleSuccess() {
     FocusScope.of(context).unfocus();
+    context.push(AppRouterName.verificationSuccessScreen);
   }
 
   void _showError(String message) {
