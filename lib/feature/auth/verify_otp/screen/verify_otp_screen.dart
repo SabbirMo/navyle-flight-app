@@ -5,12 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
-import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
+import 'package:navyla_flight_app/core/widgets/main_image_size.dart';
 import 'package:navyla_flight_app/core/widgets/start_animation.dart';
 import 'package:navyla_flight_app/feature/auth/auth_selection/widget/auth_common_screen.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
+import 'package:navyla_flight_app/feature/auth/verify_otp/model/otp_type.dart';
 import 'package:navyla_flight_app/feature/auth/verify_otp/model/verify_otp_state.dart';
 import 'package:navyla_flight_app/feature/auth/verify_otp/provider/verify_otp_notifer.dart';
 import 'package:navyla_flight_app/feature/auth/verify_otp/widget/circular_countdown_timer.dart';
@@ -18,7 +19,9 @@ import 'package:navyla_flight_app/router/app_router_name.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerifyOtpScreen extends ConsumerStatefulWidget {
-  const VerifyOtpScreen({super.key});
+  final OtpType otpType;
+
+  const VerifyOtpScreen({super.key, this.otpType = OtpType.create});
 
   @override
   ConsumerState<VerifyOtpScreen> createState() => _VerifyOtpScreenState();
@@ -42,7 +45,11 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen>
 
   void _handleSuccess() {
     FocusScope.of(context).unfocus();
-    context.push(AppRouterName.verificationSuccessScreen);
+    if (widget.otpType == OtpType.forgot) {
+      context.pushReplacement(AppRouterName.newPasswordScreen);
+    } else {
+      context.pushReplacement(AppRouterName.verificationSuccessScreen);
+    }
   }
 
   void _showError(String message) {
@@ -81,14 +88,7 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen>
                           ),
                           SizedBox(height: 6.h),
                           // App Logo
-                          _animations.buttonTransition(
-                            child: Image.asset(
-                              ImageAssets.appLogo,
-                              width: 52.w,
-                              height: 52.w,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
+                          _animations.buttonTransition(child: MainImageSize()),
                           SizedBox(height: 12.h),
                           // Title
                           _animations.taglineTransition(

@@ -4,12 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
-import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/utils/app_validator.dart';
 import 'package:navyla_flight_app/core/widgets/auth_footer.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/core/widgets/custom_input_field.dart';
+import 'package:navyla_flight_app/core/widgets/main_image_size.dart';
 import 'package:navyla_flight_app/core/widgets/start_animation.dart';
 import 'package:navyla_flight_app/feature/auth/auth_selection/widget/auth_common_screen.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
@@ -62,12 +62,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   void _onForgotPassword() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Password reset instructions sent to your email.'),
-        duration: Duration(seconds: 2),
-      ),
-    );
+    context.push(AppRouterName.forgotPasswordScreen);
   }
 
   @override
@@ -101,14 +96,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           ),
                           SizedBox(height: 30.h),
                           // App Logo
-                          _animations.buttonTransition(
-                            child: Image.asset(
-                              ImageAssets.appLogo,
-                              width: 56.w,
-                              height: 56.w,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
+                          _animations.buttonTransition(child: MainImageSize()),
                           SizedBox(height: 16.h),
                           // Title: Welcome Back
                           _animations.taglineTransition(
@@ -270,7 +258,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                 // Footer: New to NAVYLA? Create account
                                 AuthFooter(
                                   text: AppString.newToNavyla,
-                                  loginText: AppString.logIn,
+                                  loginText: AppString.createAccount,
                                   onTap: () => context.push(
                                     AppRouterName.createAccountScreen,
                                   ),

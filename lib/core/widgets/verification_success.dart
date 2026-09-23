@@ -10,16 +10,22 @@ import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
+enum VerificationType { onlyVerify, updatePassword }
+
+typedef VerificationSuccessType = VerificationType;
+
 class VerificationSuccess extends StatefulWidget {
   final String userName;
   final String? email;
   final VoidCallback? onContinue;
+  final VerificationType type;
 
   const VerificationSuccess({
     super.key,
     this.userName = AppString.defaultVerifiedUser,
     this.email,
     this.onContinue,
+    this.type = VerificationType.onlyVerify,
   });
 
   @override
@@ -156,44 +162,95 @@ class _VerificationSuccessState extends State<VerificationSuccess>
                               ),
                             ),
 
-                            SizedBox(height: 32.h),
+                            SizedBox(
+                              height:
+                                  widget.type == VerificationType.updatePassword
+                                  ? 28.h
+                                  : 32.h,
+                            ),
 
-                            // Descriptive Text
-                            FadeTransition(
-                              opacity: _fadeAnimation,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                            if (widget.type ==
+                                VerificationType.updatePassword) ...[
+                              // Title: Password updated
+                              FadeTransition(
+                                opacity: _fadeAnimation,
                                 child: Text(
-                                  AppString.verificationSuccessDesc,
+                                  AppString.passwordUpdated,
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.inter(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: const Color(0xFF6B7280),
-                                    height: 1.48,
+                                  style: StyleManager.poppinsBold28(
+                                    AppColors.black,
                                   ),
                                 ),
                               ),
-                            ),
+                              SizedBox(height: 10.h),
 
-                            SizedBox(height: 36.h),
+                              // Subtitle
+                              FadeTransition(
+                                opacity: _fadeAnimation,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 24.w,
+                                  ),
+                                  child: Text(
+                                    AppString.passwordUpdatedDesc,
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w400,
+                                      color: const Color(0xFF6B7280),
+                                      height: 1.48,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ] else ...[
+                              // Descriptive Text
+                              FadeTransition(
+                                opacity: _fadeAnimation,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 24.w,
+                                  ),
+                                  child: Text(
+                                    AppString.verificationSuccessDesc,
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w400,
+                                      color: const Color(0xFF6B7280),
+                                      height: 1.48,
+                                    ),
+                                  ),
+                                ),
+                              ),
 
-                            // Verified Email User Card
-                            FadeTransition(
-                              opacity: _fadeAnimation,
-                              child: _buildVerifiedUserCard(displayName),
-                            ),
+                              SizedBox(height: 36.h),
+
+                              // Verified Email User Card
+                              FadeTransition(
+                                opacity: _fadeAnimation,
+                                child: _buildVerifiedUserCard(displayName),
+                              ),
+                            ],
 
                             const Spacer(),
 
-                            // Bottom Continue Button
+                            // Bottom Button (Back to login or Continue)
                             FadeTransition(
                               opacity: _fadeAnimation,
                               child: CustomButton(
-                                text: AppString.continueText,
+                                text:
+                                    widget.type ==
+                                        VerificationType.updatePassword
+                                    ? AppString.backToLogin
+                                    : AppString.continueText,
                                 onTap:
                                     widget.onContinue ??
-                                    () => _handleContinue(context),
+                                    () =>
+                                        widget.type ==
+                                            VerificationType.updatePassword
+                                        ? _handleBackToLogin(context)
+                                        : _handleContinue(context),
                               ),
                             ),
 
@@ -379,10 +436,11 @@ class _VerificationSuccessState extends State<VerificationSuccess>
 
   /// Default navigation on clicking Continue
   void _handleContinue(BuildContext context) {
-    if (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
-    } else {
-      context.go(AppRouterName.authSelectionScreen);
-    }
+    context.pushReplacement(AppRouterName.loginScreen);
+  }
+
+  /// Default navigation on clicking Back to login
+  void _handleBackToLogin(BuildContext context) {
+    context.go(AppRouterName.loginScreen);
   }
 }

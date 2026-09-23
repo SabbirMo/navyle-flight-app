@@ -8,4 +8,6 @@ class AppRouterName {
   static const String verifyOtpScreen = '/verifyOtp';
   static const String verificationSuccessScreen = '/verificationSuccess';
   static const String loginScreen = '/login';
+  static const String forgotPasswordScreen = '/forgotPassword';
+  static const String newPasswordScreen = '/newPassword';
 }

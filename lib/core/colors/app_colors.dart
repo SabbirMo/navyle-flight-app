@@ -18,7 +18,8 @@ class AppColors {
   static const Color lightGray = Color(0xFF94A3B8); //#94A3B8
 
   //d8956533
-  static const Color switchColor = Color(0xFFd8956533); //#D8956533
+  static const Color switchColor = Color(0xD8956533); //#D8956533
+  static const Color darkGrayColor = Color(0xFF475569); //#475569
 
   static const Gradient splashGradient = LinearGradient(
     colors: [lightWhite, white, white],

@@ -77,12 +77,28 @@ class AppString {
   static const String resend = "Resend";
   static const String verifyOtp = "Verify OTP";
 
+  // New Password
+  static const String secureYourAccount = "Secure your account";
+  static const String secureYourAccountSubtitle =
+      "Create a strong new password to keep your travel data safe.";
+  static const String newPassword = "New password";
+  static const String confirmNewPassword = "Confirm new password";
+  static const String mustContainAtLeast = "MUST CONTAIN AT LEAST:";
+  static const String eightCharactersMinimum = "8 Characters minimum";
+  static const String oneSpecialCharacter = "One special character";
+  static const String oneUppercaseLetter = "One uppercase letter";
+  static const String updatePassword = "Update password";
+
   // Verification Success
   static const String verificationSuccessDesc =
       "Great! Your email has been successfully verified. You're all set to explore the app.";
+  static const String passwordUpdated = "Password updated";
+  static const String passwordUpdatedDesc =
+      "Your security is our priority. Your password has been successfully changed.";
   static const String verifiedEmail = "VERIFIED EMAIL";
   static const String defaultVerifiedUser = "Alex Rivers";
   static const String continueText = "Continue";
+  static const String backToLogin = "Back to login";
 
   // Login
   static const String welcomeBack = "Welcome Back";
@@ -91,6 +107,10 @@ class AppString {
   static const String enterYourPassword = "Enter your password";
   static const String rememberMe = "Remember me";
   static const String forgotPassword = "Forgot password?";
+  static const String forgotPasswordSubtitle =
+      "Don't worry, it happens. Enter your email and we'll send you a recovery code.";
+  static const String sendResetCode = "Send reset code";
+  static const String remembered = "Remembered? ";
 
   static const String newToNavyla = "New to NAVYLA? ";
   static const String createAccountLink = "Create account";

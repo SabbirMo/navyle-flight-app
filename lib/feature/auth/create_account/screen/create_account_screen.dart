@@ -6,9 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/utils/app_validator.dart';
 import 'package:navyla_flight_app/core/widgets/auth_footer.dart';
+import 'package:navyla_flight_app/core/widgets/main_image_size.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
-import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/core/widgets/custom_input_field.dart';
@@ -17,6 +17,7 @@ import 'package:navyla_flight_app/feature/auth/auth_selection/widget/auth_common
 import 'package:navyla_flight_app/feature/auth/create_account/model/create_account_state.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/provider/create_account_notifer.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
+import 'package:navyla_flight_app/feature/auth/verify_otp/model/otp_type.dart';
 
 class CreateAccountScreen extends ConsumerStatefulWidget {
   const CreateAccountScreen({super.key});
@@ -96,14 +97,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                           ),
                           SizedBox(height: 6.h),
                           // App Logo
-                          _animations.buttonTransition(
-                            child: Image.asset(
-                              ImageAssets.appLogo,
-                              width: 52.w,
-                              height: 52.w,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
+                          _animations.buttonTransition(child: MainImageSize()),
                           SizedBox(height: 12.h),
                           // Title
                           _animations.taglineTransition(
@@ -263,11 +257,11 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                                 // _buildCreateAccountButton(),
                                 CustomButton(
                                   text: "Create Account",
-                                  height: 46.h,
                                   onTap: () {
                                     if (_formKey.currentState!.validate()) {
                                       context.push(
                                         AppRouterName.verifyOtpScreen,
+                                        extra: OtpType.create,
                                       );
                                     }
                                   },
