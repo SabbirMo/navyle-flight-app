@@ -71,4 +71,44 @@ class StyleManager {
       color: color,
     );
   }
+
+  static TextStyle poppinsBold24(Color color) {
+    return GoogleFonts.poppins(
+      fontSize: 24.sp,
+      fontWeight: FontWeight.bold,
+      color: color,
+    );
+  }
+
+  static TextStyle interSemiBold14(Color color) {
+    return GoogleFonts.inter(
+      fontSize: 14.sp,
+      fontWeight: FontWeight.w600,
+      color: color,
+    );
+  }
+
+  static TextStyle interSemiBold12(Color color) {
+    return GoogleFonts.inter(
+      fontSize: 12.sp,
+      fontWeight: FontWeight.w600,
+      color: color,
+    );
+  }
+
+  static TextStyle interMedium13(Color color) {
+    return GoogleFonts.inter(
+      fontSize: 13.sp,
+      fontWeight: FontWeight.w500,
+      color: color,
+    );
+  }
+
+  static TextStyle interRegular13(Color color) {
+    return GoogleFonts.inter(
+      fontSize: 13.sp,
+      fontWeight: FontWeight.w400,
+      color: color,
+    );
+  }
 }

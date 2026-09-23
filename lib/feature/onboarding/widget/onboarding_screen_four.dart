@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
-import 'package:navyla_flight_app/core/image_manager/image_manager.dart';
+import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/start_animation.dart';
 import 'package:navyla_flight_app/feature/onboarding/widget/onboarding_dots_indicator.dart';
@@ -47,7 +47,7 @@ class _OnboardingScreenFourState extends State<OnboardingScreenFour>
                   top: 0,
                   bottom: 0,
                   child: Image.asset(
-                    ImageManager.onBoarding2,
+                    ImageAssets.onBoarding2,
                     fit: BoxFit.fitHeight,
                   ),
                 ),

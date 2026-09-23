@@ -43,4 +43,30 @@ class AppString {
   static const String continueWithApple = "Continue with Apple";
   static const String orContinueWith = "Or Continue with";
   static const String continueWithEmail = "Continue with E-mail";
+
+  // Create Account
+  static const String createYourAccount = "Create your account";
+  static const String createAccountSubtitle =
+      "Join thousands of travelers who fly stress-free every day.";
+  static const String firstName = "First name";
+  static const String lastName = "Last name";
+  static const String emailAddress = "Email address";
+  static const String password = "Password";
+  static const String jhonHint = "Jhon";
+  static const String doeHint = "Doe";
+  static const String emailHint = "your.email@example.com";
+  static const String passwordHint = "Create a strong password";
+  static const String passwordStrength = "Password strength: ";
+  static const String weak = "WEAK";
+  static const String medium = "MEDIUM";
+  static const String good = "GOOD";
+  static const String strong = "STRONG";
+  static const String agreeToThe = "I agree to the ";
+  static const String termsOfService = "Terms of Service";
+  static const String and = " and ";
+  static const String privacyPolicy = "Privacy Policy";
+  static const String createAccount = "Create Account";
+  static const String alreadyHaveAccount = "Already have an account? ";
+  static const String logIn = "Log in";
 }
+

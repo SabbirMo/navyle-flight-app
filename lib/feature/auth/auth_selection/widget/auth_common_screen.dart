@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:navyla_flight_app/core/image_manager/image_manager.dart';
+import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 
 class AuthCommonScreen extends StatelessWidget {
   const AuthCommonScreen({
     super.key,
     required this.child,
     this.bottomSafeArea = true,
-    this.backgroundImageOpacity = 0.5,
-    this.bgTopOffset = -60.0,
   });
 
   final Widget child;
   final bool bottomSafeArea;
-  final double backgroundImageOpacity;
-  final double bgTopOffset;
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +18,11 @@ class AuthCommonScreen extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Shifted background image upwards so bottom leaf and dots are visible
-          Positioned(
-            top: bgTopOffset.h,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Image.asset(
-              ImageManager.authBg,
-              fit: BoxFit.cover,
-              gaplessPlayback: true,
-              opacity: AlwaysStoppedAnimation(backgroundImageOpacity),
-            ),
+          Image.asset(
+            ImageAssets.authBg,
+            fit: BoxFit.fill,
+            opacity: const AlwaysStoppedAnimation(0.5),
+            gaplessPlayback: true,
           ),
           SafeArea(bottom: bottomSafeArea, child: child),
         ],

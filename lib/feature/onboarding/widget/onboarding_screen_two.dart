@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
-import 'package:navyla_flight_app/core/image_manager/image_manager.dart';
+import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/start_animation.dart';
 import 'package:navyla_flight_app/feature/onboarding/widget/onboarding_dots_indicator.dart';
@@ -118,7 +118,7 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
                   color: Color(0xFFFFEFE3),
                   shape: BoxShape.circle,
                 ),
-                child: Center(child: SvgPicture.asset(ImageManager.flight)),
+                child: Center(child: SvgPicture.asset(ImageAssets.flight)),
               ),
               SizedBox(width: 10.w),
               Text(

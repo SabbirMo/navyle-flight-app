@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
-import 'package:navyla_flight_app/core/image_manager/image_manager.dart';
+import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/start_animation.dart';
 import 'package:navyla_flight_app/feature/auth/auth_selection/widget/dashed_line.dart';
 import 'package:navyla_flight_app/feature/auth/auth_selection/widget/social_auth_button.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class AuthSelectionScreen extends ConsumerStatefulWidget {
   const AuthSelectionScreen({super.key});
@@ -39,10 +41,7 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset(
-            ImageManager.authBg,
-            opacity: AlwaysStoppedAnimation(0.5),
-          ),
+          Image.asset(ImageAssets.authBg, opacity: AlwaysStoppedAnimation(0.4)),
 
           SafeArea(
             child: Align(
@@ -55,7 +54,7 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                     SizedBox(height: 100.h),
                     _animations.buttonTransition(
                       child: Image.asset(
-                        ImageManager.appLogo,
+                        ImageAssets.appLogo,
                         width: 105.w,
                         height: 105.w,
                         fit: BoxFit.contain,
@@ -88,11 +87,18 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
               width: double.infinity,
               height: 300.h,
               decoration: BoxDecoration(
-                gradient: AppColors.splashGradient.withOpacity(0.9),
+                gradient: AppColors.splashGradient,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.r),
                   topRight: Radius.circular(20.r),
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.blackShadow.withValues(alpha: 0.2),
+                    blurRadius: 10,
+                    offset: Offset(0, -2),
+                  ),
+                ],
               ),
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 36.h),
               child: _animations.buttonTransition(
@@ -101,7 +107,7 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                     SocialAuthButton(
                       text: AppString.continueWithGoogle,
                       icon: SvgPicture.asset(
-                        ImageManager.google,
+                        ImageAssets.google,
                         width: 20.w,
                         height: 20.w,
                       ),
@@ -111,7 +117,7 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                     SocialAuthButton(
                       text: AppString.continueWithApple,
                       icon: SvgPicture.asset(
-                        ImageManager.apple,
+                        ImageAssets.apple,
                         width: 20.w,
                         height: 20.w,
                       ),
@@ -125,7 +131,11 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                       text: AppString.continueWithEmail,
                       icon: Icon(Icons.email),
                       border: false,
-                      onTap: () {},
+                      onTap: () {
+                        if (mounted) {
+                          context.push(AppRouterName.createAccountScreen);
+                        }
+                      },
                     ),
                   ],
                 ),

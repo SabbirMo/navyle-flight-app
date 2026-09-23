@@ -4,4 +4,5 @@ class AppRouterName {
 
   //auth
   static const String authSelectionScreen = '/authSelection';
+  static const String createAccountScreen = '/createAccount';
 }

@@ -72,7 +72,7 @@ class CustomButton extends StatelessWidget {
                     children: [
                       Text(
                         text,
-                        style: StyleManager.sfProBold16(AppColors.white),
+                        style: StyleManager.interSemiBold14(AppColors.white),
                       ),
                       if (icon != null) ...[
                         SizedBox(width: 6.w),

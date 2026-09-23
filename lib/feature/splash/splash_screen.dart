@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
-import 'package:navyla_flight_app/core/image_manager/image_manager.dart';
+import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/theme/theme_mode_provder.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
@@ -123,7 +123,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                         child: child,
                       );
                     },
-                    child: Image.asset(ImageManager.appLogo, width: 130.w),
+                    child: Image.asset(ImageAssets.appLogo, width: 130.w),
                   ),
                 ),
               ),
@@ -134,7 +134,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   child: ScaleTransition(
                     scale: _effectScaleAnimation,
                     child: Image.asset(
-                      isDark ? ImageManager.effect2 : ImageManager.effect,
+                      isDark ? ImageAssets.effect2 : ImageAssets.effect,
                     ),
                   ),
                 ),

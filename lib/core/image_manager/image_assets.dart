@@ -1,4 +1,4 @@
-class ImageManager {
+class ImageAssets {
   static const String _imagePath = "assets/images";
   static const String _svgPath = "assets/svgs";
 
