@@ -94,10 +94,7 @@ class QuickAccessToolModel {
       isChevronAtEnd: true,
       iconWidget: Padding(
         padding: EdgeInsets.all(3.w),
-        child: Image.asset(
-          ImageAssets.navylaAi,
-          fit: BoxFit.contain,
-        ),
+        child: Image.asset(ImageAssets.navylaAi, fit: BoxFit.contain),
       ),
       overlayWidget: Positioned(
         top: 10.h,
@@ -106,10 +103,7 @@ class QuickAccessToolModel {
         height: 64.h,
         child: Opacity(
           opacity: 0.72,
-          child: Image.asset(
-            ImageAssets.navylaAi,
-            fit: BoxFit.contain,
-          ),
+          child: Image.asset(ImageAssets.navylaAi, fit: BoxFit.contain),
         ),
       ),
     ),
