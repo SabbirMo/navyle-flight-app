@@ -8,14 +8,17 @@ import 'package:navyla_flight_app/feature/home/widget/flight_card_widget.dart';
 import 'package:navyla_flight_app/feature/home/widget/home_header_widget.dart';
 import 'package:navyla_flight_app/feature/home/widget/quick_access_tools_widget.dart';
 
-class HomeScreen extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
+
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScreen(
@@ -39,7 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const QuickAccessToolsWidget(),
             SizedBox(height: 16.h),
-            const TitleRowClick(title: "NAVYLA Feed", isEnable: true),
+            TitleRowClick(
+              title: "NAVYLA Feed",
+              isEnable: true,
+              onTap: () {
+                ref.read(navbarNotifierProvider.notifier).setIndex(3);
+              },
+            ),
             SizedBox(height: 12.h),
           ],
         ),

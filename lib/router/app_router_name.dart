@@ -14,4 +14,7 @@ class AppRouterName {
   //Home
   static const String homeScreen = '/home';
   static const String navbarScreen = '/navbar';
+
+  //Feed
+  static const String postLiveUpdateScreen = '/postLiveUpdate';
 }

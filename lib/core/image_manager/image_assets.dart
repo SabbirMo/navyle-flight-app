@@ -35,4 +35,5 @@ class ImageAssets {
   static const String exploreNearby = "$_imagePath/explore_nearby.png";
   static const String navylaAi = "$_imagePath/navyla_ai.png";
   static const String navylaBg = "$_imagePath/navyla_bg.png";
+  static const String alexRivers = "$_imagePath/alex_rivers.png";
 }
