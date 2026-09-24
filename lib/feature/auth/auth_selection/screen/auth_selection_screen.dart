@@ -133,7 +133,7 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                       border: false,
                       onTap: () {
                         if (mounted) {
-                          context.push(AppRouterName.createAccountScreen);
+                          context.push(AppRouterName.loginScreen);
                         }
                       },
                     ),

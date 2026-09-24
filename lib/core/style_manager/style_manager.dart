@@ -21,6 +21,15 @@ class StyleManager {
     );
   }
 
+  static TextStyle sfProBold30(Color color) {
+    return TextStyle(
+      fontSize: 30.sp,
+      fontWeight: FontWeight.w700,
+      fontFamily: "SF-Pro",
+      color: color,
+    );
+  }
+
   static TextStyle sfProSemiBold16(Color color) {
     return TextStyle(
       fontSize: 16.sp,

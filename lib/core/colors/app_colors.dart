@@ -40,6 +40,10 @@ class AppColors {
   static const Color homeAir = Color(0xff01215C); //#01215C
   static const Color homeAir60 = Color(0x9901215C); //#01215C (60%)
   static const Color homeAir0 = Color(0x0001215C); //#01215C (0%)
+  static const Color dotColor = Color(0xffBEF23C); //#BEF23C
+  static const Color darkBlue0 = Color(0xff0A4F8B); //#0A4F8B
+  static const Color darkBlue = Color(0xff014871); //#014871
+  static const Color grayD3D3D3 = Color(0xffD3D3D3); //#D3D3D3
 
   // Bottom gradient (transparent above runway -> solid homeAir behind terminal info)
   static const Gradient homeAirBottomGradient = LinearGradient(
@@ -55,6 +59,14 @@ class AppColors {
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
     stops: [0.0, 0.28, 0.42, 0.54],
+  );
+
+  //bedge gradient
+  static const Gradient bedgeGradient = LinearGradient(
+    colors: [darkBlue0, darkBlue, darkBlue0, darkBlue],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    stops: [0.0, 0.32, 0.48, 0.67],
   );
 
   static const Gradient homeAirGradient = homeAirBottomGradient;

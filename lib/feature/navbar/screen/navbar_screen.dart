@@ -25,49 +25,13 @@ class NavbarScreen extends ConsumerWidget {
 
     return Scaffold(
       extendBody: true,
-      body: SmoothFadeIndexedStack(
-        index: currentIndex,
-        children: screens,
-      ),
+      body: IndexedStack(index: currentIndex, children: screens),
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: currentIndex,
         onTap: (index) {
           ref.read(navbarNotifierProvider.notifier).setIndex(index);
         },
       ),
-    );
-  }
-}
-
-/// High-performance iOS-style smooth crossfade indexed stack
-class SmoothFadeIndexedStack extends StatelessWidget {
-  final int index;
-  final List<Widget> children;
-  final Duration duration;
-
-  const SmoothFadeIndexedStack({
-    super.key,
-    required this.index,
-    required this.children,
-    this.duration = const Duration(milliseconds: 200),
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: List.generate(children.length, (i) {
-        final isActive = i == index;
-        return IgnorePointer(
-          ignoring: !isActive,
-          child: AnimatedOpacity(
-            opacity: isActive ? 1.0 : 0.0,
-            duration: duration,
-            curve: Curves.easeOutCubic,
-            child: children[i],
-          ),
-        );
-      }),
     );
   }
 }
