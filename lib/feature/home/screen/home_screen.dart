@@ -15,8 +15,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CommonScreen(
+    return CommonScreen(
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             HomeHeaderWidget(
@@ -25,7 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
               onSettingsTap: () {},
             ),
             SizedBox(height: 16.h),
-            FlightWaveCard(),
+            const FlightWaveCard(),
+            SizedBox(height: 90.h),
           ],
         ),
       ),

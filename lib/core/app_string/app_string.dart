@@ -137,4 +137,11 @@ class AppString {
   static const String sampleGate = "B24";
   static const String seat = "SEAT";
   static const String sampleSeat = "14A";
+
+  // Bottom Navbar
+  static const String navHome = "HOME";
+  static const String navTicket = "TICKET";
+  static const String navScan = "SCAN";
+  static const String navFeed = "FEED";
+  static const String navMore = "MORE";
 }

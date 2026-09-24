@@ -11,7 +11,7 @@ import 'package:navyla_flight_app/feature/auth/new_password/screen/new_password_
 import 'package:navyla_flight_app/feature/auth/login_account/screen/login_screen.dart';
 import 'package:navyla_flight_app/feature/auth/verify_otp/model/otp_type.dart';
 import 'package:navyla_flight_app/feature/auth/verify_otp/screen/verify_otp_screen.dart';
-import 'package:navyla_flight_app/feature/home/screen/home_screen.dart';
+import 'package:navyla_flight_app/feature/navbar/screen/navbar_screen.dart';
 import 'package:navyla_flight_app/feature/onboarding/screen/onboarding_screen.dart';
 import 'package:navyla_flight_app/feature/splash/splash_screen.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
@@ -104,7 +104,12 @@ final appPages = Provider<GoRouter>(
       GoRoute(
         path: AppRouterName.homeScreen,
         pageBuilder: (context, state) =>
-            CupertinoPage(key: state.pageKey, child: const HomeScreen()),
+            CupertinoPage(key: state.pageKey, child: const NavbarScreen()),
+      ),
+      GoRoute(
+        path: AppRouterName.navbarScreen,
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: const NavbarScreen()),
       ),
     ],
     errorBuilder: (context, state) =>
