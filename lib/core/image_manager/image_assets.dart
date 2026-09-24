@@ -28,4 +28,11 @@ class ImageAssets {
   static const String profile = "$_imagePath/profile.png";
   static const String homeAir = "$_imagePath/homeAir.png";
   static const String city = "$_imagePath/city.png";
+
+  // quick access tools assets
+  static const String airportNav = "$_imagePath/airport_nav.png";
+  static const String boardingPass = "$_imagePath/boarding_pass.png";
+  static const String exploreNearby = "$_imagePath/explore_nearby.png";
+  static const String navylaAi = "$_imagePath/navyla_ai.png";
+  static const String navylaBg = "$_imagePath/navyla_bg.png";
 }

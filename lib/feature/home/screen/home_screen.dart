@@ -7,6 +7,7 @@ import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/feature/home/widget/city_weather_card.dart';
 import 'package:navyla_flight_app/feature/home/widget/flight_card_widget.dart';
 import 'package:navyla_flight_app/feature/home/widget/home_header_widget.dart';
+import 'package:navyla_flight_app/feature/home/widget/quick_access_tools_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,7 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
             const CityWeatherCard(),
             SizedBox(height: 16.h),
 
-            TitleRowClick(),
+            const TitleRowClick(),
+            SizedBox(height: 12.h),
+
+            const QuickAccessToolsWidget(),
+            SizedBox(height: 100.h),
           ],
         ),
       ),
