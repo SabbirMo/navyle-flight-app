@@ -1,7 +1,11 @@
 class ImageAssets {
   static const String _imagePath = "assets/images";
+  static const String _iconPath = "assets/icons";
   static const String _svgPath = "assets/svgs";
   static const String _lottiePath = "assets/lottie";
+
+  // icons
+  static const String cloude = "$_iconPath/cloude.png";
 
   //images
   static const String appLogo = "$_imagePath/app_logo.png";
@@ -23,4 +27,5 @@ class ImageAssets {
   //home page image assets
   static const String profile = "$_imagePath/profile.png";
   static const String homeAir = "$_imagePath/homeAir.png";
+  static const String city = "$_imagePath/city.png";
 }
