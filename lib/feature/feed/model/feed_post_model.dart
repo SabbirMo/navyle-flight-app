@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:navyla_flight_app/core/colors/app_colors.dart';
 
 /// Data model representing a community feed update item
 class FeedPostModel {
@@ -64,14 +65,14 @@ class FeedPostModel {
   Color get tagBackgroundColor {
     switch (category.toUpperCase()) {
       case 'SECURITY':
-        return const Color(0xFFFFF1E6); // Light orange tint
+        return AppColors.feedOrangeBg; // Light orange tint
       case 'ESCALATOR':
       case 'LIFT':
       case 'LIFTS':
-        return const Color(0xFFE0F2FE); // Light sky blue
+        return AppColors.feedBlueBg; // Light sky blue
       case 'GATE':
       case 'GATES':
-        return const Color(0xFFF3E8FF); // Light lavender
+        return AppColors.feedPurpleBg; // Light lavender
       default:
         return const Color(0xFFF1F5F9);
     }
@@ -81,14 +82,14 @@ class FeedPostModel {
   Color get tagTextColor {
     switch (category.toUpperCase()) {
       case 'SECURITY':
-        return const Color(0xFFEA580C); // Warm orange
+        return AppColors.feedOrange; // Warm orange
       case 'ESCALATOR':
       case 'LIFT':
       case 'LIFTS':
-        return const Color(0xFF0284C7); // Crisp blue
+        return AppColors.blue2563EB; // Crisp blue
       case 'GATE':
       case 'GATES':
-        return const Color(0xFF9333EA); // Purple
+        return AppColors.feedPurple; // Purple
       default:
         return const Color(0xFF475569);
     }

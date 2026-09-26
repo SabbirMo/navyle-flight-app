@@ -4,7 +4,7 @@ class AppColors {
   static const Color lightWhite = Color(0xFFFFF3EA); //#FFF3EA
   static const Color white = Color(0xFFFFFFFF); //#FFFFFF
 
-  static const Color primaryColor = Color(0xFFFF9D3E); //#FF9D3E
+  static const Color primaryColor = Color(0xFFFF942B); //#FF942B
   static const Color lightBgColor = Color(0xFFFFF9F0); //#FFF9F0
   static const Color unSelectColor = Color(0xFFE3E2E0); //#E3E2E0
   static const Color grayColor = Color(0xFF8A817A); //#8A817A
@@ -73,4 +73,14 @@ class AppColors {
   );
 
   static const Gradient homeAirGradient = homeAirBottomGradient;
+
+  //feed
+  static const Color primaryFeed = Color(0xffFCA15D); //#FCA15D
+  static const Color feedGreen = Color(0xff16A34A); //#16A34A
+  static const Color feedGreenOpacity = Color(0xffF0FDF4); //#F0FDF4
+  static const Color feedOrange = Color(0xffEA580C); //#EA580C
+  static const Color feedOrangeBg = Color(0xffFFF7ED); //#FFF7ED
+  static const Color feedBlueBg = Color(0xffEFF6FF); //#EFF6FF
+  static const Color feedPurple = Color(0xff9333EA); //#9333EA
+  static const Color feedPurpleBg = Color(0xffFAF5FF); //#FAF5FF
 }

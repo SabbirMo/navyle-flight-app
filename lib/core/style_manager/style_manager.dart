@@ -64,6 +64,22 @@ class StyleManager {
     );
   }
 
+  static TextStyle interRegular14(Color color) {
+    return GoogleFonts.inter(
+      fontSize: 14.sp,
+      fontWeight: FontWeight.w400,
+      color: color,
+    );
+  }
+
+  static TextStyle interBold10(Color color) {
+    return GoogleFonts.inter(
+      fontSize: 10.sp,
+      fontWeight: FontWeight.bold,
+      color: color,
+    );
+  }
+
   static TextStyle semiBoldRoboto20(Color color) {
     return GoogleFonts.roboto(
       fontSize: 20.sp,

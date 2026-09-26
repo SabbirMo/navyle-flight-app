@@ -68,30 +68,26 @@ class _TabItem extends StatelessWidget {
                 title,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
-                  fontSize: 15.sp,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
                   color: isSelected
-                      ? const Color(0xFF1E293B)
-                      : const Color(0xFF94A3B8),
+                      ? AppColors.blackShadow
+                      : AppColors.lightGray,
                 ),
               ),
             ),
             // Orange indicator line or transparent placeholder
             Container(
-              height: 2.5.h,
+              height: 2.h,
               decoration: BoxDecoration(
-                color: isSelected
-                    ? AppColors.primaryColor
-                    : Colors.transparent,
+                color: isSelected ? AppColors.primaryColor : Colors.transparent,
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
             // Subtle baseline divider
             Container(
               height: 1.h,
-              color: isSelected
-                  ? Colors.transparent
-                  : const Color(0xFFF1F5F9),
+              color: isSelected ? Colors.transparent : const Color(0xFFF1F5F9),
             ),
           ],
         ),

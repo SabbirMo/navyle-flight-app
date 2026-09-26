@@ -96,9 +96,7 @@ class FeedScreen extends ConsumerWidget {
         child: Column(
           children: [
             // 1. Top Header (Logo + Orange Add Button)
-            FeedHeaderWidget(
-              onAddPostTap: () => _openCreatePost(context),
-            ),
+            FeedHeaderWidget(onAddPostTap: () => _openCreatePost(context)),
             SizedBox(height: 8.h),
 
             // 2. Horizontal Filter Categories
@@ -140,8 +138,7 @@ class FeedScreen extends ConsumerWidget {
                           onToggleSpam: () =>
                               feedNotifier.toggleSpamVote(post.id),
                           onEdit: () => _openEditPost(context, post),
-                          onDelete: () =>
-                              _confirmDelete(context, ref, post.id),
+                          onDelete: () => _confirmDelete(context, ref, post.id),
                         );
                       },
                     ),
@@ -169,7 +166,9 @@ class FeedScreen extends ConsumerWidget {
               ),
               child: Center(
                 child: Icon(
-                  isMyPost ? Icons.post_add_rounded : Icons.filter_alt_off_rounded,
+                  isMyPost
+                      ? Icons.post_add_rounded
+                      : Icons.filter_alt_off_rounded,
                   size: 34.sp,
                   color: AppColors.primaryColor,
                 ),

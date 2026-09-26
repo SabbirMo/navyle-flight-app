@@ -47,12 +47,12 @@ class FeedHeaderWidget extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(14.r),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFFFF8A1E).withValues(alpha: 0.38),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+                    color: AppColors.primaryColor.withValues(alpha: 0.38),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),

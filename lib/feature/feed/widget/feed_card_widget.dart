@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
+import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/feature/feed/model/feed_post_model.dart';
 
 class FeedCardWidget extends StatelessWidget {
@@ -55,7 +57,10 @@ class FeedCardWidget extends StatelessWidget {
                 height: 44.w,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFFF1F5F9), width: 1.5),
+                  border: Border.all(
+                    color: const Color(0xFFF1F5F9),
+                    width: 1.5,
+                  ),
                 ),
                 child: ClipOval(
                   child: post.avatarUrl != null
@@ -92,19 +97,16 @@ class FeedCardWidget extends StatelessWidget {
                   children: [
                     Text(
                       post.authorName,
-                      style: GoogleFonts.inter(
-                        fontSize: 14.5.sp,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xFF1E293B),
-                      ),
+                      style: StyleManager.interSemiBold14(
+                        AppColors.blackShadow,
+                      ).copyWith(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 2.h),
                     Text(
                       post.timeAgo,
                       style: GoogleFonts.inter(
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         fontWeight: FontWeight.w400,
-                        color: const Color(0xFF94A3B8),
+                        color: AppColors.lightGray,
                       ),
                     ),
                   ],
@@ -120,12 +122,9 @@ class FeedCardWidget extends StatelessWidget {
                 ),
                 child: Text(
                   post.category.toUpperCase(),
-                  style: GoogleFonts.inter(
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.8,
-                    color: post.tagTextColor,
-                  ),
+                  style: StyleManager.interBold10(
+                    post.tagTextColor,
+                  ).copyWith(fontSize: 9.sp, letterSpacing: 1.0),
                 ),
               ),
             ],
@@ -135,12 +134,7 @@ class FeedCardWidget extends StatelessWidget {
           SizedBox(height: 14.h),
           Text(
             post.content,
-            style: GoogleFonts.inter(
-              fontSize: 13.5.sp,
-              height: 1.45,
-              fontWeight: FontWeight.w400,
-              color: const Color(0xFF334155),
-            ),
+            style: StyleManager.interRegular14(AppColors.darkGrayColor),
           ),
 
           // 3. Status Action Buttons (IT'S REAL & SPAM)
@@ -156,11 +150,11 @@ class FeedCardWidget extends StatelessWidget {
                     onToggleReal();
                   },
                   child: Container(
-                    height: 38.h,
+                    height: 34.h,
                     decoration: BoxDecoration(
                       color: post.isRealVoted
                           ? const Color(0xFFD1FAE5)
-                          : const Color(0xFFECFDF5),
+                          : AppColors.feedGreenOpacity,
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
                         color: post.isRealVoted
@@ -175,17 +169,12 @@ class FeedCardWidget extends StatelessWidget {
                         Icon(
                           Icons.check_rounded,
                           size: 16.sp,
-                          color: const Color(0xFF059669),
+                          color: AppColors.feedGreen,
                         ),
                         SizedBox(width: 6.w),
                         Text(
                           "IT'S REAL (${post.realCount})",
-                          style: GoogleFonts.inter(
-                            fontSize: 11.sp,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.4,
-                            color: const Color(0xFF059669),
-                          ),
+                          style: StyleManager.interBold10(AppColors.feedGreen),
                         ),
                       ],
                     ),
@@ -203,7 +192,7 @@ class FeedCardWidget extends StatelessWidget {
                     onToggleSpam();
                   },
                   child: Container(
-                    height: 38.h,
+                    height: 36.h,
                     decoration: BoxDecoration(
                       color: hasSpam
                           ? const Color(0xFFFEF2F2)
@@ -223,19 +212,14 @@ class FeedCardWidget extends StatelessWidget {
                           Icons.flag_rounded,
                           size: 15.sp,
                           color: hasSpam
-                              ? const Color(0xFFDC2626)
-                              : const Color(0xFF94A3B8),
+                              ? AppColors.errorRed
+                              : AppColors.lightGray,
                         ),
                         SizedBox(width: 6.w),
                         Text(
                           "SPAM (${post.spamCount})",
-                          style: GoogleFonts.inter(
-                            fontSize: 11.sp,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.4,
-                            color: hasSpam
-                                ? const Color(0xFFDC2626)
-                                : const Color(0xFF64748B),
+                          style: StyleManager.interBold10(
+                            hasSpam ? AppColors.errorRed : AppColors.lightGray,
                           ),
                         ),
                       ],

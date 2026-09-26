@@ -36,37 +36,29 @@ class FeedCategoryFilterWidget extends StatelessWidget {
               curve: Curves.easeInOut,
               padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primaryColor : Colors.white,
+                color: isSelected ? AppColors.primaryFeed : Colors.white,
                 borderRadius: BorderRadius.circular(24.r),
                 border: Border.all(
                   color: isSelected
-                      ? AppColors.primaryColor
+                      ? AppColors.primaryFeed
                       : const Color(0xFFE2E8F0),
                   width: 1.2,
                 ),
-                boxShadow: isSelected
-                    ? [
-                        BoxShadow(
-                          color: AppColors.primaryColor.withValues(alpha: 0.28),
-                          blurRadius: 8,
-                          offset: const Offset(0, 3),
-                        ),
-                      ]
-                    : [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.02),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.02),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Center(
                 child: Text(
                   category,
                   style: GoogleFonts.inter(
-                    fontSize: 13.sp,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                    color: isSelected ? Colors.white : const Color(0xFF64748B),
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold,
+                    color: isSelected ? Colors.white : AppColors.lightGray,
                   ),
                 ),
               ),
