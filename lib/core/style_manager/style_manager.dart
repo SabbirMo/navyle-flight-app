@@ -80,6 +80,15 @@ class StyleManager {
     );
   }
 
+  static TextStyle interBold16(Color color) {
+    return GoogleFonts.inter(
+      fontSize: 16.sp,
+      fontWeight: FontWeight.bold,
+      color: color,
+    );
+  }
+
+  //robota
   static TextStyle semiBoldRoboto20(Color color) {
     return GoogleFonts.roboto(
       fontSize: 20.sp,

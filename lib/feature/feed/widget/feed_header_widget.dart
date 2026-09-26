@@ -39,14 +39,10 @@ class FeedHeaderWidget extends StatelessWidget {
           GestureDetector(
             onTap: onAddPostTap,
             child: Container(
-              width: 44.w,
-              height: 44.w,
+              width: 38.w,
+              height: 38.w,
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFFFA34D), Color(0xFFFF7E1D)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: AppColors.primaryColor,
                 borderRadius: BorderRadius.circular(14.r),
                 boxShadow: [
                   BoxShadow(

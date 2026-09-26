@@ -246,25 +246,23 @@ class FeedCardWidget extends StatelessWidget {
                     child: Container(
                       height: 38.h,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEFF6FF),
+                        color: AppColors.feedBlueBg,
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            Icons.edit_note_rounded,
-                            size: 19.sp,
-                            color: const Color(0xFF2563EB),
+                          Image.asset(
+                            ImageAssets.edit,
+                            width: 18.w,
+                            height: 18.h,
+                            fit: BoxFit.contain,
                           ),
                           SizedBox(width: 6.w),
                           Text(
                             'EDIT POST',
-                            style: GoogleFonts.inter(
-                              fontSize: 11.5.sp,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.5,
-                              color: const Color(0xFF2563EB),
+                            style: StyleManager.interBold10(
+                              AppColors.blue2563EB,
                             ),
                           ),
                         ],
@@ -289,10 +287,11 @@ class FeedCardWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Center(
-                      child: Icon(
-                        Icons.delete_outline_rounded,
-                        size: 20.sp,
-                        color: const Color(0xFFEF4444),
+                      child: Image.asset(
+                        ImageAssets.delete,
+                        width: 18.w,
+                        height: 18.h,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),

@@ -7,6 +7,8 @@ class ImageAssets {
   // icons
   static const String cloude = "$_iconPath/cloude.png";
   static const String boardingPassIcon = "$_iconPath/boarding_pass_icon.png";
+  static const String edit = "$_iconPath/edit.png";
+  static const String delete = "$_iconPath/delete.png";
 
   //images
   static const String appLogo = "$_imagePath/app_logo.png";
@@ -21,6 +23,11 @@ class ImageAssets {
   static const String google = "$_svgPath/google.svg";
   static const String apple = "$_svgPath/apple.svg";
   static const String notification = "$_svgPath/notification.svg";
+  static const String security = "$_svgPath/security.svg";
+  static const String gate = "$_svgPath/gate.svg";
+  static const String escalato = "$_svgPath/escalator.svg";
+  static const String escalator = "$_svgPath/escalator.svg";
+  static const String lift = "$_svgPath/lift.svg";
 
   //lottie animation
 
