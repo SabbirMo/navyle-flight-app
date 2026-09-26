@@ -45,6 +45,8 @@ class AppColors {
   static const Color darkBlue0 = Color(0xff0A4F8B); //#0A4F8B
   static const Color darkBlue = Color(0xff014871); //#014871
   static const Color grayD3D3D3 = Color(0xffD3D3D3); //#D3D3D3
+  static const Color blue2563EB = Color(0xff2563EB); //#2563EB
+  static const Color lightBlueGray = Color(0xff64748B); //#64748B
 
   // Bottom gradient (transparent above runway -> solid homeAir behind terminal info)
   static const Gradient homeAirBottomGradient = LinearGradient(

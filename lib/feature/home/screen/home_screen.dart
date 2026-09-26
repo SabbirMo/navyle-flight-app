@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/core/widgets/title_row_click.dart';
+import 'package:navyla_flight_app/feature/feed/provider/feed_notifier.dart';
 import 'package:navyla_flight_app/feature/home/widget/city_weather_card.dart';
 import 'package:navyla_flight_app/feature/home/widget/flight_card_widget.dart';
+import 'package:navyla_flight_app/feature/home/widget/home_feed_card.dart';
 import 'package:navyla_flight_app/feature/home/widget/home_header_widget.dart';
 import 'package:navyla_flight_app/feature/home/widget/quick_access_tools_widget.dart';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -21,6 +22,13 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final feedPosts = ref.watch(feedNotifierProvider).posts;
+    final homePost = feedPosts.firstWhere(
+      (p) => p.authorName.contains('Mark'),
+      orElse: () =>
+          feedPosts.isNotEmpty ? feedPosts.first : HomeFeedCard.defaultPost,
+    );
+
     return CommonScreen(
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -50,6 +58,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
             ),
             SizedBox(height: 12.h),
+
+            HomeFeedCard(
+              post: homePost,
+              onTap: () {
+                ref.read(navbarNotifierProvider.notifier).setIndex(3);
+              },
+            ),
+            SizedBox(height: 16.h),
           ],
         ),
       ),

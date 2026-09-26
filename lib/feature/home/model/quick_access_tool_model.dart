@@ -64,10 +64,9 @@ class QuickAccessToolModel {
       subtitle: 'VIEW YOUR PASS',
       bgImage: ImageAssets.boardingPass,
       isChevronAtEnd: true,
-      iconWidget: Icon(
-        Icons.airplane_ticket_outlined,
-        color: const Color(0xFF007AFF),
-        size: 22.sp,
+      iconWidget: Padding(
+        padding: EdgeInsets.all(6.w),
+        child: Image.asset(ImageAssets.boardingPassIcon, fit: BoxFit.contain),
       ),
     ),
 

@@ -118,7 +118,7 @@ class FeedPostModel {
       timeAgo: '12 mins ago',
       category: 'ESCALATOR',
       content:
-          'Escalator near B34 to the shuttle is under maintenance. Take the lift behind the Starbucks.',
+          'The lounge near B12 is currently closed for cleaning. Staff said it should reopen in 45 mins.',
       realCount: 8,
       spamCount: 1,
       isMyPost: false,

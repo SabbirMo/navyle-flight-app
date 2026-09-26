@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
@@ -98,13 +99,7 @@ class HomeHeaderWidget extends StatelessWidget {
                 width: 1,
               ),
             ),
-            child: Center(
-              child: Icon(
-                Icons.settings_outlined,
-                size: 21.sp,
-                color: AppColors.blackShadow,
-              ),
-            ),
+            child: Center(child: SvgPicture.asset(ImageAssets.notification)),
           ),
         ),
       ],

@@ -51,19 +51,19 @@ class CityWeatherCard extends StatelessWidget {
             color: AppColors.white,
             borderRadius: BorderRadius.circular(24.r),
             boxShadow: [
-              // All-around ambient shadow so the card is clearly visible on all sides
+              // Ambient soft glow shadow
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
+                color: const Color(0xFF0F172A).withValues(alpha: 0.04),
                 blurRadius: 20,
-                spreadRadius: 2,
+                spreadRadius: 0,
                 offset: const Offset(0, 4),
               ),
               // Soft downward depth shadow
               BoxShadow(
-                color: const Color(0xFF1E293B).withValues(alpha: 0.05),
-                blurRadius: 10,
-                spreadRadius: 0,
-                offset: const Offset(0, 2),
+                color: const Color(0xFF0F172A).withValues(alpha: 0.06),
+                blurRadius: 12,
+                spreadRadius: -2,
+                offset: const Offset(0, 8),
               ),
             ],
           ),

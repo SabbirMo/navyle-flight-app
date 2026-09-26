@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/feature/home/model/quick_access_tool_model.dart';
 
@@ -58,9 +57,9 @@ class _QuickAccessCard extends StatelessWidget {
       onTap: item.onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        height: 128.h,
+        height: 94.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22.r),
+          borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
@@ -114,9 +113,8 @@ class _QuickAccessCard extends StatelessWidget {
                   Text(
                     item.title,
                     style: TextStyle(
-                      fontFamily: 'SF-Pro',
                       fontSize: 14.sp,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.bold,
                       color: AppColors.black,
                       letterSpacing: -0.2,
                       height: 1.15,
@@ -127,10 +125,10 @@ class _QuickAccessCard extends StatelessWidget {
                   SizedBox(height: 3.h),
                   Text(
                     item.subtitle,
-                    style: GoogleFonts.inter(
+                    style: TextStyle(
                       fontSize: 9.sp,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF6B7280),
+                      color: AppColors.lightBlueGray,
                       letterSpacing: 0.5,
                     ),
                     maxLines: 1,

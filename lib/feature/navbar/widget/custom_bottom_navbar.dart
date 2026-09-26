@@ -12,7 +12,7 @@ class CustomBottomNavBar extends StatelessWidget {
 
   // Cached layout constants
   static const double _barHeight = 64.0;
-  static const double _extraTopRoom = 16.0;
+  static const double _extraTopRoom = 0.0;
   static const double _centerBtnSize = 54.0;
   static const Color _darkBg = Color(0xFF1E293B);
   static const Color _lightBg = AppColors.white;
@@ -144,7 +144,7 @@ class CustomBottomNavBar extends StatelessWidget {
 
             // 2. Elevated Floating Center Scan Button
             Positioned(
-              bottom: bottomPadding + 30.0,
+              bottom: bottomPadding + 24.0,
               child: _CenterScanButton(
                 borderColor: navBgColor,
                 onTap: () {
