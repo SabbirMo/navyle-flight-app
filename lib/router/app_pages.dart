@@ -16,7 +16,8 @@ import 'package:navyla_flight_app/feature/feed/model/feed_post_model.dart';
 import 'package:navyla_flight_app/feature/feed/screen/post_live_update_screen.dart';
 import 'package:navyla_flight_app/feature/navbar/screen/navbar_screen.dart';
 import 'package:navyla_flight_app/feature/onboarding/screen/onboarding_screen.dart';
-import 'package:navyla_flight_app/feature/setting/screen/setting_screen.dart';
+import 'package:navyla_flight_app/feature/setting/profile_details/screen/profile_details_screen.dart';
+import 'package:navyla_flight_app/feature/setting/setting/screen/setting_screen.dart';
 import 'package:navyla_flight_app/feature/splash/splash_screen.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
@@ -142,6 +143,15 @@ final appPages = Provider<GoRouter>(
         path: AppRouterName.settingScreen,
         pageBuilder: (context, state) =>
             CupertinoPage(key: state.pageKey, child: const SettingScreen()),
+      ),
+
+      //profile Details
+      GoRoute(
+        path: AppRouterName.profileDetailsScreen,
+        pageBuilder: (context, state) => CupertinoPage(
+          key: state.pageKey,
+          child: const ProfileDetailsScreen(),
+        ),
       ),
     ],
     errorBuilder: (context, state) =>

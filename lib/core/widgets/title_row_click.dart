@@ -9,11 +9,13 @@ class TitleRowClick extends StatelessWidget {
     this.onTap,
     this.isEnable = false,
     required this.title,
+    this.subTitle = "",
   });
 
   final VoidCallback? onTap;
   final bool isEnable;
   final String title;
+  final String subTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class TitleRowClick extends StatelessWidget {
             ? InkWell(
                 onTap: onTap,
                 child: Text(
-                  "See All",
+                  subTitle,
                   style: StyleManager.interMedium12(AppColors.primaryColor),
                 ),
               )

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/theme/theme_mode_provder.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
-import 'package:navyla_flight_app/feature/setting/widget/profile_details_card.dart';
-import 'package:navyla_flight_app/feature/setting/widget/setting_item_tile.dart';
-import 'package:navyla_flight_app/feature/setting/widget/setting_toggle_switch.dart';
-import 'package:navyla_flight_app/feature/setting/widget/subscription_plan_card.dart';
+import 'package:navyla_flight_app/feature/setting/setting/widget/profile_details_card.dart';
+import 'package:navyla_flight_app/feature/setting/setting/widget/setting_item_tile.dart';
+import 'package:navyla_flight_app/feature/setting/setting/widget/setting_toggle_switch.dart';
+import 'package:navyla_flight_app/feature/setting/setting/widget/subscription_plan_card.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class SettingScreen extends ConsumerStatefulWidget {
   const SettingScreen({super.key});
@@ -46,7 +48,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                     _buildSectionTitle("PROFILE DETAILS"),
                     ProfileDetailsCard(
                       onTap: () {
-                        // Navigate to profile details
+                        context.push(AppRouterName.profileDetailsScreen);
                       },
                     ),
                     SizedBox(height: 18.h),

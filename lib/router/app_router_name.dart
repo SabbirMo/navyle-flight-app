@@ -23,4 +23,5 @@ class AppRouterName {
 
   //setting
   static const String settingScreen = '/settingScreen';
+  static const String profileDetailsScreen = '/profileDetailsScreen';
 }
