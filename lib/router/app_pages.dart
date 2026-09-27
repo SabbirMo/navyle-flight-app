@@ -16,6 +16,7 @@ import 'package:navyla_flight_app/feature/feed/model/feed_post_model.dart';
 import 'package:navyla_flight_app/feature/feed/screen/post_live_update_screen.dart';
 import 'package:navyla_flight_app/feature/navbar/screen/navbar_screen.dart';
 import 'package:navyla_flight_app/feature/onboarding/screen/onboarding_screen.dart';
+import 'package:navyla_flight_app/feature/setting/change_password/screen/change_password.dart';
 import 'package:navyla_flight_app/feature/setting/profile_details/screen/profile_details_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/screen/setting_screen.dart';
 import 'package:navyla_flight_app/feature/splash/splash_screen.dart';
@@ -152,6 +153,13 @@ final appPages = Provider<GoRouter>(
           key: state.pageKey,
           child: const ProfileDetailsScreen(),
         ),
+      ),
+
+      //change password
+      GoRoute(
+        path: AppRouterName.changePassword,
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: const ChangePassword()),
       ),
     ],
     errorBuilder: (context, state) =>

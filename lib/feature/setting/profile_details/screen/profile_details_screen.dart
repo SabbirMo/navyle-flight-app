@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
@@ -10,6 +11,7 @@ import 'package:navyla_flight_app/core/widgets/custom_input_field.dart';
 import 'package:navyla_flight_app/core/widgets/title_row_click.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
 import 'package:navyla_flight_app/feature/setting/profile_details/provider/profile_details_notifier.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class ProfileDetailsScreen extends ConsumerStatefulWidget {
   const ProfileDetailsScreen({super.key});
@@ -201,7 +203,7 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                         isEnable: true,
                         subTitle: "Change password",
                         onTap: () {
-                          // Handle change password
+                          context.push(AppRouterName.changePassword);
                         },
                       ),
                     ),
