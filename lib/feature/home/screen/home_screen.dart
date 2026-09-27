@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/core/widgets/title_row_click.dart';
@@ -11,6 +12,7 @@ import 'package:navyla_flight_app/feature/home/widget/home_feed_card.dart';
 import 'package:navyla_flight_app/feature/home/widget/home_header_widget.dart';
 import 'package:navyla_flight_app/feature/home/widget/quick_access_tools_widget.dart';
 import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -30,44 +32,50 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
 
     return CommonScreen(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            HomeHeaderWidget(
-              greeting: AppString.goodMorning,
-              userName: AppString.defaultUserName,
-              onSettingsTap: () {},
-            ),
-            SizedBox(height: 16.h),
-            const FlightWaveCard(),
-            SizedBox(height: 16.h),
-            const CityWeatherCard(),
-            SizedBox(height: 16.h),
+      child: Column(
+        children: [
+          HomeHeaderWidget(
+            greeting: AppString.goodMorning,
+            userName: AppString.defaultUserName,
+            onSettingsTap: () => context.push(AppRouterName.settingScreen),
+          ),
+          SizedBox(height: 12.h),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  const FlightWaveCard(),
+                  SizedBox(height: 16.h),
+                  const CityWeatherCard(),
+                  SizedBox(height: 16.h),
 
-            const TitleRowClick(title: "Quick access tools"),
-            SizedBox(height: 12.h),
+                  const TitleRowClick(title: "Quick access tools"),
+                  SizedBox(height: 12.h),
 
-            const QuickAccessToolsWidget(),
-            SizedBox(height: 16.h),
-            TitleRowClick(
-              title: "NAVYLA Feed",
-              isEnable: true,
-              onTap: () {
-                ref.read(navbarNotifierProvider.notifier).setIndex(3);
-              },
-            ),
-            SizedBox(height: 12.h),
+                  const QuickAccessToolsWidget(),
+                  SizedBox(height: 16.h),
+                  TitleRowClick(
+                    title: "NAVYLA Feed",
+                    isEnable: true,
+                    onTap: () {
+                      ref.read(navbarNotifierProvider.notifier).setIndex(3);
+                    },
+                  ),
+                  SizedBox(height: 12.h),
 
-            HomeFeedCard(
-              post: homePost,
-              onTap: () {
-                ref.read(navbarNotifierProvider.notifier).setIndex(3);
-              },
+                  HomeFeedCard(
+                    post: homePost,
+                    onTap: () {
+                      ref.read(navbarNotifierProvider.notifier).setIndex(3);
+                    },
+                  ),
+                  SizedBox(height: 16.h),
+                ],
+              ),
             ),
-            SizedBox(height: 16.h),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

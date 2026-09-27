@@ -22,7 +22,7 @@ class CustomBackButton extends StatelessWidget {
         height: 32.w,
         decoration: BoxDecoration(
           color: AppColors.white,
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
               color: AppColors.blackShadow.withValues(alpha: 0.12),
@@ -48,7 +48,10 @@ class CustomBackButton extends StatelessWidget {
           child: Center(
             child: Text(
               title,
-              style: StyleManager.sfProSemiBold16(AppColors.blackShadow),
+
+              style: StyleManager.sfProSemiBold16(
+                AppColors.blackShadow,
+              ).copyWith(letterSpacing: 1),
               textAlign: TextAlign.center,
             ),
           ),

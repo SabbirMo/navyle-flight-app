@@ -61,14 +61,7 @@ class _AIChatScreenState extends ConsumerState<AIChatScreen> {
         child: Column(
           children: [
             // 1. Top App Bar with Solid White Background
-            Container(
-              color: Colors.white,
-              child: ChatAppBar(
-                onInfoTap: () {
-                  // _showFlightInfoModal(context);
-                },
-              ),
-            ),
+            Container(color: Colors.white, child: const ChatAppBar()),
 
             // 2. Chat Area with Doodle Travel Background & Subtle Sky Glow
             Expanded(
@@ -150,76 +143,4 @@ class _AIChatScreenState extends ConsumerState<AIChatScreen> {
       ),
     );
   }
-
-  // void _showFlightInfoModal(BuildContext context) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     backgroundColor: Colors.white,
-  //     shape: RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-  //     ),
-  //     builder: (context) {
-  //       return Padding(
-  //         padding: EdgeInsets.all(20.w),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Center(
-  //               child: Container(
-  //                 width: 40.w,
-  //                 height: 4.h,
-  //                 decoration: BoxDecoration(
-  //                   color: const Color(0xFFE2E8F0),
-  //                   borderRadius: BorderRadius.circular(2.r),
-  //                 ),
-  //               ),
-  //             ),
-  //             SizedBox(height: 16.h),
-  //             Text(
-  //               'Flight Assistant Details',
-  //               style: GoogleFonts.inter(
-  //                 fontSize: 16.sp,
-  //                 fontWeight: FontWeight.bold,
-  //                 color: const Color(0xFF0F172A),
-  //               ),
-  //             ),
-  //             SizedBox(height: 12.h),
-  //             _buildInfoRow('Flight', 'British Airways BA 0215'),
-  //             _buildInfoRow('Route', 'London (LHR) -> New York (JFK)'),
-  //             _buildInfoRow('Departure', '11:55 AM, Terminal 5'),
-  //             _buildInfoRow('Gate', 'Gate B22 (Boarding at 11:15 AM)'),
-  //             SizedBox(height: 16.h),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  // Widget _buildInfoRow(String label, String value) {
-  //   return Padding(
-  //     padding: EdgeInsets.symmetric(vertical: 4.h),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //       children: [
-  //         Text(
-  //           label,
-  //           style: GoogleFonts.inter(
-  //             fontSize: 13.sp,
-  //             color: const Color(0xFF64748B),
-  //           ),
-  //         ),
-  //         Text(
-  //           value,
-  //           style: GoogleFonts.inter(
-  //             fontSize: 13.sp,
-  //             fontWeight: FontWeight.w600,
-  //             color: const Color(0xFF0F172A),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

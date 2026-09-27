@@ -88,4 +88,9 @@ class AppColors {
   static const Color aIPrimaryColor = Color(0xff5D99E2); //#5D99E2
   static const Color aISecondaryColor = Color(0xffFF9E3F); //#FF9E3F
   static const Color aIMessageColor = Color(0xff334155); //#334155
+
+  //setting
+  static const Color subscribeBg = Color(0xffFF812A); //#FF812A
+  static const Color subscribeHighlightBg = Color(0xffFFEDD5); //#FFEDD5
+  static const Color warningColor = Color(0xffFEFCE8); //#FEFCE8
 }

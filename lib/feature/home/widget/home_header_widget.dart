@@ -10,7 +10,7 @@ class HomeHeaderWidget extends StatelessWidget {
   final String? avatarUrl;
   final String? greeting;
   final String? userName;
-  final VoidCallback? onAvatarTap;
+  final VoidCallback? onNotificationTap;
   final VoidCallback? onSettingsTap;
 
   const HomeHeaderWidget({
@@ -18,7 +18,7 @@ class HomeHeaderWidget extends StatelessWidget {
     this.avatarUrl,
     this.greeting,
     this.userName,
-    this.onAvatarTap,
+    this.onNotificationTap,
     this.onSettingsTap,
   });
 
@@ -28,7 +28,7 @@ class HomeHeaderWidget extends StatelessWidget {
       children: [
         // User Avatar
         GestureDetector(
-          onTap: onAvatarTap,
+          onTap: onSettingsTap,
           child: Container(
             width: 46.w,
             height: 46.w,
@@ -78,9 +78,9 @@ class HomeHeaderWidget extends StatelessWidget {
         ),
         SizedBox(width: 6.w),
 
-        // Settings Button
+        // Notification Button
         GestureDetector(
-          onTap: onSettingsTap,
+          onTap: onNotificationTap,
           child: Container(
             width: 42.w,
             height: 42.w,

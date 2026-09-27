@@ -20,4 +20,7 @@ class AppRouterName {
 
   //Ai Chat
   static const String aiChatScreen = '/aiChatScreen';
+
+  //setting
+  static const String settingScreen = '/settingScreen';
 }
