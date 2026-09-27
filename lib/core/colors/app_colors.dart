@@ -83,4 +83,9 @@ class AppColors {
   static const Color feedBlueBg = Color(0xffEFF6FF); //#EFF6FF
   static const Color feedPurple = Color(0xff9333EA); //#9333EA
   static const Color feedPurpleBg = Color(0xffFAF5FF); //#FAF5FF
+
+  //AI Chat
+  static const Color aIPrimaryColor = Color(0xff5D99E2); //#5D99E2
+  static const Color aISecondaryColor = Color(0xffFF9E3F); //#FF9E3F
+  static const Color aIMessageColor = Color(0xff334155); //#334155
 }

@@ -27,6 +27,28 @@ class QuickAccessToolModel {
     this.onTap,
   });
 
+  QuickAccessToolModel copyWith({
+    String? id,
+    String? title,
+    String? subtitle,
+    String? bgImage,
+    Widget? iconWidget,
+    Widget? overlayWidget,
+    bool? isChevronAtEnd,
+    VoidCallback? onTap,
+  }) {
+    return QuickAccessToolModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      subtitle: subtitle ?? this.subtitle,
+      bgImage: bgImage ?? this.bgImage,
+      iconWidget: iconWidget ?? this.iconWidget,
+      overlayWidget: overlayWidget ?? this.overlayWidget,
+      isChevronAtEnd: isChevronAtEnd ?? this.isChevronAtEnd,
+      onTap: onTap ?? this.onTap,
+    );
+  }
+
   /// Default list of 4 quick access tools matching the design.
   static List<QuickAccessToolModel> get defaultTools => [
     // 1. Airport Navigation

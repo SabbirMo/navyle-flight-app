@@ -17,4 +17,7 @@ class AppRouterName {
 
   //Feed
   static const String postLiveUpdateScreen = '/postLiveUpdate';
+
+  //Ai Chat
+  static const String aiChatScreen = '/aiChatScreen';
 }

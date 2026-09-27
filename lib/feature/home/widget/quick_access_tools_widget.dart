@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/feature/home/model/quick_access_tool_model.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 /// A 2x2 Grid section displaying the 4 Quick Access Tool cards:
 /// - Airport Navigation
@@ -10,8 +12,9 @@ import 'package:navyla_flight_app/feature/home/model/quick_access_tool_model.dar
 /// - Ask NAVYLA
 class QuickAccessToolsWidget extends StatelessWidget {
   final List<QuickAccessToolModel>? tools;
+  final VoidCallback? onAskNavylaTap;
 
-  const QuickAccessToolsWidget({super.key, this.tools});
+  const QuickAccessToolsWidget({super.key, this.tools, this.onAskNavylaTap});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,14 @@ class QuickAccessToolsWidget extends StatelessWidget {
           children: [
             Expanded(child: _QuickAccessCard(item: list[2])),
             SizedBox(width: 14.w),
-            Expanded(child: _QuickAccessCard(item: list[3])),
+            Expanded(
+              child: _QuickAccessCard(
+                item: list[3],
+                onTap:
+                    onAskNavylaTap ??
+                    () => context.push(AppRouterName.aiChatScreen),
+              ),
+            ),
           ],
         ),
       ],
@@ -48,13 +58,14 @@ class QuickAccessToolsWidget extends StatelessWidget {
 
 class _QuickAccessCard extends StatelessWidget {
   final QuickAccessToolModel item;
+  final VoidCallback? onTap;
 
-  const _QuickAccessCard({required this.item});
+  const _QuickAccessCard({required this.item, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: item.onTap,
+      onTap: onTap ?? item.onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
         height: 94.h,

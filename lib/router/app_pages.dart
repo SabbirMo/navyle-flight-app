@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/widgets/verification_success.dart';
+import 'package:navyla_flight_app/feature/ai_chat/screen/ai_chat_screen.dart';
 import 'package:navyla_flight_app/feature/auth/auth_selection/screen/auth_selection_screen.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/screen/create_account_screen.dart';
 import 'package:navyla_flight_app/feature/auth/forgot/screen/forgot_password_screen.dart';
@@ -126,6 +127,13 @@ final appPages = Provider<GoRouter>(
             child: PostLiveUpdateScreen(postToEdit: postToEdit),
           );
         },
+      ),
+
+      //AI chat
+      GoRoute(
+        path: AppRouterName.aiChatScreen,
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: const AIChatScreen()),
       ),
     ],
     errorBuilder: (context, state) =>
