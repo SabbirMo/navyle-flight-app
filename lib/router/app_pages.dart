@@ -21,6 +21,7 @@ import 'package:navyla_flight_app/feature/setting/change_password/screen/change_
 import 'package:navyla_flight_app/feature/setting/profile_details/screen/profile_details_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/screen/setting_screen.dart';
 import 'package:navyla_flight_app/feature/splash/splash_screen.dart';
+import 'package:navyla_flight_app/feature/subscription/screen/subscription_screen.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 final appPages = Provider<GoRouter>(
@@ -168,6 +169,15 @@ final appPages = Provider<GoRouter>(
         path: AppRouterName.managePlanScreen,
         pageBuilder: (context, state) =>
             CupertinoPage(key: state.pageKey, child: const ManagePlanScreen()),
+      ),
+
+      //Subscription
+      GoRoute(
+        path: AppRouterName.subscriptionScreen,
+        pageBuilder: (context, state) => CupertinoPage(
+          key: state.pageKey,
+          child: const SubscriptionScreen(),
+        ),
       ),
     ],
     errorBuilder: (context, state) =>

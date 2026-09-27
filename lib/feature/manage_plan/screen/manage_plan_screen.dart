@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
@@ -10,6 +11,7 @@ import 'package:navyla_flight_app/feature/manage_plan/widget/billing_history_car
 import 'package:navyla_flight_app/feature/manage_plan/widget/current_plan_card.dart';
 import 'package:navyla_flight_app/feature/manage_plan/widget/payment_method_card.dart';
 import 'package:navyla_flight_app/feature/manage_plan/widget/plan_options_card.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class ManagePlanScreen extends ConsumerStatefulWidget {
   const ManagePlanScreen({super.key});
@@ -51,7 +53,7 @@ class _ManagePlanScreenState extends ConsumerState<ManagePlanScreen> {
                         notifier.setAutoRenew(value);
                       },
                       onSwitchToYearly: () {
-                        // Handle upgrade to yearly
+                        context.push(AppRouterName.subscriptionScreen);
                       },
                       onCancelSubscription: () {
                         // Handle cancel subscription

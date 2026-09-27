@@ -1,0 +1,4 @@
+enum SubscriptionBillingCycle {
+  monthly,
+  yearly,
+}
