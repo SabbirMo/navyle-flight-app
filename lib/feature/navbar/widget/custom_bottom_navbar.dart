@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
+import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 
 /// Ultra-optimized, high-performance Custom Bottom Navigation Bar
 class CustomBottomNavBar extends StatelessWidget {
@@ -38,14 +40,14 @@ class CustomBottomNavBar extends StatelessWidget {
   // Cached text styles
   static const TextStyle _selectedStyle = TextStyle(
     fontSize: 10.0,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w900,
     letterSpacing: 0.5,
     color: AppColors.primaryColor,
   );
 
   static const TextStyle _unselectedStyle = TextStyle(
     fontSize: 10.0,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w900,
     letterSpacing: 0.5,
     color: _inactiveColor,
   );
@@ -91,7 +93,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     // TICKET
                     _NavBarItem(
                       index: 1,
-                      icon: Icons.confirmation_number_rounded,
+                      svgPath: ImageAssets.ticket,
                       label: AppString.navTicket,
                       isSelected: currentIndex == 1,
                       onTap: onTap,
@@ -132,7 +134,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     // MORE
                     _NavBarItem(
                       index: 4,
-                      icon: Icons.grid_view_rounded,
+                      svgPath: ImageAssets.more,
                       label: AppString.navMore,
                       isSelected: currentIndex == 4,
                       onTap: onTap,
@@ -163,14 +165,16 @@ class CustomBottomNavBar extends StatelessWidget {
 /// Dedicated sub-widget for tab items to minimize rebuild tree depth
 class _NavBarItem extends StatelessWidget {
   final int index;
-  final IconData icon;
+  final IconData? icon;
+  final String? svgPath;
   final String label;
   final bool isSelected;
   final ValueChanged<int>? onTap;
 
   const _NavBarItem({
     required this.index,
-    required this.icon,
+    this.icon,
+    this.svgPath,
     required this.label,
     required this.isSelected,
     required this.onTap,
@@ -192,7 +196,23 @@ class _NavBarItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 23.0, color: itemColor),
+            SizedBox(
+              height: 24.0,
+              width: 24.0,
+              child: Center(
+                child: svgPath != null
+                    ? SvgPicture.asset(
+                        svgPath!,
+                        width: 22.0,
+                        height: 22.0,
+                        colorFilter: ColorFilter.mode(
+                          itemColor,
+                          BlendMode.srcIn,
+                        ),
+                      )
+                    : Icon(icon, size: 23.0, color: itemColor),
+              ),
+            ),
             const SizedBox(height: 4.0),
             Text(
               label,
@@ -228,11 +248,12 @@ class _CenterScanButton extends StatelessWidget {
           border: Border.all(color: borderColor, width: 2),
           boxShadow: CustomBottomNavBar._centerBtnShadow,
         ),
-        child: const Center(
-          child: Icon(
-            Icons.qr_code_scanner_rounded,
-            color: Colors.white,
-            size: 24.0,
+        child: Center(
+          child: SvgPicture.asset(
+            ImageAssets.scan,
+            width: 24.0,
+            height: 24.0,
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
           ),
         ),
       ),

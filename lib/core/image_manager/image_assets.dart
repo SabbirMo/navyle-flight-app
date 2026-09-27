@@ -29,6 +29,9 @@ class ImageAssets {
   static const String escalator = "$_svgPath/escalator.svg";
   static const String lift = "$_svgPath/lift.svg";
   static const String king = "$_svgPath/king.svg";
+  static const String ticket = "$_svgPath/ticket.svg";
+  static const String more = "$_svgPath/more.svg";
+  static const String scan = "$_svgPath/scan.svg";
 
   //lottie animation
 
