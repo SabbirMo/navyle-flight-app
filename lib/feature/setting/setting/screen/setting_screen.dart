@@ -57,7 +57,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                     _buildSectionTitle("SUBSCRIPTION PLAN"),
                     SubscriptionPlanCard(
                       onManagePlanTap: () {
-                        // Handle manage plan
+                        context.push(AppRouterName.managePlanScreen);
                       },
                     ),
                     SizedBox(height: 18.h),
