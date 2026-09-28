@@ -6,7 +6,8 @@ import 'package:navyla_flight_app/core/theme/theme_mode_provder.dart';
 import 'package:navyla_flight_app/router/app_pages.dart';
 
 void main() {
-  runApp(ProviderScope(child: const MyApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {

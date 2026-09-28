@@ -17,6 +17,12 @@ class ImageAssets {
   static const String effect2 = "$_imagePath/effect2.png";
   static const String onBoarding1 = "$_imagePath/onboarding1.png";
   static const String onBoarding2 = "$_imagePath/onboarding2.png";
+  static const String scanBg = "$_imagePath/scan_bg.png";
+  static const String scanBox = "$_imagePath/scanBox.png";
+  static const String scanCameraBg = "$_imagePath/scan_camera.png";
+  static const String navyla = "$_imagePath/navyla.png";
+  static const String navylaWhite = "$_imagePath/navyla_white.png";
+  static const String scanPassPreview = "$_imagePath/scan_pass_preview.png";
 
   //svgs
   static const String flight = "$_svgPath/flight.svg";

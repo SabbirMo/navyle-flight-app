@@ -24,6 +24,7 @@ dependencies:
   pin_code_fields: ^10.0.0
   lottie: ^3.6.1
   image_picker: ^1.2.3
+  camera: ^0.12.1
 
 dev_dependencies:
   flutter_test:

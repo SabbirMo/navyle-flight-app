@@ -32,4 +32,9 @@ class AppRouterName {
 
   //notification
   static const String notificationScreen = '/notificationScreen';
+
+  //scan
+  static const String scanScreen = '/scanScreen';
+  static const String scanCameraScreen = '/scanCameraScreen';
+  static const String reviewScanScreen = '/reviewScanScreen';
 }

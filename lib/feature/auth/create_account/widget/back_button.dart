@@ -8,10 +8,14 @@ class CustomBackButton extends StatelessWidget {
     super.key,
     this.icon = Icons.arrow_back_ios_new_rounded,
     this.title = '',
+    this.image = '',
+    this.isImage = false,
   });
 
   final IconData icon;
   final String title;
+  final String? image;
+  final bool isImage;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +41,11 @@ class CustomBackButton extends StatelessWidget {
       ),
     );
 
-    if (title.isEmpty) {
+    final hasTitle = title.trim().isNotEmpty;
+    final hasImage =
+        image != null && image!.trim().isNotEmpty && (isImage || image!.isNotEmpty);
+
+    if (!hasTitle && !hasImage) {
       return button;
     }
 
@@ -46,17 +54,22 @@ class CustomBackButton extends StatelessWidget {
         button,
         Expanded(
           child: Center(
-            child: Text(
-              title,
-
-              style: StyleManager.sfProSemiBold16(
-                AppColors.blackShadow,
-              ).copyWith(letterSpacing: 1),
-              textAlign: TextAlign.center,
-            ),
+            child: hasImage
+                ? Image.asset(
+                    image!,
+                    width: 140.w,
+                    fit: BoxFit.contain,
+                  )
+                : Text(
+                    title,
+                    style: StyleManager.sfProSemiBold16(
+                      AppColors.blackShadow,
+                    ).copyWith(letterSpacing: 1),
+                    textAlign: TextAlign.center,
+                  ),
           ),
         ),
-        SizedBox(width: 36.w),
+        SizedBox(width: 32.w),
       ],
     );
   }

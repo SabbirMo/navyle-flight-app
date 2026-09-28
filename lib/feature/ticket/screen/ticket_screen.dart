@@ -54,7 +54,9 @@ class TicketScreen extends StatelessWidget {
                     Text(
                       'Flight BA 0215 to Frankfurt (FRA)\nGate B24 • Seat 14A',
                       textAlign: TextAlign.center,
-                      style: StyleManager.interMedium14(AppColors.darkGrayColor),
+                      style: StyleManager.interMedium14(
+                        AppColors.darkGrayColor,
+                      ),
                     ),
                   ],
                 ),

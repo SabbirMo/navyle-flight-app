@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/feature/feed/screen/feed_screen.dart';
 import 'package:navyla_flight_app/feature/home/screen/home_screen.dart';
 import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
@@ -7,6 +8,7 @@ import 'package:navyla_flight_app/feature/navbar/widget/custom_bottom_navbar.dar
 import 'package:navyla_flight_app/feature/scan/screen/scan_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/screen/setting_screen.dart';
 import 'package:navyla_flight_app/feature/ticket/screen/ticket_screen.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class NavbarScreen extends ConsumerWidget {
   const NavbarScreen({super.key});
@@ -26,12 +28,18 @@ class NavbarScreen extends ConsumerWidget {
     return Scaffold(
       extendBody: true,
       body: IndexedStack(index: currentIndex, children: screens),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          ref.read(navbarNotifierProvider.notifier).setIndex(index);
-        },
-      ),
+      bottomNavigationBar: currentIndex == 2
+          ? null
+          : CustomBottomNavBar(
+              currentIndex: currentIndex,
+              onTap: (index) {
+                if (index == 2) {
+                  context.push(AppRouterName.scanScreen);
+                } else {
+                  ref.read(navbarNotifierProvider.notifier).setIndex(index);
+                }
+              },
+            ),
     );
   }
 }

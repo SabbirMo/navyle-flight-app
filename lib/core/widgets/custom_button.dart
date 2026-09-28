@@ -15,6 +15,8 @@ class CustomButton extends StatelessWidget {
   final bool boxShadow;
   final bool isLoading;
   final bool isEnabled;
+  final Color? bgColor;
+  final bool isBg;
 
   const CustomButton({
     super.key,
@@ -29,6 +31,8 @@ class CustomButton extends StatelessWidget {
     this.boxShadow = false,
     this.isLoading = false,
     this.isEnabled = true,
+    this.bgColor,
+    this.isBg = false,
   });
 
   @override
@@ -41,7 +45,9 @@ class CustomButton extends StatelessWidget {
       height: height ?? 38.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
-        color: isEnabled ? AppColors.primaryColor : AppColors.unSelectColor,
+        color: isEnabled
+            ? bgColor ?? AppColors.primaryColor
+            : AppColors.unSelectColor,
         boxShadow: boxShadow
             ? <BoxShadow>[
                 BoxShadow(
@@ -62,8 +68,8 @@ class CustomButton extends StatelessWidget {
                 ? SizedBox(
                     width: 24.w,
                     height: 24.w,
-                    child: const CircularProgressIndicator(
-                      color: Colors.white,
+                    child: CircularProgressIndicator(
+                      color: isBg ? AppColors.black : Colors.white,
                       strokeWidth: 2.5,
                     ),
                   )
@@ -72,7 +78,9 @@ class CustomButton extends StatelessWidget {
                     children: [
                       Text(
                         text,
-                        style: StyleManager.interSemiBold14(AppColors.white),
+                        style: StyleManager.interSemiBold14(
+                          isBg ? AppColors.black : AppColors.white,
+                        ),
                       ),
                       if (icon != null) ...[
                         SizedBox(width: 6.w),

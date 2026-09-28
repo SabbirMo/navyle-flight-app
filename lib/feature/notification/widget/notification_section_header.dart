@@ -20,8 +20,8 @@ class NotificationSectionHeader extends StatelessWidget {
       child: Text(
         title.toUpperCase(),
         style: GoogleFonts.inter(
-          fontSize: 11.5.sp,
-          fontWeight: FontWeight.w700,
+          fontSize: 10.sp,
+          fontWeight: FontWeight.w900,
           color: AppColors.lightGray,
           letterSpacing: 1.2,
         ),
