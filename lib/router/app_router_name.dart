@@ -29,4 +29,7 @@ class AppRouterName {
 
   //subscription
   static const String subscriptionScreen = '/subscriptionScreen';
+
+  //notification
+  static const String notificationScreen = '/notificationScreen';
 }

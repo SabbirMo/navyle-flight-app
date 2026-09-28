@@ -38,6 +38,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             greeting: AppString.goodMorning,
             userName: AppString.defaultUserName,
             onSettingsTap: () => context.push(AppRouterName.settingScreen),
+            onNotificationTap: () =>
+                context.push(AppRouterName.notificationScreen),
           ),
           SizedBox(height: 12.h),
           Expanded(
