@@ -12,6 +12,7 @@ import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
 import 'package:navyla_flight_app/feature/scan/provider/scan_camera_notifier.dart';
 import 'package:navyla_flight_app/feature/scan/widget/scanner_corner_overlay.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class ReviewScanScreen extends ConsumerWidget {
   final String? imagePath;
@@ -19,13 +20,7 @@ class ReviewScanScreen extends ConsumerWidget {
   const ReviewScanScreen({super.key, this.imagePath});
 
   void _handleUseScan(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Boarding pass verified and details extracted!'),
-        backgroundColor: AppColors.primaryColor,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    context.push(AppRouterName.verifyDetailsScreen);
   }
 
   void _handleRetake(BuildContext context, WidgetRef ref) {

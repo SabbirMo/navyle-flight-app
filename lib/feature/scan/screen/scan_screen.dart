@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
-import 'package:navyla_flight_app/feature/scan/widget/manual_entry_sheet.dart';
 import 'package:navyla_flight_app/feature/scan/widget/scan_camera_card.dart';
 import 'package:navyla_flight_app/feature/scan/widget/scan_option_card.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
@@ -45,19 +44,9 @@ class ScanScreen extends StatelessWidget {
   }
 
   void _handleManualEntry(BuildContext context) {
-    ManualEntrySheet.show(
-      context,
-      onConfirm: (flightNumber, gate, seat) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Ticket loaded: Flight $flightNumber, Gate $gate, Seat $seat',
-            ),
-            backgroundColor: AppColors.primaryColor,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      },
+    context.push(
+      AppRouterName.verifyDetailsScreen,
+      extra: {'isManual': true},
     );
   }
 

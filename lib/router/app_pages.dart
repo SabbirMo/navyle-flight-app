@@ -21,6 +21,7 @@ import 'package:navyla_flight_app/feature/onboarding/screen/onboarding_screen.da
 import 'package:navyla_flight_app/feature/scan/screen/review_scan_screen.dart';
 import 'package:navyla_flight_app/feature/scan/screen/scan_camera_screen.dart';
 import 'package:navyla_flight_app/feature/scan/screen/scan_screen.dart';
+import 'package:navyla_flight_app/feature/scan/verify_details/screen/verify_details_screen.dart';
 import 'package:navyla_flight_app/feature/setting/change_password/screen/change_password.dart';
 import 'package:navyla_flight_app/feature/setting/profile_details/screen/profile_details_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/screen/setting_screen.dart';
@@ -220,6 +221,29 @@ final appPages = Provider<GoRouter>(
             imagePath: state.extra as String?,
           ),
         ),
+      ),
+
+      //verify details
+      GoRoute(
+        path: AppRouterName.verifyDetailsScreen,
+        pageBuilder: (context, state) {
+          final extra = state.extra;
+          bool isManual = false;
+          Map<String, String>? initialData;
+          if (extra is Map) {
+            isManual = extra['isManual'] == true;
+            if (extra['data'] is Map<String, String>) {
+              initialData = extra['data'] as Map<String, String>;
+            }
+          }
+          return CupertinoPage(
+            key: state.pageKey,
+            child: VerifyDetailsScreen(
+              isManual: isManual,
+              initialData: initialData,
+            ),
+          );
+        },
       ),
     ],
     errorBuilder: (context, state) =>

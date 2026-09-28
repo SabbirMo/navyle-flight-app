@@ -10,7 +10,6 @@ import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
 import 'package:navyla_flight_app/feature/scan/model/scan_camera_state.dart';
 import 'package:navyla_flight_app/feature/scan/provider/scan_camera_notifier.dart';
-import 'package:navyla_flight_app/feature/scan/widget/manual_entry_sheet.dart';
 import 'package:navyla_flight_app/feature/scan/widget/scanner_corner_overlay.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
@@ -18,19 +17,9 @@ class ScanCameraScreen extends ConsumerWidget {
   const ScanCameraScreen({super.key});
 
   void _handleManualEntry(BuildContext context) {
-    ManualEntrySheet.show(
-      context,
-      onConfirm: (flightNumber, gate, seat) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Ticket loaded: Flight $flightNumber, Gate $gate, Seat $seat',
-            ),
-            backgroundColor: AppColors.primaryColor,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      },
+    context.push(
+      AppRouterName.verifyDetailsScreen,
+      extra: {'isManual': true},
     );
   }
 

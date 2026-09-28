@@ -37,4 +37,5 @@ class AppRouterName {
   static const String scanScreen = '/scanScreen';
   static const String scanCameraScreen = '/scanCameraScreen';
   static const String reviewScanScreen = '/reviewScanScreen';
+  static const String verifyDetailsScreen = '/verifyDetailsScreen';
 }
