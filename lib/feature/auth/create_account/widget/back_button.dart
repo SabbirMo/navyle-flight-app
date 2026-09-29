@@ -10,10 +10,12 @@ class CustomBackButton extends StatelessWidget {
     this.title = '',
     this.image = '',
     this.isImage = false,
+    this.subTitle = '',
   });
 
   final IconData icon;
   final String title;
+  final String? subTitle;
   final String? image;
   final bool isImage;
 
@@ -43,7 +45,9 @@ class CustomBackButton extends StatelessWidget {
 
     final hasTitle = title.trim().isNotEmpty;
     final hasImage =
-        image != null && image!.trim().isNotEmpty && (isImage || image!.isNotEmpty);
+        image != null &&
+        image!.trim().isNotEmpty &&
+        (isImage || image!.isNotEmpty);
 
     if (!hasTitle && !hasImage) {
       return button;
@@ -55,17 +59,24 @@ class CustomBackButton extends StatelessWidget {
         Expanded(
           child: Center(
             child: hasImage
-                ? Image.asset(
-                    image!,
-                    width: 140.w,
-                    fit: BoxFit.contain,
-                  )
-                : Text(
-                    title,
-                    style: StyleManager.sfProSemiBold16(
-                      AppColors.blackShadow,
-                    ).copyWith(letterSpacing: 1),
-                    textAlign: TextAlign.center,
+                ? Image.asset(image!, width: 140.w, fit: BoxFit.contain)
+                : Column(
+                    children: [
+                      Text(
+                        title,
+                        style: StyleManager.sfProSemiBold16(
+                          AppColors.blackShadow,
+                        ).copyWith(letterSpacing: 1),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        subTitle ?? "",
+                        style: StyleManager.interMedium12(
+                          AppColors.blackShadow,
+                        ).copyWith(fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
           ),
         ),

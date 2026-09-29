@@ -16,6 +16,9 @@ import 'package:navyla_flight_app/feature/boarding_pass/screen/boarding_pass_scr
 import 'package:navyla_flight_app/feature/feed/model/feed_post_model.dart';
 import 'package:navyla_flight_app/feature/feed/screen/post_live_update_screen.dart';
 import 'package:navyla_flight_app/feature/manage_plan/screen/manage_plan_screen.dart';
+import 'package:navyla_flight_app/feature/more/model/more_model.dart';
+import 'package:navyla_flight_app/feature/more/screen/more_details_screen.dart';
+import 'package:navyla_flight_app/feature/more/screen/partner_website_screen.dart';
 import 'package:navyla_flight_app/feature/navbar/screen/navbar_screen.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/screen/live_navigation_screen.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/screen/navigate_airport_route.dart';
@@ -266,6 +269,31 @@ final appPages = Provider<GoRouter>(
           key: state.pageKey,
           child: const BoardingPassScreen(),
         ),
+      ),
+
+      //More Details Screen
+      GoRoute(
+        path: AppRouterName.moreDetailsScreen,
+        pageBuilder: (context, state) {
+          final data = state.extra as MoreModel;
+          return CupertinoPage(
+            key: state.pageKey,
+            child: MoreDetailsScreen(data: data),
+          );
+        },
+      ),
+
+      //Partner Website Screen
+      GoRoute(
+        path: AppRouterName.partnerWebsiteScreen,
+        pageBuilder: (context, state) {
+          final data =
+              state.extra is MoreModel ? state.extra as MoreModel : null;
+          return CupertinoPage(
+            key: state.pageKey,
+            child: PartnerWebsiteScreen(data: data),
+          );
+        },
       ),
     ],
     errorBuilder: (context, state) =>

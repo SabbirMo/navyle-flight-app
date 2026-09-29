@@ -144,4 +144,56 @@ class AppString {
   static const String navScan = "SCAN";
   static const String navFeed = "FEED";
   static const String navMore = "MORE";
+
+  //More Option
+  static const String hotel = "Hotels";
+  static const String hotelDesc = "Airport stays and destination hotels";
+
+  static const String parking = "Parking & transfers";
+  static const String parkingDesc = "Parking, taxis and airport transfers";
+
+  static const String lounge = "Lounges & Fast Track";
+  static const String loungeDesc = "A quieter, faster airport experience";
+
+  static const String wifi = "eSIM & connectivity";
+  static const String wifiDesc = "Mobile data for your destination";
+
+  static const String travelGear = "Travel gear";
+  static const String travelGearDesc = "Useful products from retail partners";
+
+  static const String suggestion =
+      "Suggestions can use your airport and travel dates, but NAVYLA does not send boarding-pass or identity data.";
+
+  static const String partnerText =
+      "Opens a secure partner page. NAVYLA may receive a commission at no extra cost to you.";
+
+  //more details
+  static const String hotelPartnerText = "Stay near your departure airport";
+  static const String hotelPartnerSubText =
+      "Flexible partner rate for the night before your flight.";
+
+  static const String parkingPartnerText = "Reserve airport parking";
+  static const String parkingPartnerSubText =
+      "Compare partner parking options for your departure.";
+
+  static const String loungePartnerText = "Access an airport lounge";
+  static const String loungePartnerSubText =
+      "View eligible lounges and access conditions.";
+
+  static const String eSimPartnerText = "Choose a travel eSIM";
+  static const String eSimPartnerSubText =
+      "Partner data plans for your destination.";
+
+  static const String travelGearPartnerText = "Browse travel essentials";
+  static const String travelGearPartnerSubText =
+      "Continue to a retail partner for available products.";
+
+  // Partner Website
+  static const String partnerWebsite = "Partner website";
+  static const String partnerWebsiteUrl = "secure.partner.example";
+  static const String partnerWebsiteSecurityNote =
+      "The reservation or purchase is completed securely on the partner's page.";
+  static const String airportOrDestination = "Airport or destination";
+  static const String travelDates = "Travel dates";
+  static const String searchAvailability = "Search availability";
 }

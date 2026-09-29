@@ -45,4 +45,8 @@ class AppRouterName {
 
   //boarding pass
   static const String boardingPassScreen = '/boardingPassScreen';
+
+  //More Details Screen
+  static const String moreDetailsScreen = '/moreDetailsScreen';
+  static const String partnerWebsiteScreen = '/partnerWebsiteScreen';
 }

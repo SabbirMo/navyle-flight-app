@@ -60,4 +60,11 @@ class ImageAssets {
   static const String navylaBg = "$_imagePath/navyla_bg.png";
   static const String alexRivers = "$_imagePath/alex_rivers.png";
   static const String askNavyla = "$_imagePath/ask_navyla.png";
+
+  //more svg
+  static const String hotel = "$_svgPath/hotel.svg";
+  static const String car = "$_svgPath/car.svg";
+  static const String sofa = "$_svgPath/sofa.svg";
+  static const String wifi = "$_svgPath/wifi.svg";
+  static const String bag = "$_svgPath/bag.svg";
 }
