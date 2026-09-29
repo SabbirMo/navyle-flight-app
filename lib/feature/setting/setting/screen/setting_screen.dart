@@ -167,7 +167,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                             color: const Color(0xFFCBD5E1),
                           ),
                           onTap: () {
-                            // Handle rate navyla
+                            context.push(AppRouterName.rateNavylaScreen);
                           },
                           showDivider: true,
                         ),

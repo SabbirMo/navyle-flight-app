@@ -30,6 +30,7 @@ import 'package:navyla_flight_app/feature/scan/screen/scan_screen.dart';
 import 'package:navyla_flight_app/feature/scan/verify_details/screen/verify_details_screen.dart';
 import 'package:navyla_flight_app/feature/setting/change_password/screen/change_password.dart';
 import 'package:navyla_flight_app/feature/setting/profile_details/screen/profile_details_screen.dart';
+import 'package:navyla_flight_app/feature/setting/rate_navyla/screen/rate_navyla_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/screen/setting_screen.dart';
 import 'package:navyla_flight_app/feature/splash/splash_screen.dart';
 import 'package:navyla_flight_app/feature/subscription/screen/subscription_screen.dart';
@@ -180,6 +181,13 @@ final appPages = Provider<GoRouter>(
         path: AppRouterName.managePlanScreen,
         pageBuilder: (context, state) =>
             CupertinoPage(key: state.pageKey, child: const ManagePlanScreen()),
+      ),
+
+      //rate navyla review
+      GoRoute(
+        path: AppRouterName.rateNavylaScreen,
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: const RateNavylaScreen()),
       ),
 
       //Subscription

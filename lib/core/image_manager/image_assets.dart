@@ -44,8 +44,8 @@ class ImageAssets {
   static const String scan = "$_svgPath/scan.svg";
 
   //lottie animation
-
   static const String verifiedCheckLottie = "$_lottiePath/verified_check.json";
+  static const String reviewLottie = "$_lottiePath/review.json";
 
   //home page image assets
   static const String profile = "$_imagePath/profile.png";
@@ -67,4 +67,10 @@ class ImageAssets {
   static const String sofa = "$_svgPath/sofa.svg";
   static const String wifi = "$_svgPath/wifi.svg";
   static const String bag = "$_svgPath/bag.svg";
+
+  //review
+  static const String whatsApp = "$_svgPath/whatsApp.svg";
+  static const String message = "$_svgPath/message.svg";
+  static const String mail = "$_svgPath/mail.svg";
+  static const String smore = "$_svgPath/smore.svg";
 }
