@@ -23,6 +23,8 @@ class ImageAssets {
   static const String navyla = "$_imagePath/navyla.png";
   static const String navylaWhite = "$_imagePath/navyla_white.png";
   static const String scanPassPreview = "$_imagePath/scan_pass_preview.png";
+  static const String qrScan = "$_imagePath/qr-scan.png";
+  static const String ticketBottomBg = "$_imagePath/ticket_bottom_bg.png";
 
   //svgs
   static const String flight = "$_svgPath/flight.svg";
