@@ -93,4 +93,7 @@ class AppColors {
   static const Color subscribeBg = Color(0xffFF812A); //#FF812A
   static const Color subscribeHighlightBg = Color(0xffFFEDD5); //#FFEDD5
   static const Color warningColor = Color(0xffFEFCE8); //#FEFCE8
+
+  //boarding pass
+  static const Color boardingPassBg = Color(0xff2584F9); //#2584F9
 }

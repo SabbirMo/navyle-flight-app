@@ -36,7 +36,12 @@ class QuickAccessToolsWidget extends StatelessWidget {
               ),
             ),
             SizedBox(width: 14.w),
-            Expanded(child: _QuickAccessCard(item: list[1])),
+            Expanded(
+              child: _QuickAccessCard(
+                item: list[1],
+                onTap: () => context.push(AppRouterName.boardingPassScreen),
+              ),
+            ),
           ],
         ),
         SizedBox(height: 14.h),

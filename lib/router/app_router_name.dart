@@ -42,4 +42,7 @@ class AppRouterName {
   //Navigate airport route
   static const String navigateAirportRoute = '/navigateAirportRoute';
   static const String liveNavigationScreen = '/liveNavigationScreen';
+
+  //boarding pass
+  static const String boardingPassScreen = '/boardingPassScreen';
 }

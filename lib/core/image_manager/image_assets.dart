@@ -26,6 +26,7 @@ class ImageAssets {
   static const String qrScan = "$_imagePath/qr-scan.png";
   static const String ticketBottomBg = "$_imagePath/ticket_bottom_bg.png";
   static const String route = "$_imagePath/route.png";
+  static const String showing = "$_imagePath/showing.png";
 
   //svgs
   static const String flight = "$_svgPath/flight.svg";
