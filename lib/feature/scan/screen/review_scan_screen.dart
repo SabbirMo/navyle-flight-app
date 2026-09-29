@@ -31,9 +31,19 @@ class ReviewScanScreen extends ConsumerWidget {
   Widget _buildImagePreview(String? path) {
     if (path != null && path.isNotEmpty) {
       if (kIsWeb) {
-        return Image.network(path, fit: BoxFit.cover);
+        return Image.network(
+          path,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) =>
+              Image.asset(ImageAssets.scanPassPreview, fit: BoxFit.cover),
+        );
       }
-      return Image.file(File(path), fit: BoxFit.cover);
+      return Image.file(
+        File(path),
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            Image.asset(ImageAssets.scanPassPreview, fit: BoxFit.cover),
+      );
     }
 
     return Image.asset(ImageAssets.scanPassPreview, fit: BoxFit.cover);

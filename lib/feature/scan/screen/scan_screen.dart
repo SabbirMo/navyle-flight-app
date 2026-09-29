@@ -22,13 +22,7 @@ class ScanScreen extends StatelessWidget {
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null && context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Ticket loaded from gallery: ${pickedFile.name}'),
-            backgroundColor: AppColors.primaryColor,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+        context.push(AppRouterName.reviewScanScreen, extra: pickedFile.path);
       }
     } catch (e) {
       if (context.mounted) {
@@ -44,10 +38,7 @@ class ScanScreen extends StatelessWidget {
   }
 
   void _handleManualEntry(BuildContext context) {
-    context.push(
-      AppRouterName.verifyDetailsScreen,
-      extra: {'isManual': true},
-    );
+    context.push(AppRouterName.verifyDetailsScreen, extra: {'isManual': true});
   }
 
   @override
