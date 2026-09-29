@@ -16,6 +16,8 @@ import 'package:navyla_flight_app/feature/feed/model/feed_post_model.dart';
 import 'package:navyla_flight_app/feature/feed/screen/post_live_update_screen.dart';
 import 'package:navyla_flight_app/feature/manage_plan/screen/manage_plan_screen.dart';
 import 'package:navyla_flight_app/feature/navbar/screen/navbar_screen.dart';
+import 'package:navyla_flight_app/feature/navigate_airport/screen/live_navigation_screen.dart';
+import 'package:navyla_flight_app/feature/navigate_airport/screen/navigate_airport_route.dart';
 import 'package:navyla_flight_app/feature/notification/screen/notification_screen.dart';
 import 'package:navyla_flight_app/feature/onboarding/screen/onboarding_screen.dart';
 import 'package:navyla_flight_app/feature/scan/screen/review_scan_screen.dart';
@@ -197,19 +199,15 @@ final appPages = Provider<GoRouter>(
       //scan
       GoRoute(
         path: AppRouterName.scanScreen,
-        pageBuilder: (context, state) => CupertinoPage(
-          key: state.pageKey,
-          child: const ScanScreen(),
-        ),
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: const ScanScreen()),
       ),
 
       //scan camera
       GoRoute(
         path: AppRouterName.scanCameraScreen,
-        pageBuilder: (context, state) => CupertinoPage(
-          key: state.pageKey,
-          child: const ScanCameraScreen(),
-        ),
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: const ScanCameraScreen()),
       ),
 
       //review scan
@@ -217,9 +215,7 @@ final appPages = Provider<GoRouter>(
         path: AppRouterName.reviewScanScreen,
         pageBuilder: (context, state) => CupertinoPage(
           key: state.pageKey,
-          child: ReviewScanScreen(
-            imagePath: state.extra as String?,
-          ),
+          child: ReviewScanScreen(imagePath: state.extra as String?),
         ),
       ),
 
@@ -244,6 +240,22 @@ final appPages = Provider<GoRouter>(
             ),
           );
         },
+      ),
+
+      //Navigate airport route
+      GoRoute(
+        path: AppRouterName.navigateAirportRoute,
+        pageBuilder: (context, state) => CupertinoPage(
+          key: state.pageKey,
+          child: const NavigateAirportRoute(),
+        ),
+      ),
+      GoRoute(
+        path: AppRouterName.liveNavigationScreen,
+        pageBuilder: (context, state) => CupertinoPage(
+          key: state.pageKey,
+          child: const LiveNavigationScreen(),
+        ),
       ),
     ],
     errorBuilder: (context, state) =>

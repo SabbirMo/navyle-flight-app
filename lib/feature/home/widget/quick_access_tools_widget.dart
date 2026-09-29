@@ -29,7 +29,12 @@ class QuickAccessToolsWidget extends StatelessWidget {
         // Row 1: Airport Navigation & Boarding Pass
         Row(
           children: [
-            Expanded(child: _QuickAccessCard(item: list[0])),
+            Expanded(
+              child: _QuickAccessCard(
+                item: list[0],
+                onTap: () => context.push(AppRouterName.navigateAirportRoute),
+              ),
+            ),
             SizedBox(width: 14.w),
             Expanded(child: _QuickAccessCard(item: list[1])),
           ],
