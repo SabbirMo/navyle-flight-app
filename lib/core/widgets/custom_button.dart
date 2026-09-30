@@ -75,36 +75,43 @@ class CustomButton extends StatelessWidget {
                       strokeWidth: 2.5,
                     ),
                   )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (prefixIcon != null) ...[
-                        Icon(
-                          prefixIcon,
-                          color: isEnabled
-                              ? iconColor
-                              : const Color(0xFF9CA3AF),
-                          size: iconSize ?? 18.sp,
-                        ),
-                        SizedBox(width: 8.w),
-                      ],
-                      Text(
-                        text,
-                        style: StyleManager.interSemiBold14(
-                          isBg ? AppColors.black : AppColors.white,
-                        ),
+                : Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (prefixIcon != null) ...[
+                            Icon(
+                              prefixIcon,
+                              color: isEnabled
+                                  ? iconColor
+                                  : const Color(0xFF9CA3AF),
+                              size: iconSize ?? 18.sp,
+                            ),
+                            SizedBox(width: 8.w),
+                          ],
+                          Text(
+                            text,
+                            style: StyleManager.interSemiBold14(
+                              isBg ? AppColors.black : AppColors.white,
+                            ),
+                          ),
+                          if (icon != null) ...[
+                            SizedBox(width: 6.w),
+                            Icon(
+                              icon,
+                              color: isEnabled
+                                  ? iconColor
+                                  : const Color(0xFF9CA3AF),
+                              size: iconSize ?? 16.sp,
+                            ),
+                          ],
+                        ],
                       ),
-                      if (icon != null) ...[
-                        SizedBox(width: 6.w),
-                        Icon(
-                          icon,
-                          color: isEnabled
-                              ? iconColor
-                              : const Color(0xFF9CA3AF),
-                          size: iconSize ?? 16.sp,
-                        ),
-                      ],
-                    ],
+                    ),
                   ),
           ),
         ),

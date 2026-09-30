@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,9 +7,10 @@ import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
+import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
-class VerifyDetailsScreen extends StatefulWidget {
+class VerifyDetailsScreen extends ConsumerStatefulWidget {
   final bool isManual;
   final Map<String, String>? initialData;
 
@@ -19,10 +21,11 @@ class VerifyDetailsScreen extends StatefulWidget {
   });
 
   @override
-  State<VerifyDetailsScreen> createState() => _VerifyDetailsScreenState();
+  ConsumerState<VerifyDetailsScreen> createState() =>
+      _VerifyDetailsScreenState();
 }
 
-class _VerifyDetailsScreenState extends State<VerifyDetailsScreen> {
+class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _flightNumberController;
   late final TextEditingController _fromController;
@@ -80,6 +83,27 @@ class _VerifyDetailsScreenState extends State<VerifyDetailsScreen> {
   void _handleConfirm() {
     final flightNum = _flightNumberController.text.trim();
 
+    ref
+        .read(flightJourneyNotifierProvider.notifier)
+        .addBoardingPass(
+          flightNumber: flightNum.isNotEmpty ? flightNum : 'BA 0215',
+          originCode: _fromController.text.trim().isNotEmpty
+              ? _fromController.text.trim()
+              : 'AMS',
+          destinationCode: _toController.text.trim().isNotEmpty
+              ? _toController.text.trim()
+              : 'FRA',
+          seat: _seatController.text.trim().isNotEmpty
+              ? _seatController.text.trim()
+              : '14A',
+          gate: _gateController.text.trim().isNotEmpty
+              ? _gateController.text.trim()
+              : 'B24',
+          terminal: _terminalController.text.trim().isNotEmpty
+              ? _terminalController.text.trim()
+              : 'T5',
+        );
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -94,6 +118,59 @@ class _VerifyDetailsScreenState extends State<VerifyDetailsScreen> {
     context.go(AppRouterName.navbarScreen);
   }
 
+  Future<void> _selectDate() async {
+    DateTime initialDate = DateTime.now();
+    if (_dateController.text.isNotEmpty) {
+      final parts = _dateController.text.split('/');
+      if (parts.length == 3) {
+        final day = int.tryParse(parts[0]);
+        final month = int.tryParse(parts[1]);
+        int? year = int.tryParse(parts[2]);
+        if (year != null && year < 100) {
+          year += 2000;
+        }
+        if (day != null && month != null && year != null) {
+          try {
+            initialDate = DateTime(year, month, day);
+          } catch (_) {}
+        }
+      }
+    }
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2035),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: AppColors.primaryColor,
+              onPrimary: Colors.white,
+              onSurface: AppColors.black,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.primaryColor,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      final dd = picked.day.toString().padLeft(2, '0');
+      final mm = picked.month.toString().padLeft(2, '0');
+      final yy = (picked.year % 100).toString().padLeft(2, '0');
+      setState(() {
+        _dateController.text = '$dd/$mm/$yy';
+      });
+    }
+  }
+
   Widget _buildCard({
     required String label,
     required TextEditingController controller,
@@ -101,71 +178,79 @@ class _VerifyDetailsScreenState extends State<VerifyDetailsScreen> {
     IconData? icon,
     TextInputType? keyboardType,
     TextCapitalization textCapitalization = TextCapitalization.characters,
+    VoidCallback? onTap,
+    bool readOnly = false,
   }) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: const Color(0xFFF1F5F9), width: 1.2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: GoogleFonts.inter(
-              fontSize: 10.sp,
-              fontWeight: FontWeight.w500,
-              color: AppColors.lightGray,
-              letterSpacing: 1.1,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20.r),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 12.h),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(color: const Color(0xFFF1F5F9), width: 1.2),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
             ),
-          ),
-          SizedBox(height: 6.h),
-          Row(
-            children: [
-              if (icon != null) ...[
-                Icon(icon, size: 18.sp, color: const Color(0xFF94A3B8)),
-                SizedBox(width: 8.w),
-              ],
-              Expanded(
-                child: TextField(
-                  controller: controller,
-                  keyboardType: keyboardType,
-                  textCapitalization: textCapitalization,
-                  style: GoogleFonts.inter(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.black,
-                    letterSpacing: 0.3,
-                  ),
-                  decoration: InputDecoration(
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                    border: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    hintText: hintText,
-                    hintStyle: GoogleFonts.inter(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF94A3B8),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w500,
+                color: AppColors.lightGray,
+                letterSpacing: 1.1,
+              ),
+            ),
+            SizedBox(height: 6.h),
+            Row(
+              children: [
+                if (icon != null) ...[
+                  Icon(icon, size: 18.sp, color: const Color(0xFF94A3B8)),
+                  SizedBox(width: 8.w),
+                ],
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    readOnly: readOnly,
+                    onTap: onTap,
+                    keyboardType: keyboardType,
+                    textCapitalization: textCapitalization,
+                    style: GoogleFonts.inter(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.black,
+                      letterSpacing: 0.3,
+                    ),
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      hintText: hintText,
+                      hintStyle: GoogleFonts.inter(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFF94A3B8),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -303,7 +388,8 @@ class _VerifyDetailsScreenState extends State<VerifyDetailsScreen> {
                           label: 'DATE',
                           controller: _dateController,
                           hintText: 'e.g. 24/09/26',
-                          keyboardType: TextInputType.datetime,
+                          readOnly: true,
+                          onTap: _selectDate,
                         ),
                       ),
                       SizedBox(width: 12.w),

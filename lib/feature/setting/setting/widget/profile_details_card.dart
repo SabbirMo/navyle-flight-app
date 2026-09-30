@@ -12,7 +12,7 @@ class ProfileDetailsCard extends StatelessWidget {
 
   const ProfileDetailsCard({
     super.key,
-    this.name = "Radu Iulian",
+    this.name = "Alex",
     this.email = "alex.rivers@travel.com",
     this.imageAsset,
     this.onTap,

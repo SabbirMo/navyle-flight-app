@@ -291,7 +291,9 @@ final appPages = Provider<GoRouter>(
       GoRoute(
         path: AppRouterName.moreDetailsScreen,
         pageBuilder: (context, state) {
-          final data = state.extra as MoreModel;
+          final data = state.extra is MoreModel
+              ? state.extra as MoreModel
+              : moreItem.first;
           return CupertinoPage(
             key: state.pageKey,
             child: MoreDetailsScreen(data: data),

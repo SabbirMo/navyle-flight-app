@@ -116,4 +116,33 @@ void main() {
     await tester.pump();
     expect(find.text('EK 0202'), findsOneWidget);
   });
+
+  testWidgets('Tapping DATE field opens DatePickerDialog',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      ScreenUtilInit(
+        designSize: const Size(393, 852),
+        minTextAdapt: true,
+        builder: (context, child) {
+          return const MaterialApp(
+            home: VerifyDetailsScreen(),
+          );
+        },
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Tap DATE label or card
+    await tester.tap(find.text('DATE'));
+    await tester.pumpAndSettle();
+
+    // Verify DatePickerDialog is displayed
+    expect(find.byType(DatePickerDialog), findsOneWidget);
+  });
 }

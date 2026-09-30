@@ -117,7 +117,7 @@ class AppString {
 
   // Home
   static const String goodMorning = "Good Morning,";
-  static const String defaultUserName = "Radu Iulian";
+  static const String defaultUserName = "Alex";
 
   // Flight Card
   static const String departureIn = "DEPARTURE IN";

@@ -13,8 +13,14 @@ import 'package:navyla_flight_app/router/app_router_name.dart';
 class QuickAccessToolsWidget extends StatelessWidget {
   final List<QuickAccessToolModel>? tools;
   final VoidCallback? onAskNavylaTap;
+  final VoidCallback? onBoardingPassTap;
 
-  const QuickAccessToolsWidget({super.key, this.tools, this.onAskNavylaTap});
+  const QuickAccessToolsWidget({
+    super.key,
+    this.tools,
+    this.onAskNavylaTap,
+    this.onBoardingPassTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +45,8 @@ class QuickAccessToolsWidget extends StatelessWidget {
             Expanded(
               child: _QuickAccessCard(
                 item: list[1],
-                onTap: () => context.push(AppRouterName.boardingPassScreen),
+                onTap: onBoardingPassTap ??
+                    () => context.push(AppRouterName.boardingPassScreen),
               ),
             ),
           ],

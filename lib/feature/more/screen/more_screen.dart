@@ -23,13 +23,13 @@ class _MoreScreenState extends State<MoreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BackButtonListener(
-      onBackButtonPressed: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
         if (_navigatorKey.currentState?.canPop() ?? false) {
           _navigatorKey.currentState?.pop();
-          return true;
         }
-        return false;
       },
       child: Navigator(
         key: _navigatorKey,

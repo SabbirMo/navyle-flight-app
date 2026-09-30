@@ -100,4 +100,6 @@ class AppColors {
   //darkGreen
   static const Color darkGreen = Color(0xff065F46); //#065F46
   static const Color organicBrown = Color(0xFF584235); //#584235
+  static const Color noActiveBgColor = Color(0xffFEDBBE); //#FEDBBE
+  static const Color noActiveHighlightBgColor = Color(0xffDEE2F9); //#DEE2F9
 }
