@@ -69,13 +69,14 @@ class CustomBackButton extends StatelessWidget {
                         ).copyWith(letterSpacing: 1),
                         textAlign: TextAlign.center,
                       ),
-                      Text(
-                        subTitle ?? "",
-                        style: StyleManager.interMedium12(
-                          AppColors.blackShadow,
-                        ).copyWith(fontWeight: FontWeight.w400),
-                        textAlign: TextAlign.center,
-                      ),
+                      if (subTitle != null && subTitle!.isNotEmpty)
+                        Text(
+                          subTitle!,
+                          style: StyleManager.interMedium12(
+                            AppColors.blackShadow,
+                          ).copyWith(fontWeight: FontWeight.w400),
+                          textAlign: TextAlign.center,
+                        ),
                     ],
                   ),
           ),

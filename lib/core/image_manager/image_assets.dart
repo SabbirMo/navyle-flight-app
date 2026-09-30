@@ -27,11 +27,14 @@ class ImageAssets {
   static const String ticketBottomBg = "$_imagePath/ticket_bottom_bg.png";
   static const String route = "$_imagePath/route.png";
   static const String showing = "$_imagePath/showing.png";
+  static const String appleWatch = "$_imagePath/apple_watch.png";
+  static const String smartWatch = "$_imagePath/smart_watch.png";
 
   //svgs
   static const String flight = "$_svgPath/flight.svg";
   static const String google = "$_svgPath/google.svg";
   static const String apple = "$_svgPath/apple.svg";
+  static const String android = "$_svgPath/android.svg";
   static const String notification = "$_svgPath/notification.svg";
   static const String security = "$_svgPath/security.svg";
   static const String gate = "$_svgPath/gate.svg";

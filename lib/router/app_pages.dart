@@ -32,6 +32,7 @@ import 'package:navyla_flight_app/feature/setting/change_password/screen/change_
 import 'package:navyla_flight_app/feature/setting/profile_details/screen/profile_details_screen.dart';
 import 'package:navyla_flight_app/feature/setting/rate_navyla/screen/rate_navyla_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/screen/setting_screen.dart';
+import 'package:navyla_flight_app/feature/setting/smart_watch/screen/smart_watch_screen.dart';
 import 'package:navyla_flight_app/feature/splash/splash_screen.dart';
 import 'package:navyla_flight_app/feature/subscription/screen/subscription_screen.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
@@ -188,6 +189,13 @@ final appPages = Provider<GoRouter>(
         path: AppRouterName.rateNavylaScreen,
         pageBuilder: (context, state) =>
             CupertinoPage(key: state.pageKey, child: const RateNavylaScreen()),
+      ),
+
+      //smart watch
+      GoRoute(
+        path: AppRouterName.smartWatchScreen,
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: const SmartWatchScreen()),
       ),
 
       //Subscription

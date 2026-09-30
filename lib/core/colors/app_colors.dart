@@ -96,4 +96,8 @@ class AppColors {
 
   //boarding pass
   static const Color boardingPassBg = Color(0xff2584F9); //#2584F9
+
+  //darkGreen
+  static const Color darkGreen = Color(0xff065F46); //#065F46
+  static const Color organicBrown = Color(0xFF584235); //#584235
 }

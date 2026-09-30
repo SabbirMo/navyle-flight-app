@@ -106,7 +106,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                             color: const Color(0xFF94A3B8),
                           ),
                           onTap: () {
-                            // Handle watch sync
+                            context.push(AppRouterName.smartWatchScreen);
                           },
                           showDivider: true,
                         ),
