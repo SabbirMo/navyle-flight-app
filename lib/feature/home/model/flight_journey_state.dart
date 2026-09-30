@@ -25,7 +25,7 @@ class FlightJourneyState {
     this.destinationCode = 'FRA',
     this.destinationCity = 'Frankfurt',
     this.departureCountdown = '04:42:15',
-    this.checkInTime = '8:00am',
+    this.checkInTime = '8:00',
     this.terminal = 'T5',
     this.gate = 'B24',
     this.seat = '14A',

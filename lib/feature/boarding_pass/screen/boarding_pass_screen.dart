@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/feature/boarding_pass/provider/boarding_pass_notifier.dart';
-import 'package:navyla_flight_app/feature/boarding_pass/widget/boarding_pass_bottom_sheet.dart';
 import 'package:navyla_flight_app/feature/boarding_pass/widget/boarding_status_card.dart';
 import 'package:navyla_flight_app/feature/boarding_pass/widget/boarding_timer_card.dart';
 import 'package:navyla_flight_app/feature/boarding_pass/widget/current_gate_card.dart';
 import 'package:navyla_flight_app/feature/boarding_pass/widget/route_update_card.dart';
 import 'package:navyla_flight_app/feature/boarding_pass/widget/show_boarding_pass_button.dart';
 import 'package:navyla_flight_app/feature/boarding_pass/widget/stress_free_badge.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class BoardingPassScreen extends ConsumerWidget {
   const BoardingPassScreen({super.key});
@@ -100,21 +102,35 @@ class BoardingPassScreen extends ConsumerWidget {
 
                           SizedBox(height: 36.h),
 
-                          // Show Boarding Pass Button
+                          // Show Boarding Pass Button -> Navigates directly to Ticket tab
                           ShowBoardingPassButton(
-                            onTap: () => BoardingPassBottomSheet.show(context),
+                            onTap: () {
+                              ref
+                                  .read(navbarNotifierProvider.notifier)
+                                  .setIndex(1);
+                              context.go(AppRouterName.navbarScreen);
+                            },
                           ),
 
                           SizedBox(height: 18.h),
 
                           // Exit Stress-Free Mode Button
-                          Text(
-                            'EXIT STRESS-FREE MODE?',
-                            style: GoogleFonts.inter(
-                              fontSize: 12.5.sp,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.white,
-                              letterSpacing: 1,
+                          GestureDetector(
+                            onTap: () {
+                              if (context.canPop()) {
+                                context.pop();
+                              } else {
+                                context.go(AppRouterName.navbarScreen);
+                              }
+                            },
+                            child: Text(
+                              'EXIT STRESS-FREE MODE',
+                              style: GoogleFonts.inter(
+                                fontSize: 11.5.sp,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.white,
+                                letterSpacing: 1.5,
+                              ),
                             ),
                           ),
 

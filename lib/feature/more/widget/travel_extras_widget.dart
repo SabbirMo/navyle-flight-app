@@ -58,12 +58,14 @@ class TravelExtraWidget extends StatelessWidget {
                     data.title,
                     style: StyleManager.interMedium14(
                       AppColors.black,
-                    ).copyWith(fontWeight: FontWeight.w700),
+                    ).copyWith(fontSize: 13.sp, fontWeight: FontWeight.w700),
                   ),
                   SizedBox(height: 2.h),
                   Text(
                     data.subtitle,
-                    style: StyleManager.interMedium12(AppColors.lightBlueGray),
+                    style: StyleManager.interMedium12(
+                      AppColors.lightBlueGray,
+                    ).copyWith(fontSize: 11.sp),
                   ),
                 ],
               ),

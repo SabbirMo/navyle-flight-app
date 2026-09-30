@@ -34,7 +34,7 @@ class CityWeatherCard extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final cardWidth = constraints.maxWidth;
-        final cardHeight = 138.h;
+        final cardHeight = 114.h;
 
         // city.png natural size is 1901 x 544. Spire tip is at x = 946.
         final imgWidth = cardHeight * (1901.0 / 544.0);
@@ -47,9 +47,10 @@ class CityWeatherCard extends StatelessWidget {
 
         return Container(
           width: double.infinity,
+          height: cardHeight,
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(24.r),
+            borderRadius: BorderRadius.circular(20.r),
             boxShadow: [
               // Ambient soft glow shadow
               BoxShadow(
@@ -125,7 +126,7 @@ class CityWeatherCard extends StatelessWidget {
 
               // 2. Foreground Card Content (finishes cleanly around ~58-60% of card)
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 16.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -134,12 +135,12 @@ class CityWeatherCard extends StatelessWidget {
                     Text(
                       cityName,
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
                         color: AppColors.black,
                       ),
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(height: 6.h),
 
                     // Weather & Local Time Info Row
                     FittedBox(
@@ -155,8 +156,8 @@ class CityWeatherCard extends StatelessWidget {
                             children: [
                               Image.asset(
                                 weatherIconPath,
-                                width: 34.w,
-                                height: 30.h,
+                                width: 30.w,
+                                height: 26.h,
                                 fit: BoxFit.contain,
                               ),
                               SizedBox(width: 8.w),
@@ -167,7 +168,7 @@ class CityWeatherCard extends StatelessWidget {
                                   Text(
                                     temperature,
                                     style: TextStyle(
-                                      fontSize: 18.sp,
+                                      fontSize: 16.sp,
                                       fontWeight: FontWeight.w700,
                                       color: AppColors.black,
                                       height: 1.1,
@@ -177,7 +178,7 @@ class CityWeatherCard extends StatelessWidget {
                                   Text(
                                     weatherCondition,
                                     style: TextStyle(
-                                      fontSize: 12.sp,
+                                      fontSize: 11.sp,
                                       fontWeight: FontWeight.w500,
                                       color: AppColors.black,
                                     ),
@@ -191,8 +192,8 @@ class CityWeatherCard extends StatelessWidget {
 
                           // Vertical Divider
                           Container(
-                            width: 1.5.w,
-                            height: 44.h,
+                            width: 1.2.w,
+                            height: 38.h,
                             color: AppColors.grayColor.withValues(alpha: 0.5),
                           ),
 
@@ -207,24 +208,24 @@ class CityWeatherCard extends StatelessWidget {
                                 timeLabel,
                                 style: StyleManager.interMedium12(
                                   AppColors.black,
-                                ),
+                                ).copyWith(fontSize: 10.5.sp),
                               ),
-                              SizedBox(height: 2.h),
+                              SizedBox(height: 1.5.h),
                               Text(
                                 localTime,
                                 style: TextStyle(
-                                  fontSize: 20.sp,
+                                  fontSize: 18.sp,
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.black,
                                   height: 1.1,
                                 ),
                               ),
-                              SizedBox(height: 2.h),
+                              SizedBox(height: 1.5.h),
                               Text(
                                 date,
                                 style: StyleManager.interMedium12(
                                   AppColors.black,
-                                ),
+                                ).copyWith(fontSize: 10.5.sp),
                               ),
                             ],
                           ),

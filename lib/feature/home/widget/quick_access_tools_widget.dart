@@ -45,7 +45,8 @@ class QuickAccessToolsWidget extends StatelessWidget {
             Expanded(
               child: _QuickAccessCard(
                 item: list[1],
-                onTap: onBoardingPassTap ??
+                onTap:
+                    onBoardingPassTap ??
                     () => context.push(AppRouterName.boardingPassScreen),
               ),
             ),
@@ -56,7 +57,12 @@ class QuickAccessToolsWidget extends StatelessWidget {
         // Row 2: Explore Nearby & Ask NAVYLA
         Row(
           children: [
-            Expanded(child: _QuickAccessCard(item: list[2])),
+            Expanded(
+              child: _QuickAccessCard(
+                item: list[2],
+                onTap: () => context.push(AppRouterName.navigateAirportRoute),
+              ),
+            ),
             SizedBox(width: 14.w),
             Expanded(
               child: _QuickAccessCard(
@@ -141,7 +147,7 @@ class _QuickAccessCard extends StatelessWidget {
                   Text(
                     item.title,
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.black,
                       letterSpacing: -0.2,
