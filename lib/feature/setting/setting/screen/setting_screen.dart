@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
+import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/theme/theme_mode_provder.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
+import 'package:navyla_flight_app/feature/setting/setting/widget/delete_account_dialog.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/profile_details_card.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/setting_item_tile.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/setting_toggle_switch.dart';
@@ -98,8 +100,8 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                             backgroundColor: Color(0xFFFFF1E6),
                             iconColor: Color(0xFFFF8533),
                           ),
-                          title: "Watch Sync",
-                          subtitle: "Searching for Devices",
+                          title: "Smartwatch",
+                          subtitle: "Apple Watch / Wear OS",
                           trailing: Icon(
                             Icons.arrow_forward_ios_rounded,
                             size: 14.sp,
@@ -227,30 +229,27 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                     SizedBox(height: 22.h),
 
                     // 6. Sign Out Account Button
-                    GestureDetector(
+                    SettingActionButton(
+                      text: "SIGN OUT ACCOUNT",
                       onTap: () {
                         // Handle sign out
                       },
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 14.h),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFEF4444).withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(24.r),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "SIGN OUT ACCOUNT",
-                            style: TextStyle(
-                              fontFamily: 'SF-Pro',
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w900,
-                              color: const Color(0xFFEF4444),
-                              letterSpacing: 1.2,
-                            ),
-                          ),
-                        ),
-                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    SettingActionButton(
+                      text: "Delete Account",
+                      textColor: const Color(0xffBA1A1A),
+                      fontSize: 14.sp,
+                      onTap: () {
+                        DeleteAccountDialog.show(
+                          context,
+                          onDelete: () {
+                            // Handle delete account
+                          },
+                        );
+                      },
+                      backgroundColor: const Color(0xffCFC0C0),
+                      prefixIcon: Image.asset(ImageAssets.delete, width: 12.w),
                     ),
                     SizedBox(height: 28.h),
                   ],
@@ -271,6 +270,69 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
         style: StyleManager.interBold10(
           AppColors.lightGray,
         ).copyWith(letterSpacing: 0.9),
+      ),
+    );
+  }
+}
+
+/// Reusable action button for settings screen (e.g., sign out, delete account, etc.)
+class SettingActionButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onTap;
+  final Color? textColor;
+  final Color? backgroundColor;
+  final double? borderRadius;
+  final EdgeInsetsGeometry? padding;
+  final double? fontSize;
+  final Widget? prefixIcon;
+
+  const SettingActionButton({
+    super.key,
+    required this.text,
+    this.onTap,
+    this.textColor,
+    this.backgroundColor,
+    this.borderRadius,
+    this.padding,
+    this.fontSize,
+    this.prefixIcon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final effectiveTextColor = textColor ?? const Color(0xFFEF4444);
+    final effectiveBgColor =
+        backgroundColor ?? effectiveTextColor.withValues(alpha: 0.1);
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: padding ?? EdgeInsets.symmetric(vertical: 14.h),
+        decoration: BoxDecoration(
+          color: effectiveBgColor,
+          borderRadius: BorderRadius.circular(borderRadius ?? 20.r),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (prefixIcon != null) ...[prefixIcon!, SizedBox(width: 8.w)],
+              Text(
+                text,
+                style: TextStyle(
+                  fontFamily: 'SF-Pro',
+                  fontSize: fontSize ?? 12.sp,
+                  fontWeight: FontWeight.w800,
+                  color: effectiveTextColor,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
