@@ -29,6 +29,8 @@ class ImageAssets {
   static const String showing = "$_imagePath/showing.png";
   static const String appleWatch = "$_imagePath/apple_watch.png";
   static const String smartWatch = "$_imagePath/smart_watch.png";
+  static const String feedBoardingPass = "$_imagePath/feed_boarding_pass.png";
+  static const String myPossBoarding = "$_imagePath/my_poss_boarding.png";
 
   //svgs
   static const String flight = "$_svgPath/flight.svg";

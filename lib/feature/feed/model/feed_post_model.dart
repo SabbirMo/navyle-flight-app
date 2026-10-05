@@ -141,7 +141,7 @@ class FeedPostModel {
     ),
     FeedPostModel(
       id: 'post_my_1',
-      authorName: 'Alex Rivers (You)',
+      authorName: 'Alex Rivers',
       avatarUrl:
           'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150',
       timeAgo: '2 hours ago',
@@ -150,12 +150,12 @@ class FeedPostModel {
           'The lounge near B12 is currently closed for cleaning. Staff said it should reopen in 45 mins.',
       realCount: 24,
       spamCount: 0,
-      isMyPost: true,
+      isMyPost: false,
       createdAt: DateTime.now().subtract(const Duration(hours: 2)),
     ),
     FeedPostModel(
       id: 'post_my_2',
-      authorName: 'Alex Rivers (You)',
+      authorName: 'Alex Rivers',
       avatarUrl:
           'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150',
       timeAgo: '5 hours ago',
@@ -164,7 +164,7 @@ class FeedPostModel {
           'Lift #4 near the parking entrance is stuck. Maintenance is on the way.',
       realCount: 15,
       spamCount: 2,
-      isMyPost: true,
+      isMyPost: false,
       createdAt: DateTime.now().subtract(const Duration(hours: 5)),
     ),
   ];

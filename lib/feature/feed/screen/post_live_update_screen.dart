@@ -113,12 +113,6 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
             category: categoryToUse,
             content: text,
           );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Post updated successfully'),
-          duration: Duration(seconds: 2),
-        ),
-      );
     } else {
       ref
           .read(feedNotifierProvider.notifier)
@@ -127,12 +121,6 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
             content: text,
             authorName: 'Alex Rivers (You)',
           );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Live update published'),
-          duration: Duration(seconds: 2),
-        ),
-      );
     }
 
     context.pop();

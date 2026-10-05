@@ -11,6 +11,9 @@ import 'package:navyla_flight_app/feature/feed/widget/feed_tabs_widget.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/feature/feed/model/feed_post_model.dart';
+import 'package:navyla_flight_app/feature/feed/widget/feed_my_post_empty_widget.dart';
+import 'package:navyla_flight_app/feature/feed/widget/feed_no_active_journey_widget.dart';
+import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class FeedScreen extends ConsumerWidget {
@@ -87,6 +90,8 @@ class FeedScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final feedState = ref.watch(feedNotifierProvider);
     final feedNotifier = ref.read(feedNotifierProvider.notifier);
+    final journeyState = ref.watch(flightJourneyNotifierProvider);
+    final hasBoardingPass = journeyState.hasActiveFlight;
     final filteredPosts = feedState.filteredPosts;
 
     return Scaffold(
@@ -118,10 +123,18 @@ class FeedScreen extends ConsumerWidget {
             ),
             SizedBox(height: 12.h),
 
-            // 4. Feed Post List / Empty State
+            // 4. Feed Post List / No Active Journey / Empty State
             Expanded(
-              child: filteredPosts.isEmpty
-                  ? _buildEmptyState(feedState.selectedTab)
+              child: (!hasBoardingPass && feedState.selectedTab == FeedTab.feed)
+                  ? FeedNoActiveJourneyWidget(
+                      onScanTap: () => context.push(AppRouterName.scanScreen),
+                      onManualTap: () => context.push(
+                        AppRouterName.verifyDetailsScreen,
+                        extra: {'isManual': true},
+                      ),
+                    )
+                  : filteredPosts.isEmpty
+                  ? _buildEmptyState(context, feedState.selectedTab)
                   : ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 100.h),
@@ -149,8 +162,12 @@ class FeedScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState(FeedTab tab) {
-    final isMyPost = tab == FeedTab.myPost;
+  Widget _buildEmptyState(BuildContext context, FeedTab tab) {
+    if (tab == FeedTab.myPost) {
+      return FeedMyPostEmptyWidget(
+        onCreatePostTap: () => _openCreatePost(context),
+      );
+    }
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 32.w),
@@ -166,9 +183,7 @@ class FeedScreen extends ConsumerWidget {
               ),
               child: Center(
                 child: Icon(
-                  isMyPost
-                      ? Icons.post_add_rounded
-                      : Icons.filter_alt_off_rounded,
+                  Icons.filter_alt_off_rounded,
                   size: 34.sp,
                   color: AppColors.primaryColor,
                 ),
@@ -176,7 +191,7 @@ class FeedScreen extends ConsumerWidget {
             ),
             SizedBox(height: 16.h),
             Text(
-              isMyPost ? 'No Posts Yet' : 'No Updates in This Category',
+              'No Updates in This Category',
               style: GoogleFonts.inter(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
@@ -185,9 +200,7 @@ class FeedScreen extends ConsumerWidget {
             ),
             SizedBox(height: 8.h),
             Text(
-              isMyPost
-                  ? 'Tap the + button at the top to share an update about airport conditions.'
-                  : 'Try selecting "All Updates" or check back later for live community reports.',
+              'Try selecting "All Updates" or check back later for live community reports.',
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 fontSize: 13.sp,

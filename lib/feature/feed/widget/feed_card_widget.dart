@@ -163,20 +163,25 @@ class FeedCardWidget extends StatelessWidget {
                         width: 1,
                       ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.check_rounded,
-                          size: 16.sp,
-                          color: AppColors.feedGreen,
+                    child: Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.check_rounded,
+                              size: 16.sp,
+                              color: AppColors.feedGreen,
+                            ),
+                            SizedBox(width: 6.w),
+                            Text(
+                              "IT'S REAL (${post.realCount})",
+                              style: StyleManager.interBold10(AppColors.feedGreen),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 6.w),
-                        Text(
-                          "IT'S REAL (${post.realCount})",
-                          style: StyleManager.interBold10(AppColors.feedGreen),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -205,24 +210,29 @@ class FeedCardWidget extends StatelessWidget {
                         width: 1,
                       ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.flag_rounded,
-                          size: 15.sp,
-                          color: hasSpam
-                              ? AppColors.errorRed
-                              : AppColors.lightGray,
+                    child: Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.flag_rounded,
+                              size: 15.sp,
+                              color: hasSpam
+                                  ? AppColors.errorRed
+                                  : AppColors.lightGray,
+                            ),
+                            SizedBox(width: 6.w),
+                            Text(
+                              "SPAM (${post.spamCount})",
+                              style: StyleManager.interBold10(
+                                hasSpam ? AppColors.errorRed : AppColors.lightGray,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 6.w),
-                        Text(
-                          "SPAM (${post.spamCount})",
-                          style: StyleManager.interBold10(
-                            hasSpam ? AppColors.errorRed : AppColors.lightGray,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
