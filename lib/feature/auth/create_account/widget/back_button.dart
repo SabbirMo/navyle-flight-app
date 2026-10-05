@@ -11,6 +11,8 @@ class CustomBackButton extends StatelessWidget {
     this.image = '',
     this.isImage = false,
     this.subTitle = '',
+    this.size,
+    this.onTap,
   });
 
   final IconData icon;
@@ -18,14 +20,17 @@ class CustomBackButton extends StatelessWidget {
   final String? subTitle;
   final String? image;
   final bool isImage;
+  final double? size;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final btnSize = size ?? 32.w;
     final button = GestureDetector(
-      onTap: () => Navigator.of(context).maybePop(),
+      onTap: onTap ?? () => Navigator.of(context).maybePop(),
       child: Container(
-        width: 32.w,
-        height: 32.w,
+        width: btnSize,
+        height: btnSize,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(12.r),
@@ -38,7 +43,11 @@ class CustomBackButton extends StatelessWidget {
           ],
         ),
         child: Center(
-          child: Icon(icon, size: 14.sp, color: AppColors.black),
+          child: Icon(
+            icon,
+            size: (btnSize * 0.44).clamp(14.0, 18.0).sp,
+            color: AppColors.black,
+          ),
         ),
       ),
     );
@@ -53,36 +62,39 @@ class CustomBackButton extends StatelessWidget {
       return button;
     }
 
-    return Row(
-      children: [
-        button,
-        Expanded(
-          child: Center(
-            child: hasImage
-                ? Image.asset(image!, width: 140.w, fit: BoxFit.contain)
-                : Column(
-                    children: [
-                      Text(
-                        title,
-                        style: StyleManager.sfProSemiBold16(
-                          AppColors.blackShadow,
-                        ).copyWith(letterSpacing: 1),
-                        textAlign: TextAlign.center,
-                      ),
-                      if (subTitle != null && subTitle!.isNotEmpty)
+    return Padding(
+      padding: EdgeInsets.only(top: 10.h),
+      child: Row(
+        children: [
+          button,
+          Expanded(
+            child: Center(
+              child: hasImage
+                  ? Image.asset(image!, width: 140.w, fit: BoxFit.contain)
+                  : Column(
+                      children: [
                         Text(
-                          subTitle!,
-                          style: StyleManager.interMedium12(
+                          title,
+                          style: StyleManager.sfProSemiBold16(
                             AppColors.blackShadow,
-                          ).copyWith(fontWeight: FontWeight.w400),
+                          ).copyWith(letterSpacing: 1),
                           textAlign: TextAlign.center,
                         ),
-                    ],
-                  ),
+                        if (subTitle != null && subTitle!.isNotEmpty)
+                          Text(
+                            subTitle!,
+                            style: StyleManager.interMedium12(
+                              AppColors.blackShadow,
+                            ).copyWith(fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.center,
+                          ),
+                      ],
+                    ),
+            ),
           ),
-        ),
-        SizedBox(width: 32.w),
-      ],
+          SizedBox(width: btnSize),
+        ],
+      ),
     );
   }
 }

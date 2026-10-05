@@ -460,7 +460,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                     boxShadow: true,
                     onTap: _handleConfirm,
                   ),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 36.h),
                 ],
               ),
             ),

@@ -203,7 +203,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                             color: const Color(0xFFCBD5E1),
                           ),
                           onTap: () {
-                            // Handle terms of service
+                            context.push(AppRouterName.termsOfServiceScreen);
                           },
                           showDivider: true,
                         ),
@@ -220,7 +220,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                             color: const Color(0xFFCBD5E1),
                           ),
                           onTap: () {
-                            // Handle privacy policy
+                            context.push(AppRouterName.privacyPolicyScreen);
                           },
                           showDivider: false,
                         ),

@@ -31,10 +31,10 @@ class DeleteAccountDialog extends StatelessWidget {
       elevation: 0,
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 24.h),
+        padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF1E293B) : Colors.white,
-          borderRadius: BorderRadius.circular(24.r),
+          borderRadius: BorderRadius.circular(20.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.15),
@@ -85,7 +85,7 @@ class DeleteAccountDialog extends StatelessWidget {
                       onCancel?.call();
                     },
                     child: Container(
-                      height: 44.h,
+                      height: 38.h,
                       decoration: BoxDecoration(
                         color: isDark ? const Color(0xFF334155) : Colors.white,
                         borderRadius: BorderRadius.circular(16.r),
@@ -122,7 +122,7 @@ class DeleteAccountDialog extends StatelessWidget {
                       onDelete?.call();
                     },
                     child: Container(
-                      height: 44.h,
+                      height: 38.h,
                       decoration: BoxDecoration(
                         color: const Color(0xFFBA1A1A),
                         borderRadius: BorderRadius.circular(16.r),

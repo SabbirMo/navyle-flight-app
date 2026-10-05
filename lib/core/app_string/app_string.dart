@@ -196,4 +196,36 @@ class AppString {
   static const String airportOrDestination = "Airport or destination";
   static const String travelDates = "Travel dates";
   static const String searchAvailability = "Search availability";
+
+  // Terms of Service
+  static const String termsOfServiceUpper = "TERMS OF SERVICE";
+  static const String termsOfServiceP1 =
+      "By using NAVYLA, you agree to these Terms of Service. NAVYLA is a travel assistance application that provides flight information, boarding pass management, airport updates, travel offers, and smartwatch-related features designed to support travelers throughout their journey.";
+  static const String termsOfServiceP2 =
+      "Flight, airport, weather, travel, and other related information displayed in NAVYLA may be provided by third-party sources. While we aim to provide useful and timely information, NAVYLA does not guarantee that all information will always be accurate, complete, or up to date. Users should verify important travel details, including flight times, gate information, delays, cancellations, and airport requirements, directly with their airline or airport.";
+  static const String termsOfServiceP3 =
+      "NAVYLA may allow users to store and display their original airline boarding passes. NAVYLA does not replace or modify the boarding pass issued by the airline. Travel offers, hotels, parking, lounges, eSIMs, transfers, and other partner services may be provided by third parties and may be subject to their own terms, conditions, availability, pricing, and privacy policies.";
+  static const String termsOfServiceP4 =
+      "Smartwatch features depend on supported devices, operating systems, connectivity, and proper device configuration. Some features may not be available on all devices.";
+  static const String termsOfServiceP5 =
+      "NAVYLA may occasionally experience interruptions due to maintenance, technical problems, third-party service issues, or circumstances beyond our control.";
+  static const String termsOfServiceP6 =
+      "By continuing to use NAVYLA, you acknowledge and agree to these Terms of Service.";
+
+  // Privacy Policy
+  static const String privacyPolicyUpper = "PRIVACY POLICY";
+  static const String privacyPolicyP1 =
+      "NAVYLA respects your privacy and is committed to protecting the information you provide while using our application. This Privacy Policy explains how NAVYLA may collect, use, and protect your information.";
+  static const String privacyPolicyP2 =
+      "NAVYLA may collect information such as your name, account details, boarding pass information, flight details, device information, and location data when required to provide relevant travel features. Location information may be used to provide airport guidance, flight-related updates, local information, and other location-based services.";
+  static const String privacyPolicyP3 =
+      "Information collected by NAVYLA is used to provide, maintain, improve, and personalize the application's features and services. We may also use information to communicate important service updates, technical notices, or travel-related notifications.";
+  static const String privacyPolicyP4 =
+      "NAVYLA may use third-party services and data providers for flight information, airport information, maps, travel offers, smartwatch connectivity, and other features. These third parties may process information according to their own privacy policies and terms.";
+  static const String privacyPolicyP5 =
+      "NAVYLA does not guarantee that information transmitted through the internet or electronic devices will always be completely secure. We take reasonable measures to protect user information from unauthorized access, misuse, or disclosure.";
+  static const String privacyPolicyP6 =
+      "Users may have rights to access, update, or request deletion of their personal information, subject to applicable laws and technical requirements.";
+  static const String privacyPolicyP7 =
+      "By using NAVYLA, you acknowledge that you have read and understood this Privacy Policy.";
 }

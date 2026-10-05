@@ -93,7 +93,7 @@ class SettingItemTile extends StatelessWidget {
                         title,
                         style: TextStyle(
                           fontFamily: 'SF-Pro',
-                          fontSize: 14.sp,
+                          fontSize: 13.5.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.blackShadow,
                         ),

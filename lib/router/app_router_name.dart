@@ -28,6 +28,8 @@ class AppRouterName {
   static const String managePlanScreen = '/managePlanScreen';
   static const String rateNavylaScreen = '/rateNavylaScreen';
   static const String smartWatchScreen = '/smartWatchScreen';
+  static const String termsOfServiceScreen = '/termsOfServiceScreen';
+  static const String privacyPolicyScreen = '/privacyPolicyScreen';
 
   //subscription
   static const String subscriptionScreen = '/subscriptionScreen';

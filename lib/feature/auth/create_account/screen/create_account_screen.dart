@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -333,6 +334,10 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                 const TextSpan(text: AppString.agreeToThe),
                 TextSpan(
                   text: AppString.termsOfService,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      context.push(AppRouterName.termsOfServiceScreen);
+                    },
                   style: GoogleFonts.inter(
                     fontSize: 11.5.sp,
                     fontWeight: FontWeight.w500,
@@ -342,6 +347,10 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                 const TextSpan(text: AppString.and),
                 TextSpan(
                   text: AppString.privacyPolicy,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      context.push(AppRouterName.privacyPolicyScreen);
+                    },
                   style: GoogleFonts.inter(
                     fontSize: 11.5.sp,
                     fontWeight: FontWeight.w500,
