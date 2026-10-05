@@ -105,154 +105,157 @@ class TicketBoardingPass extends StatelessWidget {
           end: Alignment.bottomCenter,
         ),
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(18.w, 12.h, 18.w, 0),
-            child: Column(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 8.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Airline row
+            Row(
               children: [
-                // Airline row
-                Row(
-                  children: [
-                    Container(
-                      width: 28.w,
-                      height: 28.w,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff2563EB),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Center(
-                        child: Transform.rotate(
-                          angle: 1.5708,
-                          child: Icon(
-                            Icons.flight,
-                            color: Colors.white,
-                            size: 18.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 8.w),
-                    Text(
-                      airlineName,
-                      style: GoogleFonts.inter(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10.w,
-                        vertical: 3.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xff196CCB),
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      child: Text(
-                        flightClass,
-                        style: StyleManager.interBold10(AppColors.white),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.h),
-
-                // Origin, Airplane indicator, Destination
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _buildAirportWidget(
-                      code: originCode,
-                      city: originCity,
-                      isEnd: false,
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            _buildFlightLine(),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Transform.rotate(
-                                angle: 1.5708,
-                                child: Icon(
-                                  Icons.flight,
-                                  color: ticketOrange,
-                                  size: 15.sp,
-                                ),
-                              ),
-                            ),
-                            _buildFlightLine(),
-                          ],
-                        ),
-                        SizedBox(height: 3.h),
-                        Text(
-                          flightNumber,
-                          style: GoogleFonts.inter(
-                            fontSize: 10.5.sp,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                            letterSpacing: 0.4,
-                          ),
-                        ),
-                      ],
-                    ),
-                    _buildAirportWidget(
-                      code: destinationCode,
-                      city: destinationCity,
-                      isEnd: true,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-
-                // Thin divider line
                 Container(
-                  height: 1,
-                  color: Colors.white.withValues(alpha: 0.18),
+                  width: 28.w,
+                  height: 28.w,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff2563EB),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Center(
+                    child: Transform.rotate(
+                      angle: 1.5708,
+                      child: Icon(
+                        Icons.flight,
+                        color: Colors.white,
+                        size: 18.sp,
+                      ),
+                    ),
+                  ),
                 ),
-                SizedBox(height: 8.h),
-
-                // Date, Departure, Boarding
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildColumnInfo(
-                        label: 'DATE',
-                        value: date,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                      ),
+                SizedBox(width: 8.w),
+                Expanded(
+                  child: Text(
+                    airlineName,
+                    style: GoogleFonts.inter(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      letterSpacing: 0.5,
                     ),
-                    _buildVerticalDivider(),
-                    Expanded(
-                      child: _buildColumnInfo(
-                        label: 'DEPARTURE',
-                        value: departureTime,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                      ),
-                    ),
-                    _buildVerticalDivider(),
-                    Expanded(
-                      child: _buildColumnInfo(
-                        label: 'BOARDING',
-                        value: boardingTime,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                      ),
-                    ),
-                  ],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10.w,
+                    vertical: 3.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff196CCB),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Text(
+                    flightClass,
+                    style: StyleManager.interBold10(AppColors.white),
+                  ),
                 ),
               ],
             ),
-          ),
-          const Spacer(),
-          SizedBox(height: 6.h),
-        ],
+
+            // Origin, Airplane indicator, Destination
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: _buildAirportWidget(
+                    code: originCode,
+                    city: originCity,
+                    isEnd: false,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4.w),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildFlightLine(),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                            child: Transform.rotate(
+                              angle: 1.5708,
+                              child: Icon(
+                                Icons.flight,
+                                color: ticketOrange,
+                                size: 15.sp,
+                              ),
+                            ),
+                          ),
+                          _buildFlightLine(),
+                        ],
+                      ),
+                      SizedBox(height: 3.h),
+                      Text(
+                        flightNumber,
+                        style: GoogleFonts.inter(
+                          fontSize: 10.5.sp,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          letterSpacing: 0.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: _buildAirportWidget(
+                    code: destinationCode,
+                    city: destinationCity,
+                    isEnd: true,
+                  ),
+                ),
+              ],
+            ),
+
+            // Thin divider line
+            Container(
+              height: 1,
+              color: Colors.white.withValues(alpha: 0.18),
+            ),
+
+            // Date, Departure, Boarding
+            Row(
+              children: [
+                Expanded(
+                  child: _buildColumnInfo(
+                    label: 'DATE',
+                    value: date,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  ),
+                ),
+                _buildVerticalDivider(),
+                Expanded(
+                  child: _buildColumnInfo(
+                    label: 'DEPARTURE',
+                    value: departureTime,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                  ),
+                ),
+                _buildVerticalDivider(),
+                Expanded(
+                  child: _buildColumnInfo(
+                    label: 'BOARDING',
+                    value: boardingTime,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

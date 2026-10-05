@@ -7,6 +7,7 @@ import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
+import 'package:navyla_flight_app/feature/ticket/widget/delete_ticket_bottom_sheet.dart';
 import 'package:navyla_flight_app/feature/ticket/widget/ticket_boarding_pass.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
@@ -14,71 +15,16 @@ class TicketScreen extends ConsumerWidget {
   const TicketScreen({super.key});
 
   void _showDeleteConfirmation(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.r),
-        ),
-        title: Text(
-          'Delete Ticket?',
-          style: GoogleFonts.inter(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w700,
-            color: const Color(0xFF1E293B),
-          ),
-        ),
-        content: Text(
-          'Are you sure you want to remove this boarding pass from your active tickets?',
-          style: GoogleFonts.inter(
-            fontSize: 13.sp,
-            color: const Color(0xFF64748B),
-            height: 1.4,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(
-              'Cancel',
-              style: GoogleFonts.inter(
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFF64748B),
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-              ref.read(flightJourneyNotifierProvider.notifier).removeBoardingPass();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Ticket removed',
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                  backgroundColor: const Color(0xFFEF4444),
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                ),
-              );
-            },
-            child: Text(
-              'Delete',
-              style: GoogleFonts.inter(
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFFEF4444),
-              ),
-            ),
-          ),
-        ],
-      ),
+    final journey = ref.read(flightJourneyNotifierProvider);
+
+    DeleteTicketBottomSheet.show(
+      context,
+      flightNumber: journey.flightNumber,
+      originCode: journey.originCode,
+      destinationCode: journey.destinationCode,
+      onDelete: () {
+        ref.read(flightJourneyNotifierProvider.notifier).removeBoardingPass();
+      },
     );
   }
 
@@ -146,18 +92,21 @@ class TicketScreen extends ConsumerWidget {
 
                 // Content: Either Ticket Boarding Pass OR Empty State
                 Expanded(
-                  child: Center(
-                    child: hasPass
-                        ? TicketBoardingPass(
+                  child: hasPass
+                      ? Align(
+                          alignment: const Alignment(0, -0.8),
+                          child: TicketBoardingPass(
                             flightNumber: journey.flightNumber,
                             originCode: journey.originCode,
                             destinationCode: journey.destinationCode,
                             terminal: journey.terminal,
                             gate: journey.gate,
                             seat: journey.seat,
-                          )
-                        : _buildEmptyTicketState(context),
-                  ),
+                          ),
+                        )
+                      : Center(
+                          child: _buildEmptyTicketState(context),
+                        ),
                 ),
 
                 // Bottom spacing for floating navigation bar
