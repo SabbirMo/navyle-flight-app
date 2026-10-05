@@ -76,9 +76,11 @@ class _LiveNavigationBottomSheetState
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: isDark ? const Color(0xFF1E293B) : AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
       ),
       padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -95,7 +97,9 @@ class _LiveNavigationBottomSheetState
               width: 44.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: const Color(0xFFE2E8F0),
+                color: isDark
+                    ? const Color(0xFF475569)
+                    : const Color(0xFFE2E8F0),
                 borderRadius: BorderRadius.circular(10.r),
               ),
             ),
@@ -113,7 +117,9 @@ class _LiveNavigationBottomSheetState
             _animations.textTransition(
               child: Text(
                 AppString.enableLiveNavigationTitle,
-                style: StyleManager.sfProBold24(AppColors.black),
+                style: StyleManager.sfProBold24(
+                  isDark ? AppColors.white : AppColors.black,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -126,7 +132,9 @@ class _LiveNavigationBottomSheetState
                 padding: EdgeInsets.symmetric(horizontal: 8.w),
                 child: Text(
                   AppString.enableLiveNavigationDesc,
-                  style: StyleManager.interMedium12(AppColors.grayColor),
+                  style: StyleManager.interMedium12(
+                    isDark ? AppColors.lightGray : AppColors.grayColor,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -179,7 +187,7 @@ class _LiveNavigationBottomSheetState
                   child: Text(
                     AppString.notNow,
                     style: StyleManager.interMedium14(
-                      AppColors.shadowColor,
+                      isDark ? AppColors.lightGray : AppColors.shadowColor,
                     ).copyWith(fontWeight: FontWeight.w700),
                   ),
                 ),
@@ -205,7 +213,9 @@ class _LiveNavigationBottomSheetState
                     style: GoogleFonts.inter(
                       fontSize: 10.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.shadowColor,
+                      color: isDark
+                          ? AppColors.lightGray
+                          : AppColors.shadowColor,
                       letterSpacing: 0.8,
                     ),
                   ),

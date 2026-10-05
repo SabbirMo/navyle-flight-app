@@ -32,6 +32,8 @@ class _OnboardingScreenFourState extends State<OnboardingScreenFour>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -61,7 +63,9 @@ class _OnboardingScreenFourState extends State<OnboardingScreenFour>
         _animations.textTransition(
           child: Text(
             AppString.onboardingTitle4,
-            style: StyleManager.semiBoldRoboto20(AppColors.black),
+            style: StyleManager.semiBoldRoboto20(
+              isDark ? AppColors.white : AppColors.black,
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -69,7 +73,9 @@ class _OnboardingScreenFourState extends State<OnboardingScreenFour>
         _animations.taglineTransition(
           child: Text(
             AppString.onboardingDescription4,
-            style: StyleManager.interMedium12(AppColors.grayColor),
+            style: StyleManager.interMedium12(
+              isDark ? AppColors.lightGray : AppColors.grayColor,
+            ),
             textAlign: TextAlign.center,
           ),
         ),

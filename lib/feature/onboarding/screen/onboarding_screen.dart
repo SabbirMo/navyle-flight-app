@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/services.dart';
+import 'package:navyla_flight_app/core/theme/theme_mode_provder.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
@@ -33,94 +35,109 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(themeModeProvider);
     final currentIndex = ref.watch(onboardingProvider);
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(gradient: AppColors.splashGradient),
-        child: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (value) {
-                    ref.read(onboardingProvider.notifier).changeIndex(value);
-                  },
-                  children: const [
-                    OnboardingScreenOne(),
-                    OnboardingScreenTwo(),
-                    OnboardingScreenThree(),
-                    OnboardingScreenFour(),
-                  ],
-                ),
-              ),
-              SizedBox(height: 10.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: CustomButton(
-                  text: AppString.nextButton,
-                  onTap: () {
-                    final currentIndex = ref.read(onboardingProvider);
-                    if (currentIndex == 1) {
-                      LiveNavigationBottomSheet.show(
-                        context,
-                        onAllow: () {
-                          ref
-                              .read(onboardingProvider.notifier)
-                              .nextPage(_pageController, 4);
-                        },
-                        onNotNow: () {
-                          ref
-                              .read(onboardingProvider.notifier)
-                              .nextPage(_pageController, 4);
-                        },
-                      );
-                    } else if (currentIndex == 2) {
-                      NotificationBottomSheet.show(
-                        context,
-                        onEnable: () {
-                          ref
-                              .read(onboardingProvider.notifier)
-                              .nextPage(_pageController, 4);
-                        },
-                        onSkip: () {
-                          ref
-                              .read(onboardingProvider.notifier)
-                              .nextPage(_pageController, 4);
-                        },
-                      );
-                    } else if (currentIndex == 3) {
-                      context.pushReplacement(AppRouterName.authSelectionScreen);
-                    } else {
-                      ref
-                          .read(onboardingProvider.notifier)
-                          .nextPage(_pageController, 4);
-                    }
-                  },
-                  icon: Icons.arrow_forward_ios,
-                ),
-              ),
-              if (currentIndex != 3) ...[
-                SizedBox(height: 2.h),
-                TextButton(
-                  onPressed: () {
-                    _pageController.animateToPage(
-                      3,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  child: Text(
-                    AppString.skipButton,
-                    style: StyleManager.interMedium12(AppColors.grayColor),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+      child: Scaffold(
+        backgroundColor: isDark ? AppColors.blackShadow : Colors.white,
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.blackShadow : null,
+            gradient: isDark ? null : AppColors.splashGradient,
+          ),
+          child: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (value) {
+                      ref.read(onboardingProvider.notifier).changeIndex(value);
+                    },
+                    children: const [
+                      OnboardingScreenOne(),
+                      OnboardingScreenTwo(),
+                      OnboardingScreenThree(),
+                      OnboardingScreenFour(),
+                    ],
                   ),
                 ),
-              ],
+                SizedBox(height: 10.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: CustomButton(
+                    text: AppString.nextButton,
+                    icon: Icons.arrow_forward_ios,
+                    iconSize: 13.sp,
+                    onTap: () {
+                      final currentIndex = ref.read(onboardingProvider);
+                      if (currentIndex == 1) {
+                        LiveNavigationBottomSheet.show(
+                          context,
+                          onAllow: () {
+                            ref
+                                .read(onboardingProvider.notifier)
+                                .nextPage(_pageController, 4);
+                          },
+                          onNotNow: () {
+                            ref
+                                .read(onboardingProvider.notifier)
+                                .nextPage(_pageController, 4);
+                          },
+                        );
+                      } else if (currentIndex == 2) {
+                        NotificationBottomSheet.show(
+                          context,
+                          onEnable: () {
+                            ref
+                                .read(onboardingProvider.notifier)
+                                .nextPage(_pageController, 4);
+                          },
+                          onSkip: () {
+                            ref
+                                .read(onboardingProvider.notifier)
+                                .nextPage(_pageController, 4);
+                          },
+                        );
+                      } else if (currentIndex == 3) {
+                        context.pushReplacement(
+                          AppRouterName.authSelectionScreen,
+                        );
+                      } else {
+                        ref
+                            .read(onboardingProvider.notifier)
+                            .nextPage(_pageController, 4);
+                      }
+                    },
+                  ),
+                ),
+                if (currentIndex != 3) ...[
+                  SizedBox(height: 2.h),
+                  TextButton(
+                    onPressed: () {
+                      _pageController.animateToPage(
+                        3,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    child: Text(
+                      AppString.skipButton,
+                      style: StyleManager.interMedium12(
+                        isDark ? AppColors.lightGray : AppColors.grayColor,
+                      ),
+                    ),
+                  ),
+                ],
 
-              SizedBox(height: currentIndex == 3 ? 45.h : 8.h),
-            ],
+                SizedBox(height: currentIndex == 3 ? 45.h : 8.h),
+              ],
+            ),
           ),
         ),
       ),

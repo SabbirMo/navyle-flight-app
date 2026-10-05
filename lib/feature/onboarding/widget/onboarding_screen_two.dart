@@ -33,6 +33,8 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -54,7 +56,9 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
                         width: 116.w,
                         height: 104.h,
                         decoration: BoxDecoration(
-                          color: AppColors.rotateCont,
+                          color: isDark
+                              ? AppColors.blue2563EB.withValues(alpha: 0.3)
+                              : AppColors.rotateCont,
                           borderRadius: BorderRadius.circular(16.r),
                         ),
                       ),
@@ -62,7 +66,7 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
                   ),
 
                   // Front White Boarding Card
-                  boardingCard(),
+                  boardingCard(isDark),
                 ],
               ),
             ),
@@ -74,7 +78,9 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
         _animations.textTransition(
           child: Text(
             AppString.onboardingTitle2,
-            style: StyleManager.semiBoldRoboto20(AppColors.black),
+            style: StyleManager.semiBoldRoboto20(
+              isDark ? AppColors.white : AppColors.black,
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -82,7 +88,9 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
         _animations.taglineTransition(
           child: Text(
             AppString.onboardingDescription2,
-            style: StyleManager.interMedium12(AppColors.grayColor),
+            style: StyleManager.interMedium12(
+              isDark ? AppColors.lightGray : AppColors.grayColor,
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -90,18 +98,20 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
     );
   }
 
-  Widget boardingCard() {
+  Widget boardingCard(bool isDark) {
     return Container(
       width: 306.w,
       padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 16.h),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
         borderRadius: BorderRadius.circular(30.r),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color(0x14000000),
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.35)
+                : const Color(0x14000000),
             blurRadius: 30,
-            offset: Offset(0, 12),
+            offset: const Offset(0, 12),
           ),
         ],
       ),
@@ -114,28 +124,44 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
               Container(
                 width: 34.w,
                 height: 34.w,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFEFE3),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? const Color(0xFF334155)
+                      : const Color(0xFFFFEFE3),
                   shape: BoxShape.circle,
                 ),
-                child: Center(child: SvgPicture.asset(ImageAssets.flight)),
+                child: Center(
+                  child: SvgPicture.asset(
+                    ImageAssets.flight,
+                    colorFilter: isDark
+                        ? const ColorFilter.mode(
+                            AppColors.primaryColor,
+                            BlendMode.srcIn,
+                          )
+                        : null,
+                  ),
+                ),
               ),
               SizedBox(width: 10.w),
               Text(
                 "AA 123",
-                style: StyleManager.interMedium14(AppColors.black),
+                style: StyleManager.interMedium14(
+                  isDark ? AppColors.white : AppColors.black,
+                ),
               ),
               const Spacer(),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: AppColors.green.withValues(alpha: 0.2),
+                  color: AppColors.green.withValues(alpha: isDark ? 0.25 : 0.2),
                   borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: Text(
                   "On Time",
                   style: StyleManager.interMedium12(
-                    AppColors.green.withValues(alpha: 0.8),
+                    isDark
+                        ? const Color(0xFF4ADE80)
+                        : AppColors.green.withValues(alpha: 0.8),
                   ),
                 ),
               ),
@@ -149,7 +175,7 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Departure
-              destination(code: "JFK", city: "New York"),
+              destination(code: "JFK", city: "New York", isDark: isDark),
 
               // Flight path trajectory
               Row(
@@ -157,7 +183,9 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
                   Container(
                     width: 14.w,
                     height: 1.5.h,
-                    color: const Color(0xFFE5E7EB),
+                    color: isDark
+                        ? const Color(0xFF334155)
+                        : const Color(0xFFE5E7EB),
                   ),
                   SizedBox(width: 6.w),
                   Transform.rotate(
@@ -172,37 +200,53 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
                   Container(
                     width: 14.w,
                     height: 1.5.h,
-                    color: const Color(0xFFE5E7EB),
+                    color: isDark
+                        ? const Color(0xFF334155)
+                        : const Color(0xFFE5E7EB),
                   ),
                 ],
               ),
 
               // Arrival
-              destination(code: "LHR", city: "London"),
+              destination(code: "LHR", city: "London", isDark: isDark),
             ],
           ),
 
           SizedBox(height: 16.h),
 
           // Orange Status Box: Gate & Status
-          statusCard(),
+          statusCard(isDark),
         ],
       ),
     );
   }
 
-  Widget destination({required String code, required String city}) {
+  Widget destination({
+    required String code,
+    required String city,
+    required bool isDark,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(code, style: StyleManager.sfProSemiBold16(AppColors.black)),
+        Text(
+          code,
+          style: StyleManager.sfProSemiBold16(
+            isDark ? AppColors.white : AppColors.black,
+          ),
+        ),
         SizedBox(height: 2.h),
-        Text(city, style: StyleManager.interMedium14(AppColors.grayColor)),
+        Text(
+          city,
+          style: StyleManager.interMedium14(
+            isDark ? AppColors.lightGray : AppColors.grayColor,
+          ),
+        ),
       ],
     );
   }
 
-  Widget statusCard() {
+  Widget statusCard(bool isDark) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
       decoration: BoxDecoration(
@@ -212,11 +256,12 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          distance(status: "Gate", boaring: "B22"),
+          distance(status: "Gate", boaring: "B22", isDark: isDark),
           distance(
             status: "Status",
             boaring: "Boarding in 45m",
             align: CrossAxisAlignment.end,
+            isDark: isDark,
           ),
         ],
       ),
@@ -227,13 +272,24 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
     required String status,
     required String boaring,
     CrossAxisAlignment? align,
+    required bool isDark,
   }) {
     return Column(
       crossAxisAlignment: align ?? CrossAxisAlignment.start,
       children: [
-        Text(status, style: StyleManager.interMedium14(AppColors.brown)),
+        Text(
+          status,
+          style: StyleManager.interMedium14(
+            isDark ? Colors.white.withValues(alpha: 0.85) : AppColors.brown,
+          ),
+        ),
         SizedBox(height: 2.h),
-        Text(boaring, style: StyleManager.sfProSemiBold16(AppColors.black)),
+        Text(
+          boaring,
+          style: StyleManager.sfProSemiBold16(
+            isDark ? Colors.white : AppColors.black,
+          ),
+        ),
       ],
     );
   }

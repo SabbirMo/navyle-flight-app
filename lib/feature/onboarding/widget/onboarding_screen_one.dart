@@ -32,6 +32,8 @@ class _OnboardingScreenOneState extends State<OnboardingScreenOne>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -51,7 +53,9 @@ class _OnboardingScreenOneState extends State<OnboardingScreenOne>
         _animations.textTransition(
           child: Text(
             AppString.onboardingTitle1,
-            style: StyleManager.semiBoldRoboto20(AppColors.black),
+            style: StyleManager.semiBoldRoboto20(
+              isDark ? AppColors.white : AppColors.black,
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -59,7 +63,9 @@ class _OnboardingScreenOneState extends State<OnboardingScreenOne>
         _animations.taglineTransition(
           child: Text(
             AppString.onboardingDescription1,
-            style: StyleManager.interMedium14(AppColors.grayColor),
+            style: StyleManager.interMedium14(
+              isDark ? AppColors.lightGray : AppColors.grayColor,
+            ),
             textAlign: TextAlign.center,
           ),
         ),

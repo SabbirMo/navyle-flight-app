@@ -52,9 +52,11 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: isDark ? const Color(0xFF1E293B) : AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -71,7 +73,7 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
               width: 44.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: const Color(0xFFE2E8F0),
+                color: isDark ? const Color(0xFF475569) : const Color(0xFFE2E8F0),
                 borderRadius: BorderRadius.circular(10.r),
               ),
             ),
@@ -104,6 +106,7 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
                             icon: Icons.flight_takeoff_rounded,
                             iconColor: AppColors.blueColor,
                             cardColor: true,
+                            isDark: isDark,
                           ),
                         ),
 
@@ -116,6 +119,7 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
                             subTitle: "Walk in 5 mins",
                             icon: Icons.access_time_filled_rounded,
                             iconColor: AppColors.primaryColor,
+                            isDark: isDark,
                           ),
                         ),
                       ],
@@ -131,7 +135,9 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
             _animations.textTransition(
               child: Text(
                 AppString.notificationSheetTitle,
-                style: StyleManager.sfProBold24(AppColors.black),
+                style: StyleManager.sfProBold24(
+                  isDark ? AppColors.white : AppColors.black,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -144,7 +150,9 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                 child: Text(
                   AppString.notificationSheetDesc,
-                  style: StyleManager.interMedium12(AppColors.grayColor),
+                  style: StyleManager.interMedium12(
+                    isDark ? AppColors.lightGray : AppColors.grayColor,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -198,7 +206,9 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
                   ),
                   child: Text(
                     AppString.skipForNow,
-                    style: StyleManager.interMedium12(AppColors.grayColor),
+                    style: StyleManager.interMedium12(
+                      isDark ? AppColors.lightGray : AppColors.grayColor,
+                    ),
                   ),
                 ),
               ),
@@ -217,21 +227,24 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
     required IconData icon,
     required Color iconColor,
     bool cardColor = false,
+    required bool isDark,
   }) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: AppColors.lightBgColor,
+        color: isDark ? const Color(0xFF0F172A) : AppColors.lightBgColor,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: AppColors.primaryColor.withValues(alpha: 0.3),
+          color: AppColors.primaryColor.withValues(alpha: isDark ? 0.4 : 0.3),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.2),
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.4)
+                : AppColors.black.withValues(alpha: 0.2),
             blurRadius: 10,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -243,7 +256,7 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
             height: 28.w,
             decoration: BoxDecoration(
               color: cardColor
-                  ? AppColors.blueShadow.withValues(alpha: 0.1)
+                  ? AppColors.blueShadow.withValues(alpha: isDark ? 0.2 : 0.1)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(8.r),
             ),
@@ -261,7 +274,7 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
                 style: GoogleFonts.inter(
                   fontSize: 9.sp,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.blackShadow,
+                  color: isDark ? AppColors.white : AppColors.blackShadow,
                   letterSpacing: 0.3,
                 ),
               ),
@@ -270,7 +283,7 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
                 subTitle,
                 style: TextStyle(
                   fontSize: 8.sp,
-                  color: AppColors.grayColor,
+                  color: isDark ? AppColors.lightGray : AppColors.grayColor,
                   fontWeight: FontWeight.w400,
                 ),
               ),
