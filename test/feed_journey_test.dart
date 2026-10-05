@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/feature/feed/screen/feed_screen.dart';
+import 'package:navyla_flight_app/feature/feed/widget/feed_active_flight_card_widget.dart';
 import 'package:navyla_flight_app/feature/feed/widget/feed_card_widget.dart';
 import 'package:navyla_flight_app/feature/feed/widget/feed_my_post_empty_widget.dart';
 import 'package:navyla_flight_app/feature/feed/widget/feed_no_active_journey_widget.dart';
@@ -44,7 +46,7 @@ void main() {
     expect(find.text('No active journey'), findsOneWidget);
     expect(find.text('Scan / Load Boarding Pass'), findsOneWidget);
     expect(find.text('Enter flight number manually >'), findsOneWidget);
-    expect(find.text('Clutter-free guarantee'), findsOneWidget);
+    expect(find.text(AppString.airportLoungeAccess), findsOneWidget);
 
     // Verify: Normal feed cards are NOT shown
     expect(find.byType(FeedCardWidget), findsNothing);
@@ -70,17 +72,23 @@ void main() {
 
     // Add boarding pass
     container.read(flightJourneyNotifierProvider.notifier).addBoardingPass(
-          flightNumber: 'BA 0215',
+          flightNumber: 'LH215',
           originCode: 'AMS',
           destinationCode: 'FRA',
+          flightDate: '24/09/26',
           seat: '14A',
           gate: 'B24',
-          terminal: 'T5',
+          terminal: 'Terminal 1',
         );
     await tester.pump();
 
-    // Now: FeedNoActiveJourneyWidget is gone, normal FeedCardWidgets appear
+    // Now: FeedNoActiveJourneyWidget is gone, active flight card & normal FeedCardWidgets appear
     expect(find.byType(FeedNoActiveJourneyWidget), findsNothing);
+    expect(find.byType(FeedActiveFlightCardWidget), findsOneWidget);
+    expect(find.text('LH215'), findsOneWidget);
+    expect(find.text('24 Sep · Terminal 1'), findsOneWidget);
+    expect(find.text('GATE B24'), findsOneWidget);
+    expect(find.text('On Time'), findsOneWidget);
     expect(find.byType(FeedCardWidget), findsWidgets);
 
     // Remove boarding pass
@@ -89,6 +97,7 @@ void main() {
 
     // Reverts to No active journey design
     expect(find.byType(FeedNoActiveJourneyWidget), findsOneWidget);
+    expect(find.byType(FeedActiveFlightCardWidget), findsNothing);
     expect(find.byType(FeedCardWidget), findsNothing);
   });
 

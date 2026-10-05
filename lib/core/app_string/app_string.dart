@@ -228,4 +228,14 @@ class AppString {
       "Users may have rights to access, update, or request deletion of their personal information, subject to applicable laws and technical requirements.";
   static const String privacyPolicyP7 =
       "By using NAVYLA, you acknowledge that you have read and understood this Privacy Policy.";
+
+  // Feed Sponsor
+  static const String sponsored = "Sponsored";
+  static const String airportLoungeAccess = "Airport Lounge Access";
+  static const String airportLoungeAccessDesc =
+      "Relax before your flight with exclusive lounge access at over 1,300 airports worldwide.";
+  static const String stayConnectedWorldwide = "Stay Connected Worldwide";
+  static const String stayConnectedWorldwideDesc =
+      "Global eSIM plans for travelers. Fast, reliable data in 190+ countries.";
+  static const String viewOffer = "View offer";
 }

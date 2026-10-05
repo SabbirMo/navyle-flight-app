@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
+import 'package:navyla_flight_app/feature/feed/widget/feed_sponsor_card_widget.dart';
+import 'package:navyla_flight_app/feature/more/model/more_model.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 /// Displayed on the Feed screen under "My post" tab when the user has not posted any updates yet.
 class FeedMyPostEmptyWidget extends StatelessWidget {
@@ -139,7 +144,23 @@ class FeedMyPostEmptyWidget extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 36.h),
+          SizedBox(height: 18.h),
+
+          // 6. Sponsored Stay Connected Worldwide (eSIM) Card
+          FeedSponsorCardWidget(
+            image: ImageAssets.myPostSponsor,
+            title: AppString.stayConnectedWorldwide,
+            description: AppString.stayConnectedWorldwideDesc,
+            onTap: () {
+              if (moreItem.length > 3) {
+                context.push(
+                  AppRouterName.moreDetailsScreen,
+                  extra: moreItem[3],
+                );
+              }
+            },
+          ),
+          SizedBox(height: 20.h),
         ],
       ),
     );

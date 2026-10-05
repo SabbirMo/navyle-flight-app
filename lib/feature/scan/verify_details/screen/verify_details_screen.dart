@@ -102,6 +102,9 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
           terminal: _terminalController.text.trim().isNotEmpty
               ? _terminalController.text.trim()
               : 'T5',
+          flightDate: _dateController.text.trim().isNotEmpty
+              ? _dateController.text.trim()
+              : '24 Sep',
         );
 
     ScaffoldMessenger.of(context).showSnackBar(

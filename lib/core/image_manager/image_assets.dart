@@ -30,6 +30,8 @@ class ImageAssets {
   static const String appleWatch = "$_imagePath/apple_watch.png";
   static const String smartWatch = "$_imagePath/smart_watch.png";
   static const String feedBoardingPass = "$_imagePath/feed_boarding_pass.png";
+  static const String feedSponsor = "$_imagePath/feed_sponsor.png";
+  static const String myPostSponsor = "$_imagePath/my_post_sponsor.png";
   static const String myPossBoarding = "$_imagePath/my_poss_boarding.png";
 
   //svgs

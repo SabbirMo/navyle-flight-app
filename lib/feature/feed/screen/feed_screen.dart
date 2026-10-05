@@ -11,9 +11,11 @@ import 'package:navyla_flight_app/feature/feed/widget/feed_tabs_widget.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/feature/feed/model/feed_post_model.dart';
+import 'package:navyla_flight_app/feature/feed/widget/feed_active_flight_card_widget.dart';
 import 'package:navyla_flight_app/feature/feed/widget/feed_my_post_empty_widget.dart';
 import 'package:navyla_flight_app/feature/feed/widget/feed_no_active_journey_widget.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class FeedScreen extends ConsumerWidget {
@@ -133,28 +135,48 @@ class FeedScreen extends ConsumerWidget {
                         extra: {'isManual': true},
                       ),
                     )
-                  : filteredPosts.isEmpty
-                  ? _buildEmptyState(context, feedState.selectedTab)
-                  : ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 100.h),
-                      itemCount: filteredPosts.length,
-                      itemBuilder: (context, index) {
-                        final post = filteredPosts[index];
-                        return FeedCardWidget(
-                          key: ValueKey(post.id),
-                          post: post,
-                          showMyPostActions:
-                              feedState.selectedTab == FeedTab.myPost,
-                          onToggleReal: () =>
-                              feedNotifier.toggleRealVote(post.id),
-                          onToggleSpam: () =>
-                              feedNotifier.toggleSpamVote(post.id),
-                          onEdit: () => _openEditPost(context, post),
-                          onDelete: () => _confirmDelete(context, ref, post.id),
-                        );
-                      },
-                    ),
+                  : (feedState.selectedTab == FeedTab.myPost && filteredPosts.isEmpty)
+                      ? _buildEmptyState(context, feedState.selectedTab)
+                      : ListView(
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 100.h),
+                          children: [
+                            // Active Journey Flight Card (displayed when boarding pass is added)
+                            if (hasBoardingPass && feedState.selectedTab == FeedTab.feed) ...[
+                              FeedActiveFlightCardWidget(
+                                flightNumber: journeyState.flightNumber,
+                                originCode: journeyState.originCode,
+                                destinationCode: journeyState.destinationCode,
+                                flightDate: journeyState.flightDate,
+                                terminal: journeyState.terminal,
+                                gate: journeyState.gate,
+                                status: journeyState.status,
+                                onTap: () {
+                                  ref.read(navbarNotifierProvider.notifier).setIndex(1);
+                                },
+                              ),
+                              SizedBox(height: 12.h),
+                            ],
+                            if (filteredPosts.isEmpty)
+                              _buildEmptyState(context, feedState.selectedTab)
+                            else
+                              ...filteredPosts.map(
+                                (post) => FeedCardWidget(
+                                  key: ValueKey(post.id),
+                                  post: post,
+                                  showMyPostActions:
+                                      feedState.selectedTab == FeedTab.myPost,
+                                  onToggleReal: () =>
+                                      feedNotifier.toggleRealVote(post.id),
+                                  onToggleSpam: () =>
+                                      feedNotifier.toggleSpamVote(post.id),
+                                  onEdit: () => _openEditPost(context, post),
+                                  onDelete: () =>
+                                      _confirmDelete(context, ref, post.id),
+                                ),
+                              ),
+                          ],
+                        ),
             ),
           ],
         ),

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
+import 'package:navyla_flight_app/feature/feed/widget/feed_sponsor_card_widget.dart';
+import 'package:navyla_flight_app/feature/more/model/more_model.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 /// Displayed on the Feed screen when the user has no active boarding pass.
 class FeedNoActiveJourneyWidget extends StatelessWidget {
@@ -25,7 +30,7 @@ class FeedNoActiveJourneyWidget extends StatelessWidget {
           // 1. Boarding Pass Illustration with Circular Peach Container
           Image.asset(
             ImageAssets.feedBoardingPass,
-            height: 160.h,
+            height: 140.h,
             fit: BoxFit.cover,
           ),
           SizedBox(height: 10.h),
@@ -92,14 +97,14 @@ class FeedNoActiveJourneyWidget extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: 22.h),
+          SizedBox(height: 14.h),
 
           // 5. Scan / Load Boarding Pass Button
           GestureDetector(
             onTap: onScanTap,
             child: Container(
               width: double.infinity,
-              height: 44.h,
+              height: 38.h,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFFFF9E45), Color(0xFFFA7E23)],
@@ -132,7 +137,7 @@ class FeedNoActiveJourneyWidget extends StatelessWidget {
                         Text(
                           'Scan / Load Boarding Pass',
                           style: GoogleFonts.inter(
-                            fontSize: 14.5.sp,
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
@@ -156,7 +161,7 @@ class FeedNoActiveJourneyWidget extends StatelessWidget {
               child: Text(
                 'Enter flight number manually >',
                 style: GoogleFonts.inter(
-                  fontSize: 13.5.sp,
+                  fontSize: 11.5.sp,
                   fontWeight: FontWeight.w700,
                   color: AppColors.feedOrange,
                 ),
@@ -166,63 +171,22 @@ class FeedNoActiveJourneyWidget extends StatelessWidget {
 
           SizedBox(height: 18.h),
 
-          // 7. Clutter-Free Guarantee Card
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF8FAFC),
-              borderRadius: BorderRadius.circular(16.r),
-              border: Border.all(color: const Color(0xFFF1F5F9), width: 1.2),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 28.w,
-                  height: 28.w,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0xFFFFF2E6),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.schedule_rounded,
-                      size: 16.sp,
-                      color: const Color(0xFFFA7E23),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Clutter-free guarantee',
-                        style: GoogleFonts.inter(
-                          fontSize: 11.5.sp,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.blackShadow,
-                        ),
-                      ),
-                      SizedBox(height: 3.h),
-                      Text(
-                        'NAVYLA only delivers real-time passenger alerts and security updates for your specific flight and terminal.',
-                        style: GoogleFonts.inter(
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.darkGrayColor,
-                          height: 1.35,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          // 7. Sponsored Airport Lounge Access Card
+          FeedSponsorCardWidget(
+            image: ImageAssets.feedSponsor,
+            badgeSvgIcon: ImageAssets.sofa,
+            title: AppString.airportLoungeAccess,
+            description: AppString.airportLoungeAccessDesc,
+            onTap: () {
+              if (moreItem.length > 2) {
+                context.push(
+                  AppRouterName.moreDetailsScreen,
+                  extra: moreItem[2],
+                );
+              }
+            },
           ),
-          SizedBox(height: 36.h),
+          SizedBox(height: 20.h),
         ],
       ),
     );

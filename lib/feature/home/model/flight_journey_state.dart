@@ -11,6 +11,7 @@ class FlightJourneyState {
   final String gate;
   final String seat;
   final String status;
+  final String flightDate;
   final String weatherCity;
   final String weatherTemperature;
   final String weatherCondition;
@@ -30,6 +31,7 @@ class FlightJourneyState {
     this.gate = 'B24',
     this.seat = '14A',
     this.status = 'On Time',
+    this.flightDate = '24 Sep',
     this.weatherCity = 'New York',
     this.weatherTemperature = '24°C',
     this.weatherCondition = 'Partly cloudy',
@@ -50,6 +52,7 @@ class FlightJourneyState {
     String? gate,
     String? seat,
     String? status,
+    String? flightDate,
     String? weatherCity,
     String? weatherTemperature,
     String? weatherCondition,
@@ -69,6 +72,7 @@ class FlightJourneyState {
       gate: gate ?? this.gate,
       seat: seat ?? this.seat,
       status: status ?? this.status,
+      flightDate: flightDate ?? this.flightDate,
       weatherCity: weatherCity ?? this.weatherCity,
       weatherTemperature: weatherTemperature ?? this.weatherTemperature,
       weatherCondition: weatherCondition ?? this.weatherCondition,
