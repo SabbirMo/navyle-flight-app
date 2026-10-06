@@ -60,7 +60,7 @@ class QuickAccessToolsWidget extends StatelessWidget {
             Expanded(
               child: _QuickAccessCard(
                 item: list[2],
-                onTap: () => context.push(AppRouterName.navigateAirportRoute),
+                onTap: () => context.push(AppRouterName.exploreNearbyScreen),
               ),
             ),
             SizedBox(width: 14.w),

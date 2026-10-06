@@ -51,7 +51,7 @@ class PlanSelectionCard extends StatelessWidget {
                   planTitle,
                   style: StyleManager.interBold10(
                     AppColors.lightGray,
-                  ).copyWith(fontSize: 12.sp, letterSpacing: 0.9),
+                  ).copyWith(fontSize: 11.sp, letterSpacing: 0.9),
                 ),
                 SizedBox(height: 2.h),
                 Row(
@@ -62,7 +62,7 @@ class PlanSelectionCard extends StatelessWidget {
                       price,
                       style: TextStyle(
                         fontFamily: 'SF-Pro',
-                        fontSize: 20.sp,
+                        fontSize: 17.sp,
                         fontWeight: FontWeight.w800,
                         color: AppColors.blackShadow,
                       ),

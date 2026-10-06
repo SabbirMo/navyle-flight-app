@@ -10,6 +10,9 @@ class RouteSearchBar extends StatelessWidget {
   final VoidCallback? onClear;
   final VoidCallback? onMicTap;
   final VoidCallback? onAvatarTap;
+  final String? hintText;
+  final FocusNode? focusNode;
+  final VoidCallback? onTap;
 
   const RouteSearchBar({
     super.key,
@@ -18,6 +21,9 @@ class RouteSearchBar extends StatelessWidget {
     this.onClear,
     this.onMicTap,
     this.onAvatarTap,
+    this.hintText,
+    this.focusNode,
+    this.onTap,
   });
 
   @override
@@ -41,6 +47,8 @@ class RouteSearchBar extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
+              focusNode: focusNode,
+              onTap: onTap,
               onChanged: onChanged,
               cursorColor: AppColors.primaryColor,
               style: GoogleFonts.inter(
@@ -49,9 +57,9 @@ class RouteSearchBar extends StatelessWidget {
                 color: const Color(0xFF1E293B),
               ),
               decoration: InputDecoration(
-                hintText: 'Search terminal',
+                hintText: hintText ?? 'Search terminal',
                 hintStyle: GoogleFonts.inter(
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.w400,
                   color: const Color(0xFF94A3B8),
                 ),

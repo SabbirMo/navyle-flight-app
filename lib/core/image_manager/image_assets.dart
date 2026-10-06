@@ -59,6 +59,7 @@ class ImageAssets {
   static const String homeAir = "$_imagePath/homeAir.png";
   static const String city = "$_imagePath/city.png";
   static const String barcelonaOffer = "$_imagePath/barcelona_offer.jpg";
+  static const String gordonRamsay = "$_imagePath/gordon_ramsay.png";
 
   // quick access tools assets
   static const String airportNav = "$_imagePath/airport_nav.png";

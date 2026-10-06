@@ -99,7 +99,7 @@ class FeedMyPostEmptyWidget extends StatelessWidget {
             onTap: onCreatePostTap,
             child: Container(
               width: double.infinity,
-              height: 44.h,
+              height: 42.h,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFFFF9E45), Color(0xFFFA7E23)],

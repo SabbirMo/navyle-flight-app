@@ -97,7 +97,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       "NAVAYLA PLUS",
                       style: StyleManager.sfProBold24(
                         AppColors.black,
-                      ).copyWith(fontSize: 26.sp, fontWeight: FontWeight.w900),
+                      ).copyWith(fontSize: 25.sp, fontWeight: FontWeight.w900),
                     ),
                     SizedBox(height: 6.h),
                     Text(
@@ -107,7 +107,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         AppColors.lightBlueGray,
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 14.h),
 
                     // 3 Feature Highlights
                     SubscriptionFeatureTile(
@@ -172,7 +172,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         });
                       },
                     ),
-                    SizedBox(height: 22.h),
+                    SizedBox(height: 14.h),
 
                     // Risk-Free Trial text
                     Text(

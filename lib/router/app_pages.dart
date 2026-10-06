@@ -20,6 +20,9 @@ import 'package:navyla_flight_app/feature/more/model/more_model.dart';
 import 'package:navyla_flight_app/feature/more/screen/more_details_screen.dart';
 import 'package:navyla_flight_app/feature/more/screen/partner_website_screen.dart';
 import 'package:navyla_flight_app/feature/navbar/screen/navbar_screen.dart';
+import 'package:navyla_flight_app/feature/explore_nearby/model/explore_nearby_state.dart';
+import 'package:navyla_flight_app/feature/explore_nearby/screen/explore_hub_details_screen.dart';
+import 'package:navyla_flight_app/feature/explore_nearby/screen/explore_nearby_screen.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/screen/live_navigation_screen.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/screen/navigate_airport_route.dart';
 import 'package:navyla_flight_app/feature/notification/screen/notification_screen.dart';
@@ -289,6 +292,26 @@ final appPages = Provider<GoRouter>(
           key: state.pageKey,
           child: const LiveNavigationScreen(),
         ),
+      ),
+      GoRoute(
+        path: AppRouterName.exploreNearbyScreen,
+        pageBuilder: (context, state) => CupertinoPage(
+          key: state.pageKey,
+          child: const ExploreNearbyScreen(),
+        ),
+      ),
+      GoRoute(
+        path: AppRouterName.exploreHubDetailsScreen,
+        pageBuilder: (context, state) {
+          AirportHubItem? hub;
+          if (state.extra is AirportHubItem) {
+            hub = state.extra as AirportHubItem;
+          }
+          return CupertinoPage(
+            key: state.pageKey,
+            child: ExploreHubDetailsScreen(hub: hub),
+          );
+        },
       ),
 
       //Boarding Pass
