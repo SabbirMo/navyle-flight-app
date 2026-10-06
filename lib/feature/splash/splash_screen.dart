@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/theme/theme_mode_provder.dart';
@@ -24,6 +25,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   late final Animation<double> _effectFadeAnimation;
   late final Animation<double> _effectScaleAnimation;
   late final Animation<Offset> _effectSlideAnimation;
+  late final Animation<double> _textFadeAnimation;
+  late final Animation<double> _textScaleAnimation;
+  late final Animation<Offset> _textSlideAnimation;
 
   @override
   void initState() {
@@ -73,6 +77,27 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           CurvedAnimation(
             parent: _controller,
             curve: const Interval(0.38, 0.85, curve: Curves.easeOutCubic),
+          ),
+        );
+
+    // 4. Tagline Animation: slides up smoothly, scales, and fades in
+    _textFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.55, 0.85, curve: Curves.easeIn),
+      ),
+    );
+    _textScaleAnimation = Tween<double>(begin: 0.90, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.55, 0.92, curve: Curves.easeOutCubic),
+      ),
+    );
+    _textSlideAnimation =
+        Tween<Offset>(begin: const Offset(0.0, 0.35), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.55, 0.92, curve: Curves.easeOutCubic),
           ),
         );
 
@@ -135,6 +160,29 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     scale: _effectScaleAnimation,
                     child: Image.asset(
                       isDark ? ImageAssets.effect2 : ImageAssets.effect,
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 12.h),
+
+              FadeTransition(
+                opacity: _textFadeAnimation,
+                child: SlideTransition(
+                  position: _textSlideAnimation,
+                  child: ScaleTransition(
+                    scale: _textScaleAnimation,
+                    child: Text(
+                      "Made for Travelers",
+                      style: GoogleFonts.roboto(
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.1,
+                        color: isDark
+                            ? AppColors.white
+                            : const Color(0xff222222).withValues(alpha: 0.6),
+                      ),
                     ),
                   ),
                 ),

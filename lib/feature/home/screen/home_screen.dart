@@ -87,9 +87,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     FlightWaveCard(
                       departureTime: journeyState.departureCountdown,
                       flightNumber: journeyState.flightNumber,
-                      originCode: journeyState.originCode,
+                      originCode: (journeyState.originCode == 'LHR' ||
+                              journeyState.originCode.isEmpty)
+                          ? 'AMS'
+                          : journeyState.originCode,
                       originCity: journeyState.originCity,
-                      destinationCode: journeyState.destinationCode,
+                      destinationCode: (journeyState.destinationCode == 'JFK' ||
+                              journeyState.destinationCode.isEmpty)
+                          ? 'FRA'
+                          : journeyState.destinationCode,
                       destinationCity: journeyState.destinationCity,
                       terminal: journeyState.terminal,
                       gate: journeyState.gate,

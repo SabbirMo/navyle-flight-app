@@ -28,9 +28,13 @@ class FlightJourneyNotifier extends Notifier<FlightJourneyState> {
     state = state.copyWith(
       hasActiveFlight: true,
       flightNumber: flightNumber ?? state.flightNumber,
-      originCode: originCode ?? state.originCode,
+      originCode: (originCode == null || originCode == 'LHR')
+          ? 'AMS'
+          : originCode,
       originCity: originCity ?? state.originCity,
-      destinationCode: destinationCode ?? state.destinationCode,
+      destinationCode: (destinationCode == null || destinationCode == 'JFK')
+          ? 'FRA'
+          : destinationCode,
       destinationCity: destinationCity ?? state.destinationCity,
       seat: seat ?? state.seat,
       gate: gate ?? state.gate,
@@ -53,5 +57,5 @@ class FlightJourneyNotifier extends Notifier<FlightJourneyState> {
 
 final flightJourneyNotifierProvider =
     NotifierProvider<FlightJourneyNotifier, FlightJourneyState>(
-  FlightJourneyNotifier.new,
-);
+      FlightJourneyNotifier.new,
+    );

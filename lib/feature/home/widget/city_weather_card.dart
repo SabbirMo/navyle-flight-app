@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
-import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 
 /// A card that displays city destination information including
 /// real-time weather, temperature, local time, and date with a
@@ -19,11 +18,11 @@ class CityWeatherCard extends StatelessWidget {
 
   const CityWeatherCard({
     super.key,
-    this.cityName = 'New York',
+    this.cityName = 'Frankfurt',
     this.temperature = '24°C',
     this.weatherCondition = 'Partly cloudy',
     this.timeLabel = 'Local time',
-    this.localTime = '3:18 AM',
+    this.localTime = '9:41 AM',
     this.date = 'Tue, Apr 23',
     this.imagePath = ImageAssets.city,
     this.weatherIconPath = ImageAssets.cloude,
@@ -36,54 +35,57 @@ class CityWeatherCard extends StatelessWidget {
         final cardWidth = constraints.maxWidth;
         final cardHeight = 114.h;
 
-        // city.png natural size is 1901 x 544. Spire tip is at x = 946.
-        final imgWidth = cardHeight * (1901.0 / 544.0);
-        final spireInImg = imgWidth * (946.0 / 1901.0);
-
-        // Anchor the Empire State Building spire precisely at 79.5% of the card width
-        // so that all text finishes to the left of the building with a clear gap.
-        final spireTargetX = cardWidth * 0.795;
-        final imgLeft = spireTargetX - spireInImg;
+        // Precise skyline alignment coordinates for city.png (2000 x 1333):
+        // Height window: 680px (starting from y = 315px)
+        // Right anchor: x = 1265px
+        final imgHeight = cardHeight * (1333.0 / 680.0);
+        final imgWidth = cardHeight * (2000.0 / 680.0);
+        final topOffset = -cardHeight * (315.0 / 680.0);
+        final rightOffset = -cardHeight * ((2000.0 - 1265.0) / 680.0);
+        final imgLeft = cardWidth - imgWidth - rightOffset;
 
         return Container(
           width: double.infinity,
           height: cardHeight,
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(20.r),
+            borderRadius: BorderRadius.circular(22.r),
             boxShadow: [
               // Ambient soft glow shadow
               BoxShadow(
-                color: const Color(0xFF0F172A).withValues(alpha: 0.04),
+                color: const Color(0xFF0F172A).withValues(alpha: 0.05),
                 blurRadius: 20,
                 spreadRadius: 0,
                 offset: const Offset(0, 4),
               ),
-              // Soft downward depth shadow
+              // Downward depth shadow
               BoxShadow(
-                color: const Color(0xFF0F172A).withValues(alpha: 0.06),
-                blurRadius: 12,
-                spreadRadius: -2,
-                offset: const Offset(0, 8),
+                color: const Color(0xFF0F172A).withValues(alpha: 0.04),
+                blurRadius: 8,
+                spreadRadius: 0,
+                offset: const Offset(0, 2),
               ),
             ],
           ),
           clipBehavior: Clip.antiAlias,
           child: Stack(
             children: [
-              // 1. Skyline Background Image (Empire State Building anchored at ~79.5% on the right)
+              // 1. Frankfurt Skyline Background with seamless linear gradient fade
               Positioned(
                 left: imgLeft,
-                top: 0,
-                bottom: 0,
+                top: topOffset,
                 width: imgWidth,
+                height: imgHeight,
                 child: ShaderMask(
                   shaderCallback: (Rect bounds) {
-                    // Fade from transparent on the left to full opacity on the right
-                    final fadeStart = ((cardWidth * 0.44 - imgLeft) / imgWidth)
-                        .clamp(0.0, 1.0);
-                    final fadeEnd = ((cardWidth * 0.70 - imgLeft) / imgWidth)
-                        .clamp(0.0, 1.0);
+                    final fadeStartInBounds = (cardWidth * 0.44 - imgLeft)
+                        .clamp(0.0, bounds.width);
+                    final fadeEndInBounds = (cardWidth * 0.72 - imgLeft).clamp(
+                      0.0,
+                      bounds.width,
+                    );
+                    final stopStart = fadeStartInBounds / bounds.width;
+                    final stopEnd = fadeEndInBounds / bounds.width;
 
                     return LinearGradient(
                       begin: Alignment.centerLeft,
@@ -93,20 +95,25 @@ class CityWeatherCard extends StatelessWidget {
                         Colors.transparent,
                         Colors.white,
                       ],
-                      stops: [0.0, fadeStart, fadeEnd],
+                      stops: [0.0, stopStart, stopEnd],
                     ).createShader(bounds);
                   },
                   blendMode: BlendMode.dstIn,
-                  child: Image.asset(imagePath, fit: BoxFit.cover),
+                  child: Image.asset(
+                    imagePath,
+                    width: imgWidth,
+                    height: imgHeight,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
 
-              // Soft white gradient scrim overlay over the left text area
+              // 2. Soft white gradient overlay across the left side for optimal legibility
               Positioned(
                 left: 0,
                 top: 0,
                 bottom: 0,
-                width: cardWidth * 0.72,
+                width: cardWidth * 0.68,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -115,18 +122,23 @@ class CityWeatherCard extends StatelessWidget {
                       colors: [
                         AppColors.white,
                         AppColors.white,
-                        AppColors.white.withValues(alpha: 0.6),
+                        AppColors.white.withValues(alpha: 0.8),
                         AppColors.white.withValues(alpha: 0.0),
                       ],
-                      stops: const [0.0, 0.55, 0.85, 1.0],
+                      stops: const [0.0, 0.44, 0.65, 1.0],
                     ),
                   ),
                 ),
               ),
 
-              // 2. Foreground Card Content (finishes cleanly around ~58-60% of card)
+              // 3. Foreground Information Layer
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                padding: EdgeInsets.only(
+                  left: 18.w,
+                  top: 14.h,
+                  right: 18.w,
+                  bottom: 12.h,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -135,14 +147,16 @@ class CityWeatherCard extends StatelessWidget {
                     Text(
                       cityName,
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.black,
+                        color: const Color(0xFF0F172A),
+                        letterSpacing: -0.2,
+                        height: 1.1,
                       ),
                     ),
-                    SizedBox(height: 6.h),
+                    SizedBox(height: 16.h),
 
-                    // Weather & Local Time Info Row
+                    // Weather, Divider, and Local Time Row
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,
@@ -156,8 +170,8 @@ class CityWeatherCard extends StatelessWidget {
                             children: [
                               Image.asset(
                                 weatherIconPath,
-                                width: 30.w,
-                                height: 26.h,
+                                width: 34.w,
+                                height: 30.h,
                                 fit: BoxFit.contain,
                               ),
                               SizedBox(width: 8.w),
@@ -168,19 +182,20 @@ class CityWeatherCard extends StatelessWidget {
                                   Text(
                                     temperature,
                                     style: TextStyle(
-                                      fontSize: 16.sp,
+                                      fontSize: 18.sp,
                                       fontWeight: FontWeight.w700,
-                                      color: AppColors.black,
-                                      height: 1.1,
+                                      color: const Color(0xFF0F172A),
+                                      height: 1.15,
                                     ),
                                   ),
                                   SizedBox(height: 2.h),
                                   Text(
                                     weatherCondition,
                                     style: TextStyle(
-                                      fontSize: 11.sp,
+                                      fontSize: 11.5.sp,
                                       fontWeight: FontWeight.w500,
-                                      color: AppColors.black,
+                                      color: const Color(0xFF334155),
+                                      height: 1.1,
                                     ),
                                   ),
                                 ],
@@ -188,16 +203,16 @@ class CityWeatherCard extends StatelessWidget {
                             ],
                           ),
 
-                          SizedBox(width: 12.w),
+                          SizedBox(width: 14.w),
 
                           // Vertical Divider
                           Container(
                             width: 1.2.w,
-                            height: 38.h,
-                            color: AppColors.grayColor.withValues(alpha: 0.5),
+                            height: 42.h,
+                            color: const Color(0xFFBAC0C9),
                           ),
 
-                          SizedBox(width: 12.w),
+                          SizedBox(width: 14.w),
 
                           // Local Time Section
                           Column(
@@ -206,26 +221,32 @@ class CityWeatherCard extends StatelessWidget {
                             children: [
                               Text(
                                 timeLabel,
-                                style: StyleManager.interMedium12(
-                                  AppColors.black,
-                                ).copyWith(fontSize: 10.5.sp),
-                              ),
-                              SizedBox(height: 1.5.h),
-                              Text(
-                                localTime,
                                 style: TextStyle(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.black,
+                                  fontSize: 11.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color(0xFF334155),
                                   height: 1.1,
                                 ),
                               ),
-                              SizedBox(height: 1.5.h),
+                              SizedBox(height: 2.h),
+                              Text(
+                                localTime,
+                                style: TextStyle(
+                                  fontSize: 19.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFF0F172A),
+                                  height: 1.1,
+                                ),
+                              ),
+                              SizedBox(height: 2.h),
                               Text(
                                 date,
-                                style: StyleManager.interMedium12(
-                                  AppColors.black,
-                                ).copyWith(fontSize: 10.5.sp),
+                                style: TextStyle(
+                                  fontSize: 11.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color(0xFF475569),
+                                  height: 1.1,
+                                ),
                               ),
                             ],
                           ),

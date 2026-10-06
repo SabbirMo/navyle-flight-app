@@ -6,7 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
+import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
 import 'package:navyla_flight_app/feature/ticket/widget/delete_ticket_bottom_sheet.dart';
 import 'package:navyla_flight_app/feature/ticket/widget/ticket_boarding_pass.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
@@ -62,6 +64,18 @@ class TicketScreen extends ConsumerWidget {
                           ),
                         ),
                       ),
+                      if (hasPass)
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: CustomBackButton(
+                            size: 38.w,
+                            onTap: () {
+                              ref
+                                  .read(navbarNotifierProvider.notifier)
+                                  .setIndex(0);
+                            },
+                          ),
+                        ),
                       if (hasPass)
                         Align(
                           alignment: Alignment.centerRight,

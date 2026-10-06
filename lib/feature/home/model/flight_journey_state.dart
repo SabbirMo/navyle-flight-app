@@ -32,10 +32,10 @@ class FlightJourneyState {
     this.seat = '14A',
     this.status = 'On Time',
     this.flightDate = '24 Sep',
-    this.weatherCity = 'New York',
+    this.weatherCity = 'Frankfurt',
     this.weatherTemperature = '24°C',
     this.weatherCondition = 'Partly cloudy',
-    this.weatherLocalTime = '3:18 AM',
+    this.weatherLocalTime = '9:41 AM',
     this.weatherDate = 'Tue, Apr 23',
   });
 

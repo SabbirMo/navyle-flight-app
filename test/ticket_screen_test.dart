@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
 import 'package:navyla_flight_app/feature/ticket/screen/ticket_screen.dart';
 import 'package:navyla_flight_app/feature/ticket/widget/delete_ticket_bottom_sheet.dart';
 import 'package:navyla_flight_app/feature/ticket/widget/ticket_boarding_pass.dart';
@@ -100,6 +101,12 @@ void main() {
 
     expect(find.text('TICKET'), findsOneWidget);
     expect(find.byType(TicketBoardingPass), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_back_ios_new_rounded), findsOneWidget);
+
+    // Verify tapping back button sets navbar index to 0
+    await tester.tap(find.byIcon(Icons.arrow_back_ios_new_rounded));
+    await tester.pumpAndSettle();
+    expect(container.read(navbarNotifierProvider), 0);
     expect(tester.takeException(), isNull);
   });
 
@@ -125,6 +132,7 @@ void main() {
     expect(find.text('TICKET'), findsOneWidget);
     expect(find.text('No Active Boarding Pass'), findsOneWidget);
     expect(find.byType(TicketBoardingPass), findsNothing);
+    expect(find.byIcon(Icons.arrow_back_ios_new_rounded), findsNothing);
     expect(tester.takeException(), isNull);
   });
 }

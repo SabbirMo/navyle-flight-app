@@ -60,20 +60,24 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                         fit: BoxFit.contain,
                       ),
                     ),
-                    SizedBox(height: 18.h),
+                    SizedBox(height: 4.h),
                     _animations.textTransition(
                       child: Text(
                         AppString.welcomeToNavyla,
                         textAlign: TextAlign.center,
-                        style: StyleManager.poppinsBold28(AppColors.black),
+                        style: StyleManager.poppinsBold28(
+                          AppColors.black,
+                        ).copyWith(fontSize: 26.sp),
                       ),
                     ),
-                    SizedBox(height: 4.h),
+
                     _animations.taglineTransition(
                       child: Text(
                         AppString.authSelectionSubtitle,
                         textAlign: TextAlign.center,
-                        style: StyleManager.interMedium14(AppColors.grayColor),
+                        style: StyleManager.interMedium14(
+                          AppColors.grayColor,
+                        ).copyWith(fontSize: 13.sp),
                       ),
                     ),
                   ],

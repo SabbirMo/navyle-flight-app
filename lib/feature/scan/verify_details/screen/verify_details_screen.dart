@@ -48,10 +48,10 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
       text: isManual ? '' : (data['flightNumber'] ?? 'BA 0215'),
     );
     _fromController = TextEditingController(
-      text: isManual ? '' : (data['from'] ?? 'LHR'),
+      text: isManual ? '' : (data['from'] ?? 'AMS'),
     );
     _toController = TextEditingController(
-      text: isManual ? '' : (data['to'] ?? 'JFK'),
+      text: isManual ? '' : (data['to'] ?? 'FRA'),
     );
     _dateController = TextEditingController(
       text: isManual ? '' : (data['date'] ?? '24/09/26'),
@@ -368,7 +368,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                         child: _buildCard(
                           label: 'FROM',
                           controller: _fromController,
-                          hintText: 'e.g. LHR',
+                          hintText: 'e.g. AMS',
                         ),
                       ),
                       SizedBox(width: 12.w),
@@ -376,7 +376,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                         child: _buildCard(
                           label: 'TO',
                           controller: _toController,
-                          hintText: 'e.g. JFK',
+                          hintText: 'e.g. FRA',
                         ),
                       ),
                     ],
