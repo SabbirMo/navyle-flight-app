@@ -26,7 +26,6 @@ class AppRouterName {
   static const String profileDetailsScreen = '/profileDetailsScreen';
   static const String changePassword = '/changePassword';
   static const String managePlanScreen = '/managePlanScreen';
-  static const String rateNavylaScreen = '/rateNavylaScreen';
   static const String smartWatchScreen = '/smartWatchScreen';
   static const String termsOfServiceScreen = '/termsOfServiceScreen';
   static const String privacyPolicyScreen = '/privacyPolicyScreen';

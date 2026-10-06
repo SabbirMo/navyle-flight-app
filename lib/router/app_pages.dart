@@ -30,7 +30,6 @@ import 'package:navyla_flight_app/feature/scan/screen/scan_screen.dart';
 import 'package:navyla_flight_app/feature/scan/verify_details/screen/verify_details_screen.dart';
 import 'package:navyla_flight_app/feature/setting/change_password/screen/change_password.dart';
 import 'package:navyla_flight_app/feature/setting/profile_details/screen/profile_details_screen.dart';
-import 'package:navyla_flight_app/feature/setting/rate_navyla/screen/rate_navyla_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/screen/setting_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/privacy_policy_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/termsof_service_screen.dart';
@@ -186,13 +185,6 @@ final appPages = Provider<GoRouter>(
             CupertinoPage(key: state.pageKey, child: const ManagePlanScreen()),
       ),
 
-      //rate navyla review
-      GoRoute(
-        path: AppRouterName.rateNavylaScreen,
-        pageBuilder: (context, state) =>
-            CupertinoPage(key: state.pageKey, child: const RateNavylaScreen()),
-      ),
-
       //smart watch
       GoRoute(
         path: AppRouterName.smartWatchScreen,
@@ -325,8 +317,9 @@ final appPages = Provider<GoRouter>(
       GoRoute(
         path: AppRouterName.partnerWebsiteScreen,
         pageBuilder: (context, state) {
-          final data =
-              state.extra is MoreModel ? state.extra as MoreModel : null;
+          final data = state.extra is MoreModel
+              ? state.extra as MoreModel
+              : null;
           return CupertinoPage(
             key: state.pageKey,
             child: PartnerWebsiteScreen(data: data),

@@ -13,6 +13,7 @@ import 'package:navyla_flight_app/feature/setting/setting/widget/profile_details
 import 'package:navyla_flight_app/feature/setting/setting/widget/setting_item_tile.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/setting_toggle_switch.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/subscription_plan_card.dart';
+import 'package:navyla_flight_app/feature/setting/rate_navyla/widget/rate_navyla_bottom_sheet.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class SettingScreen extends ConsumerStatefulWidget {
@@ -169,7 +170,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                             color: const Color(0xFFCBD5E1),
                           ),
                           onTap: () {
-                            context.push(AppRouterName.rateNavylaScreen);
+                            RateNavylaBottomSheet.show(context);
                           },
                           showDivider: true,
                         ),
@@ -186,7 +187,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                             color: const Color(0xFFCBD5E1),
                           ),
                           onTap: () {
-                            // Handle share navyla
+                            RateNavylaBottomSheet.show(context);
                           },
                           showDivider: true,
                         ),

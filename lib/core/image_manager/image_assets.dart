@@ -52,7 +52,6 @@ class ImageAssets {
 
   //lottie animation
   static const String verifiedCheckLottie = "$_lottiePath/verified_check.json";
-  static const String reviewLottie = "$_lottiePath/review.json";
 
   //home page image assets
   static const String profile = "$_imagePath/profile.png";
@@ -81,4 +80,5 @@ class ImageAssets {
   static const String message = "$_svgPath/message.svg";
   static const String mail = "$_svgPath/mail.svg";
   static const String smore = "$_svgPath/smore.svg";
+  static const String review = "$_svgPath/review.svg";
 }
