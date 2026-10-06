@@ -30,6 +30,7 @@ import 'package:navyla_flight_app/feature/scan/screen/scan_screen.dart';
 import 'package:navyla_flight_app/feature/scan/verify_details/screen/verify_details_screen.dart';
 import 'package:navyla_flight_app/feature/setting/change_password/screen/change_password.dart';
 import 'package:navyla_flight_app/feature/setting/profile_details/screen/profile_details_screen.dart';
+import 'package:navyla_flight_app/feature/setting/rate_navyla/share_screen/share_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/screen/setting_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/privacy_policy_screen.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/termsof_service_screen.dart';
@@ -325,6 +326,13 @@ final appPages = Provider<GoRouter>(
             child: PartnerWebsiteScreen(data: data),
           );
         },
+      ),
+
+      //share Screen
+      GoRoute(
+        path: AppRouterName.shareScreen,
+        pageBuilder: (context, state) =>
+            CupertinoPage(key: state.pageKey, child: ShareScreen()),
       ),
     ],
     errorBuilder: (context, state) =>

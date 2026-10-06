@@ -13,6 +13,7 @@ class CustomBackButton extends StatelessWidget {
     this.subTitle = '',
     this.size,
     this.onTap,
+    this.imageSize,
   });
 
   final IconData icon;
@@ -22,6 +23,7 @@ class CustomBackButton extends StatelessWidget {
   final bool isImage;
   final double? size;
   final VoidCallback? onTap;
+  final double? imageSize;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +72,11 @@ class CustomBackButton extends StatelessWidget {
           Expanded(
             child: Center(
               child: hasImage
-                  ? Image.asset(image!, width: 140.w, fit: BoxFit.contain)
+                  ? Image.asset(
+                      image!,
+                      width: imageSize ?? 140.w,
+                      fit: BoxFit.contain,
+                    )
                   : Column(
                       children: [
                         Text(

@@ -52,4 +52,7 @@ class AppRouterName {
   //More Details Screen
   static const String moreDetailsScreen = '/moreDetailsScreen';
   static const String partnerWebsiteScreen = '/partnerWebsiteScreen';
+
+  //share screen
+  static const String shareScreen = '/shareScreen';
 }
