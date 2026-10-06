@@ -12,6 +12,7 @@ import 'package:navyla_flight_app/feature/navigate_airport/widget/route_map_view
 import 'package:navyla_flight_app/feature/navigate_airport/widget/route_search_suggestions.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/widget/route_top_header.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/widget/terminal_bottom_sheet.dart';
+import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class NavigateAirportRoute extends ConsumerStatefulWidget {
@@ -99,15 +100,15 @@ class _NavigateAirportRouteState extends ConsumerState<NavigateAirportRoute>
         break;
       case 'home':
         ref.read(navbarNotifierProvider.notifier).setIndex(0);
-        context.go(AppRouterName.homeScreen);
+        // context.go(AppRouterName.homeScreen);
         break;
       case 'ticket':
         ref.read(navbarNotifierProvider.notifier).setIndex(1);
-        context.go(AppRouterName.navbarScreen);
+        //context.go(AppRouterName.navbarScreen);
         break;
       case 'feed':
         ref.read(navbarNotifierProvider.notifier).setIndex(3);
-        context.go(AppRouterName.navbarScreen);
+        //context.go(AppRouterName.navbarScreen);
         break;
       default:
         break;
@@ -140,144 +141,12 @@ class _NavigateAirportRouteState extends ConsumerState<NavigateAirportRoute>
     );
   }
 
-  void _showTerminalDetailsModal(NavigateAirportState state) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (ctx) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
-          ),
-          padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 24.h),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40.w,
-                  height: 4.h,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE2E8F0),
-                    borderRadius: BorderRadius.circular(2.r),
-                  ),
-                ),
-              ),
-              SizedBox(height: 16.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        state.terminalInfo.terminalName,
-                        style: GoogleFonts.inter(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFF0F172A),
-                        ),
-                      ),
-                      SizedBox(height: 2.h),
-                      Text(
-                        state.terminalInfo.airportName,
-                        style: GoogleFonts.inter(
-                          fontSize: 13.sp,
-                          color: const Color(0xFF64748B),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                      vertical: 5.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFDCFCE7),
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                    child: Text(
-                      '${state.terminalInfo.temperature} • ${state.terminalInfo.aqi}',
-                      style: GoogleFonts.inter(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF16A34A),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 18.h),
-              Text(
-                'Key Locations in this Terminal',
-                style: GoogleFonts.inter(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF1E293B),
-                ),
-              ),
-              SizedBox(height: 10.h),
-              ...state.points.map(
-                (p) => ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  dense: true,
-                  leading: Container(
-                    width: 36.w,
-                    height: 36.w,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Icon(
-                      p.icon,
-                      size: 18.sp,
-                      color: AppColors.primaryColor,
-                    ),
-                  ),
-                  title: Text(
-                    p.name,
-                    style: GoogleFonts.inter(
-                      fontSize: 13.5.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF0F172A),
-                    ),
-                  ),
-                  subtitle: Text(
-                    p.subtitle,
-                    style: GoogleFonts.inter(
-                      fontSize: 11.5.sp,
-                      color: const Color(0xFF64748B),
-                    ),
-                  ),
-                  trailing: Text(
-                    p.walkingMinutes,
-                    style: GoogleFonts.inter(
-                      fontSize: 11.5.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.blue2563EB,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.of(ctx).pop();
-                    _handlePoiSelect(p);
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(navigateAirportNotifierProvider);
     final notifier = ref.read(navigateAirportNotifierProvider.notifier);
+    final journeyState = ref.watch(flightJourneyNotifierProvider);
+    final hasActiveJourney = journeyState.hasActiveFlight;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF1F4F9),
@@ -352,7 +221,7 @@ class _NavigateAirportRouteState extends ConsumerState<NavigateAirportRoute>
               isNavigating: state.isNavigating,
               onLocateTap: _resetMapToCenter,
               onNavigateTap: () {
-                context.push(AppRouterName.liveNavigationScreen);
+                //context.push(AppRouterName.liveNavigationScreen);
               },
             ),
           ),
@@ -364,37 +233,47 @@ class _NavigateAirportRouteState extends ConsumerState<NavigateAirportRoute>
             left: 0,
             right: 0,
             bottom: 0,
-            child: GestureDetector(
-              onTap: () => _showTerminalDetailsModal(state),
-              child: TerminalBottomSheet(
-                terminalInfo: state.terminalInfo,
-                onBookmarkTap: () {
-                  notifier.toggleBookmark();
-                  final isBookmarked = !state.terminalInfo.isBookmarked;
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        isBookmarked
-                            ? 'Saved Main Terminal 5 to bookmarks'
-                            : 'Removed from bookmarks',
-                        style: GoogleFonts.inter(
-                          fontSize: 12.5.sp,
-                          color: Colors.white,
+            child: hasActiveJourney
+                ? TerminalBottomSheet(
+                    terminalInfo: state.terminalInfo,
+                    hasActiveJourney: true,
+                    onBookmarkTap: () {
+                      notifier.toggleBookmark();
+                      final isBookmarked = !state.terminalInfo.isBookmarked;
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            isBookmarked
+                                ? 'Saved Main Terminal 5 to bookmarks'
+                                : 'Removed from bookmarks',
+                            style: GoogleFonts.inter(
+                              fontSize: 12.5.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                          backgroundColor: const Color(0xFF0F172A),
+                          behavior: SnackBarBehavior.floating,
+                          duration: const Duration(seconds: 2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
                         ),
-                      ),
-                      backgroundColor: const Color(0xFF0F172A),
-                      behavior: SnackBarBehavior.floating,
-                      duration: const Duration(seconds: 2),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
+                      );
+                    },
+                  )
+                : GestureDetector(
+                    onTap: () =>
+                        context.push(AppRouterName.exploreNearbyScreen),
+                    child: TerminalBottomSheet(
+                      terminalInfo: state.terminalInfo,
+                      hasActiveJourney: false,
+                      onChooseAirportTap: () {
+                        //  context.push(AppRouterName.exploreNearbyScreen);
+                      },
+                      onBookmarkTap: () {},
                     ),
-                  );
-                },
-                onDetailsTap: () => _showTerminalDetailsModal(state),
-              ),
-            ),
+                  ),
           ),
         ],
       ),
