@@ -39,6 +39,7 @@ class ImageAssets {
   static const String google = "$_svgPath/google.svg";
   static const String apple = "$_svgPath/apple.svg";
   static const String android = "$_svgPath/android.svg";
+  static const String playStore = "$_svgPath/playStore.svg";
   static const String notification = "$_svgPath/notification.svg";
   static const String security = "$_svgPath/security.svg";
   static const String gate = "$_svgPath/gate.svg";

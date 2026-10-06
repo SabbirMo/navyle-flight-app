@@ -21,14 +21,14 @@ class CurrentPlanCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [Color(0xffF69248), Color(0xffFF9D3E)],
         ),
-        borderRadius: BorderRadius.circular(30.r),
+        borderRadius: BorderRadius.circular(24.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,14 +52,14 @@ class CurrentPlanCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 10.h),
 
           // Plan Name
           Text(
             planName,
             style: TextStyle(
               fontFamily: 'SF-Pro',
-              fontSize: 24.sp,
+              fontSize: 20.sp,
               fontWeight: FontWeight.w900,
               color: AppColors.white,
             ),
@@ -69,7 +69,7 @@ class CurrentPlanCard extends StatelessWidget {
           // Renewal details
           Text(
             "Renews on $renewalDate · $price",
-            style: StyleManager.interMedium14(AppColors.white),
+            style: StyleManager.interMedium12(AppColors.white),
           ),
           SizedBox(height: 16.h),
 

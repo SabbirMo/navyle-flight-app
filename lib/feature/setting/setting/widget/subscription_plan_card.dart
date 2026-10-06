@@ -74,7 +74,7 @@ class SubscriptionPlanCard extends StatelessWidget {
             "YEARLY PREMIUM",
             style: StyleManager.interBold16(AppColors.white).copyWith(
               fontWeight: FontWeight.w900,
-              letterSpacing: -0.9,
+              letterSpacing: -0.7,
               fontSize: 24.sp,
             ),
           ),

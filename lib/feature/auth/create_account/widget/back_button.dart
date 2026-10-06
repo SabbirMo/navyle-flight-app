@@ -81,9 +81,13 @@ class CustomBackButton extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: StyleManager.sfProSemiBold16(
-                            AppColors.blackShadow,
-                          ).copyWith(letterSpacing: 1),
+                          style:
+                              StyleManager.sfProSemiBold16(
+                                AppColors.blackShadow,
+                              ).copyWith(
+                                letterSpacing: 1,
+                                fontWeight: FontWeight.w900,
+                              ),
                           textAlign: TextAlign.center,
                         ),
                         if (subTitle != null && subTitle!.isNotEmpty)
