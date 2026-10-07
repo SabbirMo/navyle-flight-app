@@ -36,7 +36,7 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
       child: Column(
         children: [
           // Header with Back Button
-          const CustomBackButton(title: "NOTIFICATIONS"),
+          const CustomBackButton(title: "NOTIFICATIONS", isBorder: true),
           SizedBox(height: 12.h),
 
           // Scrollable Notifications List

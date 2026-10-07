@@ -16,22 +16,30 @@ class NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isHighlighted = item.isHighlighted;
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       decoration: BoxDecoration(
-        color: isHighlighted ? const Color(0xFFFFF9F3) : Colors.white,
+        color: isDark
+            ? (isHighlighted ? AppColors.textFieldBgColor : AppColors.darkBlack)
+            : (isHighlighted ? const Color(0xFFFFF9F3) : Colors.white),
         borderRadius: BorderRadius.circular(22.r),
         border: Border.all(
-          color: isHighlighted
-              ? const Color(0xFFFFEAD5)
-              : const Color(0xFFF1F5F9),
+          color: isDark
+              ? (isHighlighted
+                    ? AppColors.primaryColor.withValues(alpha: 0.45)
+                    : AppColors.lightBlueGray.withValues(alpha: 0.3))
+              : (isHighlighted
+                    ? const Color(0xFFFFEAD5)
+                    : const Color(0xFFF1F5F9)),
           width: 1.2,
         ),
         boxShadow: isHighlighted
             ? [
                 BoxShadow(
-                  color: const Color(0xFFFF942B).withValues(alpha: 0.04),
+                  color: isDark
+                      ? AppColors.primaryColor.withValues(alpha: 0.12)
+                      : const Color(0xFFFF942B).withValues(alpha: 0.04),
                   blurRadius: 10,
                   offset: const Offset(0, 3),
                 ),
@@ -56,7 +64,7 @@ class NotificationCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Left Icon
-                _buildIconContainer(),
+                _buildIconContainer(context),
                 SizedBox(width: 14.w),
 
                 // Right Content
@@ -73,7 +81,9 @@ class NotificationCard extends StatelessWidget {
                             child: Text(
                               item.title,
                               style: StyleManager.interMedium12(
-                                AppColors.blackShadow,
+                                isDark
+                                    ? AppColors.white
+                                    : AppColors.blackShadow,
                               ).copyWith(fontWeight: FontWeight.w900),
                             ),
                           ),
@@ -105,7 +115,11 @@ class NotificationCard extends StatelessWidget {
                                 color:
                                     span.color ??
                                     (span.isBold
-                                        ? const Color(0xFF1E293B)
+                                        ? isDark
+                                              ? AppColors.primaryColor
+                                              : const Color(0xFF1E293B)
+                                        : isDark
+                                        ? AppColors.lightGray
                                         : const Color(0xFF475569)),
                                 height: 1.35,
                               ),
@@ -121,7 +135,9 @@ class NotificationCard extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 9.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.lightGray,
+                          color: isDark
+                              ? AppColors.lightBlueGray
+                              : AppColors.lightGray,
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -136,7 +152,8 @@ class NotificationCard extends StatelessWidget {
     );
   }
 
-  Widget _buildIconContainer() {
+  Widget _buildIconContainer(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     switch (item.type) {
       case NotificationType.gateChange:
         return Container(
@@ -145,6 +162,13 @@ class NotificationCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: const Color(0xFFFF8533),
             borderRadius: BorderRadius.circular(12.r),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFFFF8533).withValues(alpha: 0.35),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: Center(
             child: SvgPicture.asset(
@@ -164,7 +188,9 @@ class NotificationCard extends StatelessWidget {
           width: 48.w,
           height: 48.w,
           decoration: BoxDecoration(
-            color: const Color(0xFFE8F9EE),
+            color: isDark
+                ? AppColors.green.withValues(alpha: 0.16)
+                : const Color(0xFFE8F9EE),
             borderRadius: BorderRadius.circular(16.r),
           ),
           child: Center(
@@ -189,7 +215,7 @@ class NotificationCard extends StatelessWidget {
           width: 48.w,
           height: 48.w,
           decoration: BoxDecoration(
-            color: const Color(0xFFEFF6FF),
+            color: isDark ? Color(0x1AEFF6FF) : const Color(0xFFEFF6FF),
             borderRadius: BorderRadius.circular(16.r),
           ),
           child: Center(
@@ -202,11 +228,15 @@ class NotificationCard extends StatelessWidget {
           width: 48.w,
           height: 48.w,
           decoration: BoxDecoration(
-            color: const Color(0xFFF1F5F9),
+            color: isDark
+                ? AppColors.white.withValues(alpha: 0.1)
+                : const Color(0xFFF1F5F9),
             borderRadius: BorderRadius.circular(16.r),
           ),
           child: Center(
-            child: _buildExclamationCircle(const Color(0xFF94A3B8)),
+            child: _buildExclamationCircle(
+              isDark ? AppColors.lightBlueGray : const Color(0xFF94A3B8),
+            ),
           ),
         );
     }

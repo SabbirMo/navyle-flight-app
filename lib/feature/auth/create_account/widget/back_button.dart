@@ -14,6 +14,7 @@ class CustomBackButton extends StatelessWidget {
     this.size,
     this.onTap,
     this.imageSize,
+    this.isBorder = false,
   });
 
   final IconData icon;
@@ -24,6 +25,7 @@ class CustomBackButton extends StatelessWidget {
   final double? size;
   final VoidCallback? onTap;
   final double? imageSize;
+  final bool isBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +40,13 @@ class CustomBackButton extends StatelessWidget {
               ? AppColors.white.withValues(alpha: 0.2)
               : AppColors.white,
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? AppColors.white.withValues(alpha: 0.8)
-                : Colors.transparent,
-          ),
+          border: !isBorder
+              ? Border.all(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.white.withValues(alpha: 0.8)
+                      : Colors.transparent,
+                )
+              : null,
           boxShadow: [
             BoxShadow(
               color: AppColors.blackShadow.withValues(alpha: 0.12),
