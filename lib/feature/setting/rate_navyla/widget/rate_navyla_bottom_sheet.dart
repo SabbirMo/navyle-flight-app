@@ -19,32 +19,38 @@ class RateNavylaBottomSheet extends StatefulWidget {
       barrierColor: Colors.transparent,
       builder: (ctx) {
         final bottomInset = MediaQuery.of(ctx).viewInsets.bottom;
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => Navigator.of(ctx).pop(),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: Colors.black.withValues(alpha: 0.20),
-              child: AnimatedPadding(
-                padding: EdgeInsets.only(bottom: bottomInset),
-                duration: const Duration(milliseconds: 150),
-                curve: Curves.easeOut,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap:
-                            () {}, // Prevent taps inside bottom sheet from dismissing
-                        child: const RateNavylaBottomSheet(),
-                      ),
+        return ScaffoldMessenger(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            resizeToAvoidBottomInset: false,
+            body: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => Navigator.of(ctx).pop(),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.black.withValues(alpha: 0.20),
+                  child: AnimatedPadding(
+                    padding: EdgeInsets.only(bottom: bottomInset),
+                    duration: const Duration(milliseconds: 150),
+                    curve: Curves.easeOut,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Flexible(
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap:
+                                () {}, // Prevent taps inside bottom sheet from dismissing
+                            child: const RateNavylaBottomSheet(),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -69,8 +75,14 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
     super.dispose();
   }
 
-  void _onShareNavyla() {
-    Navigator.of(context).pop();
+  bool _isSubmitting = false;
+
+  Future<void> _onShareNavyla() async {
+    if (_isSubmitting) return;
+    setState(() {
+      _isSubmitting = true;
+    });
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
@@ -91,11 +103,17 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
         ),
         backgroundColor: const Color(0xFF22C55E),
         behavior: SnackBarBehavior.floating,
+        duration: const Duration(milliseconds: 1500),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.r),
         ),
       ),
     );
+
+    await Future.delayed(const Duration(milliseconds: 1600));
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _onSocialShare(String channel) {
@@ -353,16 +371,18 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  "Share NAVYLA with friends & family",
-                                  style: GoogleFonts.inter(
-                                    fontSize: 13.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF495B70),
+                                Expanded(
+                                  child: Text(
+                                    "Share NAVYLA with friends & family",
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: const Color(0xFF495B70),
+                                    ),
                                   ),
                                 ),
                                 AnimatedRotation(
-                                  turns: _isShareExpanded ? 0.5 : 0.0,
+                                  turns: _isShareExpanded ? 0.0 : 0.5,
                                   duration: const Duration(milliseconds: 200),
                                   child: Icon(
                                     Icons.keyboard_arrow_down_rounded,
