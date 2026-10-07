@@ -36,6 +36,7 @@ class HomeFeedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayPost = post ?? defaultPost;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: () {
@@ -47,9 +48,12 @@ class HomeFeedCard extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? AppColors.darkBluec : Colors.white,
           borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: const Color(0xFFEEF2F6), width: 1.2),
+          border: Border.all(
+            color: isDark ? AppColors.lightBlueGray : const Color(0xFFEEF2F6),
+            width: 1.2,
+          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.028),
@@ -89,7 +93,9 @@ class HomeFeedCard extends StatelessWidget {
                     children: [
                       Text(
                         displayPost.authorName,
-                        style: StyleManager.interSemiBold14(AppColors.black),
+                        style: StyleManager.interSemiBold14(
+                          isDark ? AppColors.white : AppColors.black,
+                        ),
                       ),
                       Text(
                         displayPost.timeAgo,
@@ -130,7 +136,9 @@ class HomeFeedCard extends StatelessWidget {
             SizedBox(height: 8.h),
             Text(
               defaultPost.content,
-              style: StyleManager.interRegular13(AppColors.darkGrayColor),
+              style: StyleManager.interRegular13(
+                isDark ? AppColors.lightGray : AppColors.darkGrayColor,
+              ),
             ),
           ],
         ),

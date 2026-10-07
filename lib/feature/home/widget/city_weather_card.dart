@@ -11,6 +11,8 @@ class CityWeatherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const baseColor = Color(0xFFF7F8FA);
+    final baseDark = Color(0xff021F42);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       width: double.infinity,
@@ -20,7 +22,9 @@ class CityWeatherCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: isDark
+                ? AppColors.aIPrimaryColor.withValues(alpha: 0.3)
+                : Colors.black.withValues(alpha: 0.08),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -47,11 +51,17 @@ class CityWeatherCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      baseColor,
-                      baseColor,
-                      baseColor.withValues(alpha: 0.98),
-                      baseColor.withValues(alpha: 0.84),
-                      baseColor.withValues(alpha: 0.1),
+                      isDark ? baseDark : baseColor,
+                      isDark ? baseDark : baseColor,
+                      isDark
+                          ? baseDark.withValues(alpha: 0.98)
+                          : baseColor.withValues(alpha: 0.98),
+                      isDark
+                          ? baseDark.withValues(alpha: 0.84)
+                          : baseColor.withValues(alpha: 0.84),
+                      isDark
+                          ? baseDark.withValues(alpha: 0.6)
+                          : baseColor.withValues(alpha: 0.1),
                     ],
                     stops: const [0.0, 0.44, 0.60, 0.70, 0.80],
                     begin: Alignment.centerLeft,
@@ -72,7 +82,7 @@ class CityWeatherCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.black,
+                      color: isDark ? Colors.white : AppColors.black,
                     ),
                   ),
                   const Spacer(),
@@ -96,14 +106,14 @@ class CityWeatherCard extends StatelessWidget {
                             style: GoogleFonts.inter(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.black,
+                              color: isDark ? Colors.white : AppColors.black,
                             ),
                           ),
                           SizedBox(height: 2.h),
                           Text(
                             'Partly cloudy',
                             style: StyleManager.interMedium12(
-                              const Color(0xff0B0E14),
+                              isDark ? Colors.white : const Color(0xff0B0E14),
                             ),
                           ),
                         ],
@@ -129,7 +139,9 @@ class CityWeatherCard extends StatelessWidget {
                             style: GoogleFonts.inter(
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF1E2124),
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xff0B0E14),
                             ),
                           ),
                           SizedBox(height: 1.h),
@@ -138,7 +150,9 @@ class CityWeatherCard extends StatelessWidget {
                             style: GoogleFonts.inter(
                               fontSize: 20.sp,
                               fontWeight: FontWeight.w700,
-                              color: const Color(0xFF1A1A1A),
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xFF1A1A1A),
                               letterSpacing: -0.5,
                             ),
                           ),
@@ -146,7 +160,7 @@ class CityWeatherCard extends StatelessWidget {
                           Text(
                             'Tue, Apr 23',
                             style: StyleManager.interMedium12(
-                              const Color(0xff0B0E14),
+                              isDark ? Colors.white : const Color(0xff0B0E14),
                             ),
                           ),
                         ],
