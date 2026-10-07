@@ -16,7 +16,7 @@ class CustomBottomNavBar extends StatelessWidget {
   static const double _barHeight = 64.0;
   static const double _extraTopRoom = 0.0;
   static const double _centerBtnSize = 54.0;
-  static const Color _darkBg = Color(0xFF1E293B);
+  static const Color _darkBg = AppColors.darkBluec;
   static const Color _lightBg = AppColors.white;
   static const Color _inactiveColor = Color(0xFF8E9BAE);
 

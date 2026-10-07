@@ -42,37 +42,52 @@ class _ChatInputBarState extends State<ChatInputBar> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.only(
         left: 16.w,
         right: 16.w,
-        top: 14.h,
-        bottom: 14.h,
+        top: 12.h,
+        bottom: 12.h,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 12,
-            offset: const Offset(0, -3),
-          ),
-        ],
+        color: isDark ? const Color(0xFF020617) : Colors.white,
+        borderRadius: isDark
+            ? null
+            : BorderRadius.vertical(top: Radius.circular(24.r)),
+        border: isDark
+            ? Border(
+                top: BorderSide(
+                  color: const Color(0xFF1E293B).withValues(alpha: 0.6),
+                  width: 1,
+                ),
+              )
+            : null,
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 12,
+                  offset: const Offset(0, -3),
+                ),
+              ],
       ),
       child: SafeArea(
         top: false,
         child: Container(
-          height: 40.h,
+          height: 44.h,
           decoration: BoxDecoration(
-            color: const Color(0xFFF4F7FB),
+            color: isDark ? const Color(0xFF1B1E2E) : const Color(0xFFF4F7FB),
             borderRadius: BorderRadius.circular(30.r),
             border: Border.all(
-              color: const Color(0xFFE2E8F0).withValues(alpha: 0.6),
+              color: isDark
+                  ? const Color(0xFF2E3547).withValues(alpha: 0.6)
+                  : const Color(0xFFE2E8F0).withValues(alpha: 0.6),
               width: 1,
             ),
           ),
-          padding: EdgeInsets.only(left: 18.w, right: 6.w),
+          padding: EdgeInsets.only(left: 18.w, right: 4.w),
           child: Row(
             children: [
               // Text Field - override all theme borders and fills
@@ -84,7 +99,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                   style: GoogleFonts.inter(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xFF0F172A),
+                    color: isDark ? Colors.white : const Color(0xFF0F172A),
                   ),
                   decoration: InputDecoration(
                     isDense: true,
@@ -114,10 +129,12 @@ class _ChatInputBarState extends State<ChatInputBar> {
                   duration: const Duration(milliseconds: 200),
                   opacity: widget.isGenerating ? 0.6 : 1.0,
                   child: Container(
-                    width: 42.w,
-                    height: 42.w,
+                    width: 38.w,
+                    height: 38.w,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF00386C),
+                      color: isDark
+                          ? const Color(0xFF003D72)
+                          : const Color(0xFF00386C),
                       shape: BoxShape.circle,
                     ),
                     child: Center(
@@ -128,7 +145,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                           child: Icon(
                             Icons.send_rounded,
                             color: Colors.white,
-                            size: 18.sp,
+                            size: 17.sp,
                           ),
                         ),
                       ),

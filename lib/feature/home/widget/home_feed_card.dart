@@ -51,7 +51,9 @@ class HomeFeedCard extends StatelessWidget {
           color: isDark ? AppColors.darkBluec : Colors.white,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
-            color: isDark ? AppColors.lightBlueGray : const Color(0xFFEEF2F6),
+            color: isDark
+                ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+                : const Color(0xFFEEF2F6),
             width: 1.2,
           ),
           boxShadow: [
@@ -114,18 +116,22 @@ class HomeFeedCard extends StatelessWidget {
                     vertical: 4.h,
                   ),
                   decoration: BoxDecoration(
-                    color: _getCategoryBgColor(displayPost.category),
+                    color: isDark
+                        ? AppColors.lightBlueGray.withValues(alpha: 0.5)
+                        : _getCategoryBgColor(displayPost.category),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Text(
                     displayPost.category.toUpperCase(),
                     style:
                         StyleManager.interSemiBold12(
-                          _getCategoryTextColor(displayPost.category),
+                          isDark
+                              ? AppColors.white
+                              : _getCategoryTextColor(displayPost.category),
                         ).copyWith(
                           fontSize: 10.sp,
                           fontWeight: FontWeight.bold,
-                          letterSpacing: 1,
+                          letterSpacing: 1.2,
                         ),
                   ),
                 ),

@@ -43,7 +43,7 @@ class CustomBackButton extends StatelessWidget {
           border: !isBorder
               ? Border.all(
                   color: Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.white.withValues(alpha: 0.8)
+                      ? AppColors.white.withValues(alpha: 0.5)
                       : Colors.transparent,
                 )
               : null,

@@ -47,6 +47,7 @@ class _AIChatScreenState extends ConsumerState<AIChatScreen> {
   Widget build(BuildContext context) {
     final chatState = ref.watch(chatNotifierProvider);
     final messages = chatState.messages;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     ref.listen(chatNotifierProvider, (previous, next) {
       if (previous?.messages.length != next.messages.length ||
@@ -56,45 +57,73 @@ class _AIChatScreenState extends ConsumerState<AIChatScreen> {
     });
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? const Color(0xFF020617) : Colors.white,
       body: SafeArea(
         child: Column(
           children: [
-            // 1. Top App Bar with Solid White Background
-            Container(color: Colors.white, child: const ChatAppBar()),
+            // 1. Top App Bar
+            Container(
+              color: isDark ? const Color(0xFF020617) : Colors.white,
+              child: Column(
+                children: [
+                  const ChatAppBar(),
+                  if (isDark)
+                    Divider(
+                      height: 1,
+                      thickness: 0.8,
+                      color: const Color(0xFF1E293B).withValues(alpha: 0.6),
+                    ),
+                ],
+              ),
+            ),
 
-            // 2. Chat Area with Doodle Travel Background & Subtle Sky Glow
+            // 2. Chat Area with Doodle Travel Background
             Expanded(
               child: Stack(
                 children: [
-                  // Subtle sky blue wash at top fading to clean background
-                  Positioned.fill(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(0xFFEAF2FD),
-                            Color(0xFFF7FAFD),
-                            Color.fromARGB(255, 245, 238, 238),
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomLeft,
-                          stops: [0.0, 0.28, 1.0],
+                  if (!isDark) ...[
+                    // Light mode: Subtle sky blue wash at top fading to clean background
+                    Positioned.fill(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xFFEAF2FD),
+                              Color(0xFFF7FAFD),
+                              Color.fromARGB(255, 245, 238, 238),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomLeft,
+                            stops: [0.0, 0.28, 1.0],
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
-                  // Travel Doodle Art from assets/images/ask_navyla.png
-                  Positioned.fill(
-                    child: Opacity(
-                      opacity: 0.13,
+                    // Travel Doodle Art
+                    Positioned.fill(
+                      child: Opacity(
+                        opacity: 0.13,
+                        child: Image.asset(
+                          ImageAssets.askNavyla,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ] else ...[
+                    // Dark mode: ask_navyla.png in background, then black color with opacity overlay on top
+                    Positioned.fill(
                       child: Image.asset(
                         ImageAssets.askNavyla,
                         fit: BoxFit.cover,
                       ),
                     ),
-                  ),
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.black.withValues(alpha: 0.90),
+                      ),
+                    ),
+                  ],
 
                   // Chat Messages List with Scrollable Timestamp Header
                   ListView.builder(
@@ -110,13 +139,15 @@ class _AIChatScreenState extends ConsumerState<AIChatScreen> {
                       if (index == 0) {
                         return Center(
                           child: Padding(
-                            padding: EdgeInsets.only(top: 8.h, bottom: 10.h),
+                            padding: EdgeInsets.only(top: 10.h, bottom: 12.h),
                             child: Text(
                               'TODAY, 10:45 AM',
                               style: GoogleFonts.inter(
                                 fontSize: 10.sp,
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.lightGray,
+                                color: isDark
+                                    ? AppColors.lightBlueGray
+                                    : AppColors.lightGray,
                                 letterSpacing: 0.8,
                               ),
                             ),
@@ -130,7 +161,7 @@ class _AIChatScreenState extends ConsumerState<AIChatScreen> {
               ),
             ),
 
-            // 4. Bottom Input Bar with Pure White Container
+            // 4. Bottom Input Bar
             ChatInputBar(
               isGenerating: chatState.isGenerating,
               onSend: (text) {
