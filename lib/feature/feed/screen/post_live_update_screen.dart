@@ -129,7 +129,7 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return CommonScreen(
       child: Column(
         children: [
@@ -160,7 +160,7 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12.r),
                           child: Image.asset(
-                            ImageAssets.alexRivers,
+                            ImageAssets.profile,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 Image.asset(
@@ -177,7 +177,7 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
                           Text(
                             'Alex Rivers',
                             style: StyleManager.interBold16(
-                              AppColors.blackShadow,
+                              isDark ? AppColors.white : AppColors.blackShadow,
                             ),
                           ),
 
@@ -202,12 +202,14 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
                   ),
                   SizedBox(height: 10.h),
                   Container(
-                    height: 155.h,
+                    height: 130.h,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: isDark ? AppColors.darkBlack : Colors.white,
                       borderRadius: BorderRadius.circular(22.r),
                       border: Border.all(
-                        color: const Color(0xFFE2E8F0),
+                        color: isDark
+                            ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+                            : const Color(0xFFE2E8F0),
                         width: 1.2,
                       ),
                     ),
@@ -223,7 +225,9 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
                       style: GoogleFonts.inter(
                         fontSize: 14.sp,
                         height: 1.45,
-                        color: const Color(0xFF1E293B),
+                        color: isDark
+                            ? AppColors.white
+                            : const Color(0xFF1E293B),
                       ),
                       decoration: InputDecoration(
                         isDense: true,
@@ -238,9 +242,9 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
                         hintText:
                             'Tell other travelers about gate status, queues, or facility updates...',
                         hintStyle: GoogleFonts.inter(
-                          fontSize: 13.5.sp,
+                          fontSize: 11.5.sp,
                           height: 1.45,
-                          color: const Color(0xFFCBD5E1),
+                          color: AppColors.lightGray,
                         ),
                       ),
                     ),
@@ -321,11 +325,13 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
                   Container(
                     height: 48.h,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: isDark ? AppColors.darkBlack : Colors.white,
                       borderRadius: BorderRadius.circular(24.r),
                       border: Border.all(
                         color: _isCustomCategory
                             ? AppColors.primaryColor
+                            : isDark
+                            ? AppColors.lightBlueGray.withValues(alpha: 0.4)
                             : const Color(0xFFE2E8F0),
                         width: 1.2,
                       ),
@@ -391,8 +397,12 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
         !_isCustomCategory &&
         _selectedCategory.toUpperCase() == title.toUpperCase();
 
-    final itemColor = isSelected ? Colors.white : const Color(0xFF1E293B);
-
+    final itemColor = isSelected
+        ? Colors.white
+        : (Theme.of(context).brightness == Brightness.dark
+              ? AppColors.white
+              : const Color(0xFF1E293B));
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Expanded(
       child: GestureDetector(
         onTap: () => _selectPresetCategory(title),
@@ -401,7 +411,9 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
           curve: Curves.easeInOut,
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primaryColor : Colors.white,
+            color: isSelected
+                ? AppColors.primaryColor
+                : (isDark ? AppColors.darkBlack : Colors.white),
             borderRadius: BorderRadius.circular(12.r),
             border: Border.all(
               color: isSelected

@@ -41,7 +41,9 @@ class FeedScreen extends ConsumerWidget {
           style: GoogleFonts.inter(
             fontSize: 18.sp,
             fontWeight: FontWeight.w700,
-            color: const Color(0xFF1E293B),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? AppColors.white
+                : const Color(0xFF1E293B),
           ),
         ),
         content: Text(

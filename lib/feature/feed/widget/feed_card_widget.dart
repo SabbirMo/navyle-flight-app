@@ -252,7 +252,9 @@ class FeedCardWidget extends StatelessWidget {
                     child: Container(
                       height: 38.h,
                       decoration: BoxDecoration(
-                        color: AppColors.feedBlueBg,
+                        color: isDark
+                            ? AppColors.blue2563EB.withValues(alpha: 0.3)
+                            : AppColors.feedBlueBg,
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Row(
@@ -289,7 +291,9 @@ class FeedCardWidget extends StatelessWidget {
                     width: 46.w,
                     height: 38.h,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFEF2F2),
+                      color: isDark
+                          ? AppColors.errorRed.withValues(alpha: 0.3)
+                          : const Color(0xFFFEF2F2),
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Center(

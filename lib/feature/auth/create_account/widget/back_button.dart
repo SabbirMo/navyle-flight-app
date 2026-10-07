@@ -34,8 +34,15 @@ class CustomBackButton extends StatelessWidget {
         width: btnSize,
         height: btnSize,
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.white.withValues(alpha: 0.2)
+              : AppColors.white,
           borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? AppColors.white.withValues(alpha: 0.8)
+                : Colors.transparent,
+          ),
           boxShadow: [
             BoxShadow(
               color: AppColors.blackShadow.withValues(alpha: 0.12),
@@ -48,7 +55,9 @@ class CustomBackButton extends StatelessWidget {
           child: Icon(
             icon,
             size: (btnSize * 0.44).clamp(14.0, 18.0).sp,
-            color: AppColors.black,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? AppColors.white
+                : AppColors.black,
           ),
         ),
       ),
@@ -63,6 +72,8 @@ class CustomBackButton extends StatelessWidget {
     if (!hasTitle && !hasImage) {
       return button;
     }
+
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
@@ -83,7 +94,9 @@ class CustomBackButton extends StatelessWidget {
                           title,
                           style:
                               StyleManager.sfProSemiBold16(
-                                AppColors.blackShadow,
+                                isDark
+                                    ? AppColors.white
+                                    : AppColors.blackShadow,
                               ).copyWith(
                                 letterSpacing: 1,
                                 fontWeight: FontWeight.w900,
