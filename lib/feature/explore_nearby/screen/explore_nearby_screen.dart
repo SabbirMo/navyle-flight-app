@@ -222,11 +222,11 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                   Expanded(
                     child: Center(
                       child: Text(
-                        'SELECT AIRPORT',
+                        "AMS",
                         style: GoogleFonts.inter(
-                          fontSize: 14.5.sp,
+                          fontSize: 15.5.sp,
                           fontWeight: FontWeight.w800,
-                          letterSpacing: 0.8,
+                          letterSpacing: 1.5,
                           color: const Color(0xFF0F172A),
                         ),
                       ),

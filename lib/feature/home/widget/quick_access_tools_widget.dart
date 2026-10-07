@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/feature/home/model/quick_access_tool_model.dart';
+import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
@@ -16,12 +17,14 @@ class QuickAccessToolsWidget extends ConsumerWidget {
   final List<QuickAccessToolModel>? tools;
   final VoidCallback? onAskNavylaTap;
   final VoidCallback? onBoardingPassTap;
+  final VoidCallback? onExploreNearbyTap;
 
   const QuickAccessToolsWidget({
     super.key,
     this.tools,
     this.onAskNavylaTap,
     this.onBoardingPassTap,
+    this.onExploreNearbyTap,
   });
 
   @override
@@ -49,8 +52,7 @@ class QuickAccessToolsWidget extends ConsumerWidget {
                 item: list[1],
                 onTap:
                     onBoardingPassTap ??
-                    () =>
-                        ref.read(navbarNotifierProvider.notifier).setIndex(1),
+                    () => ref.read(navbarNotifierProvider.notifier).setIndex(1),
               ),
             ),
           ],
@@ -63,7 +65,18 @@ class QuickAccessToolsWidget extends ConsumerWidget {
             Expanded(
               child: _QuickAccessCard(
                 item: list[2],
-                onTap: () => context.push(AppRouterName.exploreNearbyScreen),
+                onTap:
+                    onExploreNearbyTap ??
+                    () {
+                      final hasBoardingPass = ref
+                          .read(flightJourneyNotifierProvider)
+                          .hasActiveFlight;
+                      if (hasBoardingPass) {
+                        context.push(AppRouterName.navigateAirportRoute);
+                      } else {
+                        context.push(AppRouterName.exploreNearbyScreen);
+                      }
+                    },
               ),
             ),
             SizedBox(width: 14.w),
