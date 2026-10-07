@@ -24,6 +24,7 @@ class HomeHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
         // User Avatar
@@ -57,12 +58,18 @@ class HomeHeaderWidget extends StatelessWidget {
           children: [
             Text(
               greeting ?? AppString.goodMorning,
-              style: StyleManager.interMedium12(AppColors.darkGrayColor),
+              style: StyleManager.interMedium12(
+                isDark ? AppColors.grayD3D3D3 : AppColors.darkGrayColor,
+              ),
             ),
 
             Text(
               userName ?? AppString.defaultUserName,
-              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.bold,
+                color: isDark ? AppColors.white : AppColors.black,
+              ),
             ),
           ],
         ),
@@ -72,8 +79,8 @@ class HomeHeaderWidget extends StatelessWidget {
         // App Logo Pin
         Image.asset(
           ImageAssets.appLogo,
-          width: 34.w,
-          height: 34.w,
+          width: 38.w,
+          height: 38.w,
           fit: BoxFit.contain,
         ),
         SizedBox(width: 6.w),
@@ -85,7 +92,9 @@ class HomeHeaderWidget extends StatelessWidget {
             width: 42.w,
             height: 42.w,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: isDark
+                  ? AppColors.white.withValues(alpha: 0.14)
+                  : Colors.white,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
@@ -95,11 +104,21 @@ class HomeHeaderWidget extends StatelessWidget {
                 ),
               ],
               border: Border.all(
-                color: Colors.black.withValues(alpha: 0.04),
-                width: 1,
+                color: isDark
+                    ? Color(0xff000000)
+                    : Colors.black.withValues(alpha: 0.04),
+                width: 1.8,
               ),
             ),
-            child: Center(child: SvgPicture.asset(ImageAssets.notification)),
+            child: Center(
+              child: SvgPicture.asset(
+                ImageAssets.notification,
+                colorFilter: ColorFilter.mode(
+                  isDark ? AppColors.white : AppColors.black,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
           ),
         ),
       ],

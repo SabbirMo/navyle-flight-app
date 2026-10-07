@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/widgets/title_row_click.dart';
 
 /// Travel offers section displaying curated deals (eSIM, Lounge access)
@@ -19,6 +20,7 @@ class TravelOffersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,9 +36,12 @@ class TravelOffersWidget extends StatelessWidget {
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? Color(0xff04294F) : Colors.white,
             borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: const Color(0xFFF1F5F9), width: 1.0),
+            border: Border.all(
+              color: isDark ? AppColors.lightBlueGray : const Color(0xFFF1F5F9),
+              width: 1.0,
+            ),
             boxShadow: [
               BoxShadow(
                 color: const Color(0xFF0F172A).withValues(alpha: 0.04),
@@ -50,22 +55,24 @@ class TravelOffersWidget extends StatelessWidget {
               // Row 1: Global eSIM
               _OfferItem(
                 onTap: onEsimTap,
-                iconBackgroundColor: const Color(0xFFFFEDD5),
-                iconColor: const Color(0xFFEA580C),
+                iconColor: AppColors.bedgeColor,
                 icon: Icons.cell_tower_rounded,
-                categoryText: 'eSIM • Instant',
+                categoryText: 'eSIM ',
+                subCategoryText: '• Instant',
+                subCategoryTextColor: isDark
+                    ? Color(0xff8DCAFF)
+                    : AppColors.bedgeColor,
                 titleText: 'Global eSIM',
                 subtitleText: 'Stay connected in 150+ countries.',
                 badgeText: 'From \$4.50',
-                badgeBackgroundColor: const Color(0xFFFFF7ED),
-                badgeBorderColor: const Color(0xFFFFEDD5),
-                badgeTextColor: const Color(0xFFC2410C),
               ),
 
               Divider(
                 height: 1,
                 thickness: 0.8,
-                color: const Color(0xFFF1F5F9),
+                color: isDark
+                    ? AppColors.lightBlueGray
+                    : const Color(0xFFF0F3F7),
                 indent: 12.w,
                 endIndent: 12.w,
               ),
@@ -73,16 +80,18 @@ class TravelOffersWidget extends StatelessWidget {
               // Row 2: Lounge Access
               _OfferItem(
                 onTap: onLoungeTap,
-                iconBackgroundColor: const Color(0xFFDBEAFE),
-                iconColor: const Color(0xFF2563EB),
+                iconColor: isDark
+                    ? AppColors.primaryColor
+                    : AppColors.bedgeGreen,
                 icon: Icons.chair_rounded,
-                categoryText: 'lounge • T1 & T2',
+                categoryText: 'lounge ',
+                subCategoryText: '• T1 & T2',
+                subCategoryTextColor: isDark
+                    ? AppColors.primaryColor
+                    : AppColors.bedgeGreen,
                 titleText: 'Lounge Access',
                 subtitleText: 'Complimentary artisan coffee, hot showers.',
                 badgeText: 'Partner Perk',
-                badgeBackgroundColor: const Color(0xFFEEF2FF),
-                badgeBorderColor: const Color(0xFFC7D2FE),
-                badgeTextColor: const Color(0xFF4338CA),
               ),
             ],
           ),
@@ -94,33 +103,30 @@ class TravelOffersWidget extends StatelessWidget {
 
 class _OfferItem extends StatelessWidget {
   final VoidCallback? onTap;
-  final Color iconBackgroundColor;
   final Color iconColor;
   final IconData icon;
   final String categoryText;
+  final String subCategoryText;
   final String titleText;
   final String subtitleText;
   final String badgeText;
-  final Color badgeBackgroundColor;
-  final Color badgeBorderColor;
-  final Color badgeTextColor;
+  final Color subCategoryTextColor;
 
   const _OfferItem({
     required this.onTap,
-    required this.iconBackgroundColor,
     required this.iconColor,
     required this.icon,
     required this.categoryText,
     required this.titleText,
     required this.subtitleText,
     required this.badgeText,
-    required this.badgeBackgroundColor,
-    required this.badgeBorderColor,
-    required this.badgeTextColor,
+    required this.subCategoryText,
+    required this.subCategoryTextColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16.r),
@@ -134,7 +140,10 @@ class _OfferItem extends StatelessWidget {
               height: 36.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: iconBackgroundColor,
+                color: AppColors.white,
+                border: isDark
+                    ? null
+                    : Border.all(color: AppColors.primaryColor, width: 1.6),
               ),
               child: Center(
                 child: Icon(icon, color: iconColor, size: 18.sp),
@@ -147,12 +156,28 @@ class _OfferItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    categoryText,
-                    style: GoogleFonts.inter(
-                      fontSize: 9.5.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF64748B),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: categoryText,
+                          style: GoogleFonts.inter(
+                            fontSize: 10.5.sp,
+                            fontWeight: FontWeight.w800,
+                            color: subCategoryTextColor,
+                          ),
+                        ),
+                        TextSpan(
+                          text: subCategoryText,
+                          style: GoogleFonts.inter(
+                            fontSize: 9.5.sp,
+                            fontWeight: FontWeight.w600,
+                            color: isDark
+                                ? AppColors.grayD3D3D3
+                                : AppColors.organicBrown,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 1.h),
@@ -161,7 +186,7 @@ class _OfferItem extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 12.5.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF1E293B),
+                      color: isDark ? AppColors.white : const Color(0xFF1E293B),
                     ),
                   ),
                   SizedBox(height: 1.h),
@@ -172,7 +197,9 @@ class _OfferItem extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 9.5.sp,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xFF94A3B8),
+                      color: isDark
+                          ? AppColors.grayD3D3D3
+                          : AppColors.lightGray,
                     ),
                   ),
                 ],
@@ -185,21 +212,17 @@ class _OfferItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 7.w,
-                    vertical: 3.h,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                   decoration: BoxDecoration(
-                    color: badgeBackgroundColor,
+                    color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(color: badgeBorderColor, width: 0.8),
                   ),
                   child: Text(
                     badgeText,
                     style: GoogleFonts.inter(
                       fontSize: 10.sp,
                       fontWeight: FontWeight.w700,
-                      color: badgeTextColor,
+                      color: AppColors.white,
                     ),
                   ),
                 ),

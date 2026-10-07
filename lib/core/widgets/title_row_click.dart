@@ -19,13 +19,15 @@ class TitleRowClick extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
           style: StyleManager.interSemiBold12(
-            AppColors.black,
+            isDark ? AppColors.white : AppColors.black,
           ).copyWith(fontSize: 14.sp),
         ),
         isEnable
