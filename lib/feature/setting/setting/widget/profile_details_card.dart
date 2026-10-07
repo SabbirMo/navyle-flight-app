@@ -20,13 +20,14 @@ class ProfileDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: isDark ? Colors.transparent : AppColors.white,
           borderRadius: BorderRadius.circular(24.r),
           border: Border.all(
             color: AppColors.lightGray.withValues(alpha: 0.2),
@@ -55,6 +56,9 @@ class ProfileDetailsCard extends StatelessWidget {
                       image: AssetImage(imageAsset ?? ImageAssets.profile),
                       fit: BoxFit.cover,
                     ),
+                    border: isDark
+                        ? Border.all(color: AppColors.white, width: 2)
+                        : null,
                   ),
                 ),
                 Positioned(
@@ -88,7 +92,9 @@ class ProfileDetailsCard extends StatelessWidget {
                     name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: StyleManager.sfProBold16(AppColors.blackShadow),
+                    style: StyleManager.sfProBold16(
+                      isDark ? AppColors.white : AppColors.blackShadow,
+                    ),
                   ),
                   SizedBox(height: 2.h),
                   Text(
@@ -109,10 +115,18 @@ class ProfileDetailsCard extends StatelessWidget {
 
             // Arrow button
             Container(
-              width: 32.w,
-              height: 32.w,
+              width: 34.w,
+              height: 34.w,
               decoration: BoxDecoration(
-                color: const Color(0xffF8FAFC),
+                color: isDark
+                    ? AppColors.white.withValues(alpha: 0.1)
+                    : const Color(0xffF8FAFC),
+                border: isDark
+                    ? Border.all(
+                        color: AppColors.white.withValues(alpha: 0.2),
+                        width: 1,
+                      )
+                    : null,
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Center(

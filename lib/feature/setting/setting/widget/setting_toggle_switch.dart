@@ -14,6 +14,7 @@ class SettingToggleSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () => onChanged(!value),
       behavior: HitTestBehavior.opaque,
@@ -25,7 +26,9 @@ class SettingToggleSwitch extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 3.5.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
-          color: value ? AppColors.primaryFeed : AppColors.lightGray,
+          color: value
+              ? (isDark ? AppColors.blue2563EB : AppColors.primaryFeed)
+              : AppColors.lightGray,
         ),
         child: AnimatedAlign(
           duration: const Duration(milliseconds: 200),

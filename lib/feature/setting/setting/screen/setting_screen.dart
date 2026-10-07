@@ -39,7 +39,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
       body: CommonScreen(
         child: Column(
           children: [
-            const CustomBackButton(title: "SETTINGS"),
+            const CustomBackButton(title: "SETTINGS", isBorder: true),
             SizedBox(height: 16.h),
             Expanded(
               child: SingleChildScrollView(
@@ -70,10 +70,15 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                     SettingCardContainer(
                       children: [
                         SettingItemTile(
-                          iconWidget: const SettingIconBox(
+                          iconWidget: SettingIconBox(
                             icon: Icons.nightlight_round,
-                            backgroundColor: Color(0xFFFFF3E6),
-                            iconColor: Color(0xFFFF942B),
+                            backgroundColor: isDarkMode
+                                ? Color(0x1A6366F1)
+                                : Color(0xFFFFF3E6),
+                            iconColor: isDarkMode
+                                ? Color(0xff6366F1)
+                                : Color(0xFFFF942B),
+                            borderColor: Color(0xff6366F1),
                           ),
                           title: "Dark Mode",
                           subtitle: "Enjoy a darker view",
@@ -96,10 +101,15 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                     SettingCardContainer(
                       children: [
                         SettingItemTile(
-                          iconWidget: const SettingIconBox(
+                          iconWidget: SettingIconBox(
                             icon: Icons.watch_rounded,
-                            backgroundColor: Color(0xFFFFF1E6),
+                            backgroundColor: isDarkMode
+                                ? Color(0x4DFDEDE3)
+                                : Color(0xFFFFF1E6),
                             iconColor: Color(0xFFFF8533),
+                            borderColor: Color(
+                              0xFFFF8533,
+                            ).withValues(alpha: 0.4),
                           ),
                           title: "Smartwatch",
                           subtitle: "Apple Watch / Wear OS",
@@ -114,10 +124,15 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                           showDivider: true,
                         ),
                         SettingItemTile(
-                          iconWidget: const SettingIconBox(
+                          iconWidget: SettingIconBox(
                             icon: Icons.location_on_rounded,
-                            backgroundColor: Color(0xFFEFF6FF),
+                            backgroundColor: isDarkMode
+                                ? Color(0x333B82F6)
+                                : Color(0xFFEFF6FF),
                             iconColor: Color(0xFF3B82F6),
+                            borderColor: Color(
+                              0xFF3B82F6,
+                            ).withValues(alpha: 0.3),
                           ),
                           title: "Location Access",
                           subtitle: "For reliable updates",
@@ -132,10 +147,15 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                           showDivider: true,
                         ),
                         SettingItemTile(
-                          iconWidget: const SettingIconBox(
+                          iconWidget: SettingIconBox(
                             icon: Icons.notifications_rounded,
-                            backgroundColor: Color(0xFFFFF3E6),
+                            backgroundColor: isDarkMode
+                                ? Color(0x33F97316)
+                                : Color(0xFFFFF3E6),
                             iconColor: Color(0xFFFF8533),
+                            borderColor: Color(
+                              0xFFFF8533,
+                            ).withValues(alpha: 0.3),
                           ),
                           title: "Push Notifications",
                           subtitle: "Quick updates at your notify bar",
@@ -158,10 +178,15 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                     SettingCardContainer(
                       children: [
                         SettingItemTile(
-                          iconWidget: const SettingIconBox(
+                          iconWidget: SettingIconBox(
                             icon: Icons.star_rounded,
-                            backgroundColor: AppColors.warningColor,
+                            backgroundColor: isDarkMode
+                                ? Color(0x33EAB308)
+                                : AppColors.warningColor,
                             iconColor: Color(0xFFEAB308),
+                            borderColor: Color(
+                              0xFFEAB308,
+                            ).withValues(alpha: 0.3),
                           ),
                           title: "RATE NAVYLA",
                           trailing: Icon(
@@ -175,9 +200,11 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                           showDivider: true,
                         ),
                         SettingItemTile(
-                          iconWidget: const SettingIconBox(
+                          iconWidget: SettingIconBox(
                             icon: Icons.share_rounded,
-                            backgroundColor: Color(0xFFEFF6FF),
+                            backgroundColor: isDarkMode
+                                ? Color(0x1A2563EB)
+                                : Color(0xFFEFF6FF),
                             iconColor: Color(0xFF2563EB),
                           ),
                           title: "SHARE NAVYLA",
@@ -192,10 +219,15 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                           showDivider: true,
                         ),
                         SettingItemTile(
-                          iconWidget: const SettingIconBox(
+                          iconWidget: SettingIconBox(
                             icon: Icons.description_rounded,
-                            backgroundColor: Color(0xFFF1F5F9),
+                            backgroundColor: isDarkMode
+                                ? Color(0xff1E293B)
+                                : Color(0xFFF1F5F9),
                             iconColor: Color(0xFF64748B),
+                            borderColor: Color(
+                              0xFF64748B,
+                            ).withValues(alpha: 0.3),
                           ),
                           title: "TERMS OF SERVICE",
                           trailing: Icon(
@@ -209,10 +241,15 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                           showDivider: true,
                         ),
                         SettingItemTile(
-                          iconWidget: const SettingIconBox(
+                          iconWidget: SettingIconBox(
                             icon: Icons.security_rounded,
-                            backgroundColor: Color(0xFFF1F5F9),
+                            backgroundColor: isDarkMode
+                                ? Color(0xff1E293B)
+                                : Color(0xFFF1F5F9),
                             iconColor: Color(0xFF64748B),
+                            borderColor: Color(
+                              0xFF64748B,
+                            ).withValues(alpha: 0.3),
                           ),
                           title: "PRIVACY POLICY",
                           trailing: Icon(

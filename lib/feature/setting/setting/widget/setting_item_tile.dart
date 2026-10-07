@@ -9,9 +9,10 @@ class SettingCardContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: isDark ? Colors.transparent : AppColors.white,
         borderRadius: BorderRadius.circular(24.r),
         border: Border.all(
           color: AppColors.lightGray.withValues(alpha: 0.2),
@@ -28,6 +29,7 @@ class SettingIconBox extends StatelessWidget {
   final Color backgroundColor;
   final Color iconColor;
   final double? iconSize;
+  final Color? borderColor;
 
   const SettingIconBox({
     super.key,
@@ -35,16 +37,21 @@ class SettingIconBox extends StatelessWidget {
     required this.backgroundColor,
     required this.iconColor,
     this.iconSize,
+    this.borderColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: 40.w,
       height: 40.w,
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(14.r),
+        border: isDark
+            ? Border.all(color: borderColor ?? Colors.transparent, width: 1)
+            : null,
       ),
       child: Center(
         child: Icon(icon, size: iconSize ?? 18.sp, color: iconColor),
@@ -73,6 +80,8 @@ class SettingItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       children: [
         InkWell(
@@ -95,7 +104,9 @@ class SettingItemTile extends StatelessWidget {
                           fontFamily: 'SF-Pro',
                           fontSize: 13.5.sp,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.blackShadow,
+                          color: isDark
+                              ? AppColors.white
+                              : AppColors.blackShadow,
                         ),
                       ),
                       if (subtitle != null) ...[
@@ -119,10 +130,12 @@ class SettingItemTile extends StatelessWidget {
         if (showDivider)
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: const Divider(
+            child: Divider(
               height: 1,
               thickness: 0.8,
-              color: Color(0xFFF1F5F9),
+              color: isDark
+                  ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+                  : Color(0xFFF1F5F9),
             ),
           ),
       ],
