@@ -73,13 +73,13 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
                       height: 126.h,
                       decoration: BoxDecoration(
                         color: isDark
-                            ? AppColors.blue2563EB.withValues(alpha: 0.3)
+                            ? Color(0xff11223E).withValues(alpha: 0.4)
                             : AppColors.rotateCont.withValues(alpha: 0.26),
                         borderRadius: BorderRadius.circular(16.r),
                         boxShadow: [
                           BoxShadow(
                             color: isDark
-                                ? Colors.black.withValues(alpha: 0.3)
+                                ? Color(0xff11223E)
                                 : AppColors.black.withValues(alpha: 0.2),
                             blurRadius: 30,
                             //offset: const Offset(0, 10),
@@ -131,9 +131,7 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
         borderRadius: BorderRadius.circular(30.r),
         boxShadow: [
           BoxShadow(
-            color: isDark
-                ? Colors.black.withValues(alpha: 0.35)
-                : const Color(0x14000000),
+            color: isDark ? Color(0xff121C39) : const Color(0x14000000),
             blurRadius: 30,
             offset: const Offset(0, 12),
           ),
@@ -301,12 +299,7 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
     return Column(
       crossAxisAlignment: align ?? CrossAxisAlignment.start,
       children: [
-        Text(
-          status,
-          style: StyleManager.interMedium12(
-            isDark ? Colors.white.withValues(alpha: 0.85) : AppColors.brown,
-          ),
-        ),
+        Text(status, style: StyleManager.interMedium12(AppColors.brown)),
         SizedBox(height: 2.h),
         Text(
           boaring,

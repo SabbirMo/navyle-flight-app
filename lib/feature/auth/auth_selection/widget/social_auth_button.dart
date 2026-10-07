@@ -11,19 +11,26 @@ class SocialAuthButton extends StatelessWidget {
     this.isLoading = false,
     super.key,
     this.border = true,
+    this.bgColor = false,
   });
   final String text;
   final Widget icon;
   final VoidCallback? onTap;
   final bool isLoading;
   final bool border;
+  final bool? bgColor;
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       height: 44.h,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: bgColor == true
+            ? Colors.transparent
+            : isDark
+            ? AppColors.textFieldBgColor
+            : AppColors.white,
         borderRadius: BorderRadius.circular(30.r),
         border: border
             ? Border.all(
@@ -53,7 +60,9 @@ class SocialAuthButton extends StatelessWidget {
                   SizedBox(width: 10.w),
                   Text(
                     text,
-                    style: StyleManager.sfProSemiBold14(AppColors.blackShadow),
+                    style: StyleManager.sfProSemiBold14(
+                      isDark ? AppColors.white : AppColors.blackShadow,
+                    ),
                   ),
                 ],
               ),

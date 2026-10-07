@@ -301,10 +301,12 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF0F172A) : AppColors.lightBgColor,
+        color: isDark ? AppColors.white : AppColors.lightBgColor,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: AppColors.primaryColor.withValues(alpha: isDark ? 0.4 : 0.3),
+          color: isDark
+              ? AppColors.white
+              : AppColors.primaryColor.withValues(alpha: isDark ? 0.4 : 0.3),
           width: 1,
         ),
         boxShadow: [
@@ -343,7 +345,7 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
                 style: GoogleFonts.inter(
                   fontSize: 9.sp,
                   fontWeight: FontWeight.w800,
-                  color: isDark ? AppColors.white : AppColors.blackShadow,
+                  color: isDark ? AppColors.blackShadow : AppColors.blackShadow,
                   letterSpacing: 0.3,
                 ),
               ),
@@ -352,7 +354,7 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
                 subTitle,
                 style: TextStyle(
                   fontSize: 8.sp,
-                  color: isDark ? AppColors.lightGray : AppColors.grayColor,
+                  color: isDark ? AppColors.lightBlueGray : AppColors.grayColor,
                   fontWeight: FontWeight.w400,
                 ),
               ),

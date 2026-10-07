@@ -18,7 +18,7 @@ class SquircleIcon extends StatelessWidget {
           BoxShadow(
             color: AppColors.blueShadow.withValues(alpha: 0.4),
             blurRadius: 20,
-            offset: const Offset(0, 24),
+            offset: const Offset(0, 20),
           ),
         ],
       ),

@@ -38,10 +38,16 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset(ImageAssets.authBg, opacity: AlwaysStoppedAnimation(0.4)),
+          Image.asset(
+            ImageAssets.authBg,
+            opacity: isDark
+                ? AlwaysStoppedAnimation(0.29)
+                : AlwaysStoppedAnimation(0.4),
+          ),
 
           SafeArea(
             child: Align(
@@ -66,7 +72,7 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                         AppString.welcomeToNavyla,
                         textAlign: TextAlign.center,
                         style: StyleManager.poppinsBold28(
-                          AppColors.black,
+                          isDark ? AppColors.white : AppColors.black,
                         ).copyWith(fontSize: 26.sp),
                       ),
                     ),
@@ -76,7 +82,7 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                         AppString.authSelectionSubtitle,
                         textAlign: TextAlign.center,
                         style: StyleManager.interMedium14(
-                          AppColors.grayColor,
+                          isDark ? AppColors.grayD3D3D3 : AppColors.grayColor,
                         ).copyWith(fontSize: 13.sp),
                       ),
                     ),
@@ -91,7 +97,8 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
               width: double.infinity,
               height: 300.h,
               decoration: BoxDecoration(
-                gradient: AppColors.splashGradient,
+                gradient: isDark ? null : AppColors.splashGradient,
+                color: isDark ? AppColors.blackShadow : null,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.r),
                   topRight: Radius.circular(20.r),
@@ -124,6 +131,10 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                         ImageAssets.apple,
                         width: 20.w,
                         height: 20.w,
+                        colorFilter: ColorFilter.mode(
+                          isDark ? AppColors.white : AppColors.blackShadow,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       onTap: () {},
                     ),
@@ -133,7 +144,8 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                     SizedBox(height: 12.h),
                     SocialAuthButton(
                       text: AppString.continueWithEmail,
-                      icon: Icon(Icons.email),
+                      bgColor: true,
+                      icon: Icon(Icons.email, size: 18.w),
                       border: false,
                       onTap: () {
                         if (mounted) {
@@ -152,13 +164,16 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
   }
 
   Widget _deshDivider() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       spacing: 4.w,
       children: [
         Expanded(child: DashedLine()),
         Text(
           AppString.orContinueWith,
-          style: StyleManager.interMedium12(AppColors.shadowColor),
+          style: StyleManager.interMedium12(
+            isDark ? AppColors.lightGray : AppColors.shadowColor,
+          ),
         ),
         Expanded(child: DashedLine()),
       ],

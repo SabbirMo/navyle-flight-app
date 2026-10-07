@@ -52,7 +52,7 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree>
                       height: 40.h,
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF1E293B).withValues(alpha: 0.5)
+                            ? Color(0xff2563EB).withValues(alpha: 0.3)
                             : Colors.white.withValues(alpha: 0.65),
                         borderRadius: BorderRadius.circular(20.r),
                         boxShadow: const [
@@ -78,7 +78,7 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree>
                       ),
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF1E293B).withValues(alpha: 0.8)
+                            ? const Color(0xFF101E3D).withValues(alpha: 0.8)
                             : Colors.white.withValues(alpha: 0.65),
                         borderRadius: BorderRadius.circular(24.r),
                         boxShadow: const [
@@ -122,7 +122,9 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree>
                             style: StyleManager.interMedium12(
                               isDark
                                   ? AppColors.lightGray.withValues(alpha: 0.4)
-                                  : AppColors.shadowColor.withValues(alpha: 0.2),
+                                  : AppColors.shadowColor.withValues(
+                                      alpha: 0.2,
+                                    ),
                             ),
                           ),
                         ],
@@ -138,7 +140,7 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree>
                       vertical: 14.h,
                     ),
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                      color: isDark ? const Color(0xff0D3665) : Colors.white,
                       borderRadius: BorderRadius.circular(26.r),
                       boxShadow: [
                         BoxShadow(
@@ -178,7 +180,7 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree>
                                     Icons.flight_takeoff_rounded,
                                     size: 15.sp,
                                     color: isDark
-                                        ? const Color(0xFF93C5FD)
+                                        ? AppColors.white
                                         : AppColors.shadowColor,
                                   ),
                                   SizedBox(width: 6.w),
@@ -186,7 +188,7 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree>
                                     "NOW BOARDING",
                                     style: StyleManager.interMedium12(
                                       isDark
-                                          ? const Color(0xFF93C5FD)
+                                          ? AppColors.white
                                           : AppColors.shadowColor,
                                     ),
                                   ),
@@ -208,7 +210,7 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree>
                         Text(
                           "Group 3",
                           style: StyleManager.interMedium14(
-                            isDark ? AppColors.lightGray : AppColors.brown,
+                            isDark ? AppColors.lightBlueGray : AppColors.brown,
                           ),
                         ),
 
@@ -219,7 +221,9 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree>
                               child: Text(
                                 "Have your boarding pass ready.",
                                 style: StyleManager.sfProSemiBold16(
-                                  isDark ? AppColors.white : AppColors.black,
+                                  isDark
+                                      ? AppColors.lightGray
+                                      : AppColors.black,
                                 ).copyWith(fontSize: 14.5.sp),
                                 maxLines: 1,
                               ),
@@ -230,7 +234,7 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree>
                               height: 36.w,
                               decoration: BoxDecoration(
                                 color: isDark
-                                    ? const Color(0xFF334155)
+                                    ? AppColors.white
                                     : const Color(0xFFF3F4F6),
                                 shape: BoxShape.circle,
                               ),
@@ -239,7 +243,7 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree>
                                   Icons.qr_code_scanner_rounded,
                                   size: 20,
                                   color: isDark
-                                      ? AppColors.white
+                                      ? AppColors.black
                                       : const Color(0xFF1F2937),
                                 ),
                               ),

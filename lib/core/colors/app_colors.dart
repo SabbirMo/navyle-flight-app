@@ -31,6 +31,7 @@ class AppColors {
 
   // Black Theme
   static const Color blackShadow = Color(0xFF0F172A); //#0F172A
+  static const Color textFieldBgColor = Color(0xFF1E293B); //#1E293B
 
   // Aliases & Error Colors
   static const Color buttonGradientStart = primaryColor;
