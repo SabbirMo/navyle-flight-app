@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +9,55 @@ import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/core/widgets/start_animation.dart';
 import 'package:navyla_flight_app/feature/onboarding/widget/squircke_icon_widget.dart';
+
+class _BlurredModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
+  _BlurredModalBottomSheetRoute({
+    required super.builder,
+    super.capturedThemes,
+    super.barrierLabel,
+    super.barrierOnTapHint,
+    super.backgroundColor,
+    super.elevation,
+    super.shape,
+    super.clipBehavior,
+    super.constraints,
+    super.modalBarrierColor,
+    super.isDismissible = true,
+    super.enableDrag = true,
+    super.showDragHandle,
+    required super.isScrollControlled,
+    super.scrollControlDisabledMaxHeightRatio,
+    super.settings,
+    super.requestFocus,
+    super.transitionAnimationController,
+    super.anchorPoint,
+    super.useSafeArea = false,
+    super.sheetAnimationStyle,
+  });
+
+  @override
+  Widget buildModalBarrier() {
+    final barrier = super.buildModalBarrier();
+    final anim = animation;
+    if (anim != null) {
+      return AnimatedBuilder(
+        animation: anim,
+        builder: (context, child) {
+          final blurVal = (4.0 * anim.value).clamp(0.001, 8.0);
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: blurVal, sigmaY: blurVal),
+            child: child,
+          );
+        },
+        child: barrier,
+      );
+    }
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+      child: barrier,
+    );
+  }
+}
 
 class NotificationBottomSheet extends StatefulWidget {
   final VoidCallback? onEnable;
@@ -19,13 +70,29 @@ class NotificationBottomSheet extends StatefulWidget {
     VoidCallback? onEnable,
     VoidCallback? onSkip,
   }) {
-    return showModalBottomSheet<T>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withValues(alpha: 0.45),
-      builder: (context) =>
-          NotificationBottomSheet(onEnable: onEnable, onSkip: onSkip),
+    final NavigatorState navigator = Navigator.of(context);
+    final MaterialLocalizations localizations = MaterialLocalizations.of(
+      context,
+    );
+
+    return navigator.push(
+      _BlurredModalBottomSheetRoute<T>(
+        builder: (context) =>
+            NotificationBottomSheet(onEnable: onEnable, onSkip: onSkip),
+        capturedThemes: InheritedTheme.capture(
+          from: context,
+          to: navigator.context,
+        ),
+        isScrollControlled: true,
+        barrierLabel: localizations.scrimLabel,
+        barrierOnTapHint: localizations.scrimOnTapHint(
+          localizations.bottomSheetLabel,
+        ),
+        backgroundColor: Colors.transparent,
+        modalBarrierColor: Colors.black.withValues(alpha: 0.35),
+        isDismissible: true,
+        enableDrag: true,
+      ),
     );
   }
 
@@ -73,12 +140,14 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
               width: 44.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF475569) : const Color(0xFFE2E8F0),
+                color: isDark
+                    ? const Color(0xFF475569)
+                    : const Color(0xFFE2E8F0),
                 borderRadius: BorderRadius.circular(10.r),
               ),
             ),
 
-            SizedBox(height: 28.h),
+            SizedBox(height: 16.h),
 
             // Notification Visual Illustration (Center Bell + 2 floating cards)
             _animations.buttonTransition(
@@ -129,7 +198,7 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
               ),
             ),
 
-            SizedBox(height: 32.h),
+            SizedBox(height: 12.h),
 
             // Title
             _animations.textTransition(
@@ -173,7 +242,7 @@ class _NotificationBottomSheetState extends State<NotificationBottomSheet>
               ),
             ),
 
-            SizedBox(height: 28.h),
+            SizedBox(height: 20.h),
 
             // Primary Button: Enable Notification
             _animations.buttonTransition(

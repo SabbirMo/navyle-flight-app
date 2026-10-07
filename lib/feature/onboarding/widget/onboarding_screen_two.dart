@@ -65,6 +65,30 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
                     ),
                   ),
 
+                  Positioned(
+                    left: -12,
+                    top: -14,
+                    child: Container(
+                      width: 160.w,
+                      height: 126.h,
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? AppColors.blue2563EB.withValues(alpha: 0.3)
+                            : AppColors.rotateCont.withValues(alpha: 0.26),
+                        borderRadius: BorderRadius.circular(16.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: isDark
+                                ? Colors.black.withValues(alpha: 0.3)
+                                : AppColors.black.withValues(alpha: 0.2),
+                            blurRadius: 30,
+                            //offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
                   // Front White Boarding Card
                   boardingCard(isDark),
                 ],
@@ -279,7 +303,7 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
       children: [
         Text(
           status,
-          style: StyleManager.interMedium14(
+          style: StyleManager.interMedium12(
             isDark ? Colors.white.withValues(alpha: 0.85) : AppColors.brown,
           ),
         ),
@@ -288,7 +312,7 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo>
           boaring,
           style: StyleManager.sfProSemiBold16(
             isDark ? Colors.white : AppColors.black,
-          ),
+          ).copyWith(fontSize: 14.sp),
         ),
       ],
     );

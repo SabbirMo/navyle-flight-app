@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,55 @@ import 'package:navyla_flight_app/core/widgets/start_animation.dart';
 import 'package:navyla_flight_app/feature/onboarding/provider/location_provider.dart';
 import 'package:navyla_flight_app/feature/onboarding/widget/squircke_icon_widget.dart';
 
+class _BlurredModalBottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
+  _BlurredModalBottomSheetRoute({
+    required super.builder,
+    super.capturedThemes,
+    super.barrierLabel,
+    super.barrierOnTapHint,
+    super.backgroundColor,
+    super.elevation,
+    super.shape,
+    super.clipBehavior,
+    super.constraints,
+    super.modalBarrierColor,
+    super.isDismissible = true,
+    super.enableDrag = true,
+    super.showDragHandle,
+    required super.isScrollControlled,
+    super.scrollControlDisabledMaxHeightRatio,
+    super.settings,
+    super.requestFocus,
+    super.transitionAnimationController,
+    super.anchorPoint,
+    super.useSafeArea = false,
+    super.sheetAnimationStyle,
+  });
+
+  @override
+  Widget buildModalBarrier() {
+    final barrier = super.buildModalBarrier();
+    final anim = animation;
+    if (anim != null) {
+      return AnimatedBuilder(
+        animation: anim,
+        builder: (context, child) {
+          final blurVal = (4.0 * anim.value).clamp(0.001, 8.0);
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: blurVal, sigmaY: blurVal),
+            child: child,
+          );
+        },
+        child: barrier,
+      );
+    }
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+      child: barrier,
+    );
+  }
+}
+
 class LiveNavigationBottomSheet extends ConsumerStatefulWidget {
   final VoidCallback? onAllow;
   final VoidCallback? onNotNow;
@@ -21,13 +71,29 @@ class LiveNavigationBottomSheet extends ConsumerStatefulWidget {
     VoidCallback? onAllow,
     VoidCallback? onNotNow,
   }) {
-    return showModalBottomSheet<T>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withValues(alpha: 0.45),
-      builder: (context) =>
-          LiveNavigationBottomSheet(onAllow: onAllow, onNotNow: onNotNow),
+    final NavigatorState navigator = Navigator.of(context);
+    final MaterialLocalizations localizations = MaterialLocalizations.of(
+      context,
+    );
+
+    return navigator.push(
+      _BlurredModalBottomSheetRoute<T>(
+        builder: (context) =>
+            LiveNavigationBottomSheet(onAllow: onAllow, onNotNow: onNotNow),
+        capturedThemes: InheritedTheme.capture(
+          from: context,
+          to: navigator.context,
+        ),
+        isScrollControlled: true,
+        barrierLabel: localizations.scrimLabel,
+        barrierOnTapHint: localizations.scrimOnTapHint(
+          localizations.bottomSheetLabel,
+        ),
+        backgroundColor: Colors.transparent,
+        modalBarrierColor: Colors.black.withValues(alpha: 0.35),
+        isDismissible: true,
+        enableDrag: true,
+      ),
     );
   }
 
@@ -82,6 +148,13 @@ class _LiveNavigationBottomSheetState
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.12),
+            blurRadius: 24,
+            offset: const Offset(0, -6),
+          ),
+        ],
       ),
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: SafeArea(
