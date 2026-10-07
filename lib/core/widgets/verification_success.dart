@@ -102,8 +102,10 @@ class _VerificationSuccessState extends State<VerificationSuccess>
         ? widget.userName
         : AppString.defaultVerifiedUser;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppColors.blackShadow : Colors.white,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -125,7 +127,7 @@ class _VerificationSuccessState extends State<VerificationSuccess>
                 },
                 blendMode: BlendMode.dstIn,
                 child: Opacity(
-                  opacity: 0.40,
+                  opacity: isDark ? 0.1 : 0.40,
                   child: Image.asset(
                     ImageAssets.authBg,
                     fit: BoxFit.cover,
@@ -178,7 +180,7 @@ class _VerificationSuccessState extends State<VerificationSuccess>
                                   AppString.passwordUpdated,
                                   textAlign: TextAlign.center,
                                   style: StyleManager.poppinsBold28(
-                                    AppColors.black,
+                                    isDark ? AppColors.white : AppColors.black,
                                   ),
                                 ),
                               ),
@@ -197,7 +199,7 @@ class _VerificationSuccessState extends State<VerificationSuccess>
                                     style: GoogleFonts.inter(
                                       fontSize: 13.sp,
                                       fontWeight: FontWeight.w400,
-                                      color: const Color(0xFF6B7280),
+                                      color: AppColors.lightGray,
                                       height: 1.48,
                                     ),
                                   ),
@@ -217,7 +219,7 @@ class _VerificationSuccessState extends State<VerificationSuccess>
                                     style: GoogleFonts.inter(
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w400,
-                                      color: const Color(0xFF6B7280),
+                                      color: AppColors.lightGray,
                                       height: 1.48,
                                     ),
                                   ),
@@ -365,13 +367,17 @@ class _VerificationSuccessState extends State<VerificationSuccess>
 
   /// Verified Email Card with user details and orange check badge
   Widget _buildVerifiedUserCard(String displayName) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.textFieldBgColor : Colors.white,
         borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(color: const Color(0xFFF1F3F5), width: 1.2),
+        border: Border.all(
+          color: isDark ? AppColors.lightBlueGray : const Color(0xFFF1F3F5),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -388,8 +394,11 @@ class _VerificationSuccessState extends State<VerificationSuccess>
             height: 44.w,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.r),
+              color: isDark ? AppColors.white : null,
               border: Border.all(
-                color: AppColors.grayColor.withValues(alpha: 0.1),
+                color: isDark
+                    ? AppColors.white
+                    : AppColors.grayColor.withValues(alpha: 0.1),
               ),
             ),
             child: Icon(Icons.person_rounded, color: AppColors.grayColor),
@@ -413,7 +422,9 @@ class _VerificationSuccessState extends State<VerificationSuccess>
                 ),
                 Text(
                   displayName,
-                  style: StyleManager.interSemiBold14(AppColors.black),
+                  style: StyleManager.interSemiBold14(
+                    isDark ? AppColors.white : AppColors.black,
+                  ),
                 ),
               ],
             ),
@@ -427,7 +438,11 @@ class _VerificationSuccessState extends State<VerificationSuccess>
               color: AppColors.primaryColor,
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.check_rounded, color: Colors.white, size: 18.sp),
+            child: Icon(
+              Icons.check_rounded,
+              color: isDark ? AppColors.blackShadow : Colors.white,
+              size: 18.sp,
+            ),
           ),
         ],
       ),

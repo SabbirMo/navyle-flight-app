@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 
 class AuthCommonScreen extends StatelessWidget {
@@ -15,16 +16,19 @@ class AuthCommonScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppColors.blackShadow : Colors.white,
       body: Stack(
         fit: StackFit.expand,
         children: [
           Image.asset(
             ImageAssets.authBg,
             fit: BoxFit.fill,
-            opacity: const AlwaysStoppedAnimation(0.5),
+            opacity: isDark
+                ? const AlwaysStoppedAnimation(0.29)
+                : const AlwaysStoppedAnimation(0.5),
             gaplessPlayback: true,
           ),
           SafeArea(bottom: bottomSafeArea, child: child),

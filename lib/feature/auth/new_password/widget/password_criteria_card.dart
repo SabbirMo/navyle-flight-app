@@ -19,13 +19,16 @@ class PasswordCriteriaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF9F2),
+        color: isDark ? const Color(0x1AFFAE74) : const Color(0xFFFFF9F2),
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: AppColors.primaryColor.withValues(alpha: 0.45),
+          color: isDark
+              ? Color(0xffFFAE74).withValues(alpha: 0.4)
+              : AppColors.primaryColor.withValues(alpha: 0.45),
           width: 1.1,
         ),
       ),
@@ -46,16 +49,19 @@ class PasswordCriteriaCard extends StatelessWidget {
           _buildCriteriaItem(
             isSatisfied: hasMinLength,
             label: AppString.eightCharactersMinimum,
+            isDark: isDark,
           ),
           SizedBox(height: 8.h),
           _buildCriteriaItem(
             isSatisfied: hasSpecialChar,
             label: AppString.oneSpecialCharacter,
+            isDark: isDark,
           ),
           SizedBox(height: 8.h),
           _buildCriteriaItem(
             isSatisfied: hasUppercase,
             label: AppString.oneUppercaseLetter,
+            isDark: isDark,
           ),
         ],
       ),
@@ -65,21 +71,22 @@ class PasswordCriteriaCard extends StatelessWidget {
   Widget _buildCriteriaItem({
     required bool isSatisfied,
     required String label,
+    required bool isDark,
   }) {
     return Row(
       children: [
         Icon(
           Icons.check_circle_rounded,
           size: 16.sp,
-          color: isSatisfied
-              ? const Color(0xFF22C55E)
-              : const Color(0xFF94A3B8),
+          color: isSatisfied ? const Color(0xFF22C55E) : AppColors.lightGray,
         ),
         SizedBox(width: 8.w),
         Expanded(
           child: Text(
             label,
-            style: StyleManager.interMedium12(AppColors.darkGrayColor),
+            style: StyleManager.interMedium12(
+              isDark ? AppColors.grayD3D3D3 : AppColors.darkGrayColor,
+            ),
           ),
         ),
       ],

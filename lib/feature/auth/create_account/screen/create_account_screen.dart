@@ -72,6 +72,8 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
     final state = ref.watch(createAccountNotifierProvider);
     final notifier = ref.read(createAccountNotifierProvider.notifier);
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return AuthCommonScreen(
       bottomSafeArea: false,
       child: LayoutBuilder(
@@ -106,7 +108,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                               AppString.createYourAccount,
                               textAlign: TextAlign.center,
                               style: StyleManager.poppinsBold28(
-                                AppColors.black,
+                                isDark ? AppColors.white : AppColors.black,
                               ),
                             ),
                           ),
@@ -117,7 +119,9 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                               AppString.createAccountSubtitle,
                               textAlign: TextAlign.center,
                               style: StyleManager.interMedium13(
-                                AppColors.grayColor,
+                                isDark
+                                    ? AppColors.grayD3D3D3
+                                    : AppColors.grayColor,
                               ),
                             ),
                           ),
@@ -132,9 +136,9 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: AppColors.lightBgColor.withValues(
-                              alpha: 0.8,
-                            ),
+                            color: isDark
+                                ? AppColors.blackShadow
+                                : AppColors.lightBgColor.withValues(alpha: 0.8),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(28.r),
                               topRight: Radius.circular(28.r),
@@ -229,7 +233,9 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen>
                                       Text(
                                         AppString.passwordStrength,
                                         style: StyleManager.interRegular13(
-                                          AppColors.grayColor,
+                                          isDark
+                                              ? AppColors.lightGray
+                                              : AppColors.grayColor,
                                         ),
                                       ),
                                       AnimatedDefaultTextStyle(

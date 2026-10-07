@@ -4,11 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
-import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/utils/app_validator.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/core/widgets/custom_input_field.dart';
+import 'package:navyla_flight_app/core/widgets/main_image_size.dart';
 import 'package:navyla_flight_app/core/widgets/start_animation.dart';
 import 'package:navyla_flight_app/feature/auth/auth_selection/widget/auth_common_screen.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
@@ -68,6 +68,8 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen>
     final state = ref.watch(newPasswordNotifierProvider);
     final notifier = ref.read(newPasswordNotifierProvider.notifier);
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     ref.listen<NewPasswordState>(newPasswordNotifierProvider, (previous, next) {
       if (next.errorMessage != null && next.errorMessage!.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -81,10 +83,10 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen>
 
     return AuthCommonScreen(
       bottomSafeArea: false,
-      resizeToAvoidBottomInset: false,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             physics: const BouncingScrollPhysics(),
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
@@ -108,14 +110,9 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen>
 
                           // App Logo
                           _animations.buttonTransition(
-                            child: Image.asset(
-                              ImageAssets.appLogo,
-                              width: 56.w,
-                              height: 56.w,
-                              fit: BoxFit.contain,
-                            ),
+                            child: const MainImageSize(),
                           ),
-                          SizedBox(height: 16.h),
+                          SizedBox(height: 4.h),
 
                           // Title: Secure your account
                           _animations.taglineTransition(
@@ -123,7 +120,7 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen>
                               AppString.secureYourAccount,
                               textAlign: TextAlign.center,
                               style: StyleManager.poppinsBold28(
-                                AppColors.black,
+                                isDark ? AppColors.white : AppColors.black,
                               ),
                             ),
                           ),
@@ -137,7 +134,9 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen>
                                 AppString.secureYourAccountSubtitle,
                                 textAlign: TextAlign.center,
                                 style: StyleManager.interMedium12(
-                                  AppColors.grayColor,
+                                  isDark
+                                      ? AppColors.grayD3D3D3
+                                      : AppColors.grayColor,
                                 ),
                               ),
                             ),
@@ -153,7 +152,9 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen>
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFFBF8),
+                            color: isDark
+                                ? AppColors.blackShadow
+                                : const Color(0xFFFFFBF8),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(28.r),
                               topRight: Radius.circular(28.r),

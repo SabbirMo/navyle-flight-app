@@ -79,6 +79,7 @@ class CustomInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     final radius = borderRadius ?? 24.r;
     final effectiveHeight = height ?? (validator == null ? 46.h : null);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final Widget inputField = TextFormField(
       controller: controller,
@@ -95,17 +96,23 @@ class CustomInputField extends StatelessWidget {
       onTap: onTap,
       validator: validator,
       inputFormatters: inputFormatters,
-      style: style ?? StyleManager.interMedium13(AppColors.black),
+      style:
+          style ??
+          StyleManager.interMedium13(
+            isDark ? AppColors.white : AppColors.black,
+          ),
       decoration: InputDecoration(
         isDense: true,
         filled: true,
-        fillColor: fillColor ?? AppColors.white,
+        fillColor:
+            fillColor ??
+            (isDark ? AppColors.blackShadow : AppColors.lightBgColor),
         contentPadding:
             contentPadding ??
             EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
         hintText: hintText,
         hintStyle:
-            hintStyle ?? StyleManager.interRegular13(const Color(0xFF9CA3AF)),
+            hintStyle ?? StyleManager.interRegular13(AppColors.lightGray),
         prefixIconConstraints: (prefixIcon != null || prefixWidget != null)
             ? BoxConstraints(minWidth: 40.w, minHeight: 20.w)
             : null,
@@ -140,7 +147,9 @@ class CustomInputField extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radius),
           borderSide: BorderSide(
-            color: borderColor ?? const Color(0xFFE5E7EB),
+            color:
+                borderColor ??
+                (isDark ? Color(0xff5B5F69) : const Color(0xFFE5E7EB)),
             width: 1.1,
           ),
         ),
@@ -185,7 +194,9 @@ class CustomInputField extends StatelessWidget {
                     text: label,
                     style:
                         labelStyle ??
-                        StyleManager.interMedium13(const Color(0xFF374151)),
+                        StyleManager.interMedium13(
+                          isDark ? AppColors.white : const Color(0xFF374151),
+                        ),
                   ),
                   if (isRequired)
                     TextSpan(

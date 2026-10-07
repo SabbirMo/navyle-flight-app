@@ -28,6 +28,7 @@ class CircularCountdownTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
       width: 120.w,
       height: 120.w,
@@ -61,7 +62,7 @@ class CircularCountdownTimer extends StatelessWidget {
             style: GoogleFonts.inter(
               fontSize: 22.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.black,
+              color: isDark ? AppColors.white : AppColors.black,
             ),
           ),
         ],

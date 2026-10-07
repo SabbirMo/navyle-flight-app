@@ -9,6 +9,7 @@ class ForgotPasswordIllustration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
       width: 115.w,
       height: 105.h,
@@ -55,12 +56,15 @@ class ForgotPasswordIllustration extends StatelessWidget {
               width: 78.w,
               height: 78.w,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? AppColors.blackShadow : Colors.white,
                 borderRadius: BorderRadius.circular(22.r),
+                border: isDark ? Border.all(color: AppColors.blue2563EB) : null,
                 boxShadow: [
                   // Warm orange glow below card
                   BoxShadow(
-                    color: AppColors.primaryColor.withValues(alpha: 0.42),
+                    color: isDark
+                        ? AppColors.aIPrimaryColor
+                        : AppColors.primaryColor.withValues(alpha: 0.42),
                     blurRadius: 24,
                     spreadRadius: 2,
                     offset: const Offset(0, 10),
@@ -81,7 +85,7 @@ class ForgotPasswordIllustration extends StatelessWidget {
                     child: Icon(
                       Icons.vpn_key_rounded,
                       size: 34.sp,
-                      color: const Color(0xFF0F172A),
+                      color: isDark ? AppColors.white : const Color(0xFF0F172A),
                     ),
                   ),
                 ),

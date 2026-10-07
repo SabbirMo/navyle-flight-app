@@ -66,6 +66,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   Widget build(BuildContext context) {
     final state = ref.watch(loginNotifierProvider);
     final notifier = ref.read(loginNotifierProvider.notifier);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return AuthCommonScreen(
       bottomSafeArea: false,
@@ -101,7 +102,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               AppString.welcomeBack,
                               textAlign: TextAlign.center,
                               style: StyleManager.poppinsBold28(
-                                AppColors.black,
+                                isDark ? AppColors.white : AppColors.black,
                               ),
                             ),
                           ),
@@ -114,7 +115,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                 AppString.loginSubtitle,
                                 textAlign: TextAlign.center,
                                 style: StyleManager.interMedium12(
-                                  AppColors.grayColor,
+                                  isDark
+                                      ? AppColors.grayD3D3D3
+                                      : AppColors.grayColor,
                                 ),
                               ),
                             ),
@@ -130,9 +133,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: AppColors.lightBgColor.withValues(
-                              alpha: 0.85,
-                            ),
+                            color: isDark
+                                ? AppColors.blackShadow
+                                : AppColors.lightBgColor.withValues(
+                                    alpha: 0.85,
+                                  ),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(28.r),
                               topRight: Radius.circular(28.r),

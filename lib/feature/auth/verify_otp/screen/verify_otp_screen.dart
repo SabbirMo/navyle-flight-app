@@ -61,12 +61,14 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen>
     final state = ref.watch(verifyOtpNotifierProvider);
     final notifier = ref.read(verifyOtpNotifierProvider.notifier);
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return AuthCommonScreen(
       bottomSafeArea: false,
-      resizeToAvoidBottomInset: false,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             physics: const BouncingScrollPhysics(),
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
@@ -96,18 +98,20 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen>
                               AppString.checkYourEmail,
                               textAlign: TextAlign.center,
                               style: StyleManager.poppinsBold24(
-                                AppColors.black,
+                                isDark ? AppColors.white : AppColors.black,
                               ),
                             ),
                           ),
-                          SizedBox(height: 6.h),
+                          SizedBox(height: 2.h),
                           // Subtitle
                           _animations.taglineTransition(
                             child: Text(
                               AppString.otpSubtitle,
                               textAlign: TextAlign.center,
                               style: StyleManager.interMedium13(
-                                AppColors.grayColor,
+                                isDark
+                                    ? AppColors.grayD3D3D3
+                                    : AppColors.grayColor,
                               ),
                             ),
                           ),
@@ -122,9 +126,9 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen>
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: AppColors.lightBgColor.withValues(
-                              alpha: 0.8,
-                            ),
+                            color: isDark
+                                ? AppColors.blackShadow
+                                : AppColors.lightBgColor.withValues(alpha: 0.8),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(28.r),
                               topRight: Radius.circular(28.r),
@@ -198,9 +202,15 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen>
                                       AppColors.buttonGradientStart,
                                   filledBorderColor:
                                       AppColors.buttonGradientStart,
-                                  fillColor: Colors.white,
-                                  focusedFillColor: Colors.white,
-                                  filledFillColor: Colors.white,
+                                  fillColor: isDark
+                                      ? Colors.transparent
+                                      : Colors.white,
+                                  focusedFillColor: isDark
+                                      ? AppColors.blackShadow
+                                      : Colors.white,
+                                  filledFillColor: isDark
+                                      ? AppColors.blackShadow
+                                      : Colors.white,
                                   showCursor: true,
                                   cursorColor: AppColors.buttonGradientStart,
                                   cursorWidth: 2.0,
@@ -223,7 +233,9 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen>
                                   textStyle: GoogleFonts.inter(
                                     fontSize: 24.sp,
                                     fontWeight: FontWeight.w700,
-                                    color: AppColors.textDark,
+                                    color: isDark
+                                        ? AppColors.white
+                                        : AppColors.textDark,
                                   ),
                                 ),
                                 onChanged: notifier.onPinChanged,

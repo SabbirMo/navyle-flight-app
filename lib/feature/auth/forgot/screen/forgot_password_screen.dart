@@ -51,10 +51,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
         _emailController.text.trim(),
       );
       if (success && mounted) {
-        context.push(
-          AppRouterName.verifyOtpScreen,
-          extra: OtpType.forgot,
-        );
+        context.push(AppRouterName.verifyOtpScreen, extra: OtpType.forgot);
       }
     }
   }
@@ -63,12 +60,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
   Widget build(BuildContext context) {
     final state = ref.watch(forgotPasswordNotifierProvider);
     final notifier = ref.read(forgotPasswordNotifierProvider.notifier);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return AuthCommonScreen(
       bottomSafeArea: false,
-      resizeToAvoidBottomInset: false,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             physics: const BouncingScrollPhysics(),
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
@@ -102,11 +100,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                               AppString.forgotPassword,
                               textAlign: TextAlign.center,
                               style: StyleManager.poppinsBold28(
-                                AppColors.black,
+                                isDark ? AppColors.white : AppColors.black,
                               ),
                             ),
                           ),
-                          SizedBox(height: 8.h),
+                          SizedBox(height: 6.h),
 
                           // Subtitle: Don't worry, it happens...
                           _animations.taglineTransition(
@@ -116,7 +114,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                                 AppString.forgotPasswordSubtitle,
                                 textAlign: TextAlign.center,
                                 style: StyleManager.interMedium12(
-                                  AppColors.grayColor,
+                                  isDark
+                                      ? AppColors.grayD3D3D3
+                                      : AppColors.grayColor,
                                 ),
                               ),
                             ),
@@ -132,7 +132,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFFBF8),
+                            color: isDark
+                                ? AppColors.blackShadow
+                                : const Color(0xFFFFFBF8),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(28.r),
                               topRight: Radius.circular(28.r),
