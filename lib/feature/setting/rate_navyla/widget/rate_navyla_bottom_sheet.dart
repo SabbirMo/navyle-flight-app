@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
+import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 
 class RateNavylaBottomSheet extends StatefulWidget {
   const RateNavylaBottomSheet({super.key});
@@ -59,6 +61,7 @@ class RateNavylaBottomSheet extends StatefulWidget {
 class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
   int _selectedRating = 1;
   final TextEditingController _experienceController = TextEditingController();
+  bool _isShareExpanded = false;
 
   @override
   void dispose() {
@@ -160,8 +163,11 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                   ),
 
                   // Review Icon
-                  SvgPicture.asset(ImageAssets.review, width: 105.w),
-
+                  // SvgPicture.asset(ImageAssets.review, width: 105.w),
+                  SizedBox(
+                    height: 105.h,
+                    child: Lottie.asset("assets/lottie/review.json"),
+                  ),
                   // Title
                   Text(
                     "How was your trip?",
@@ -311,101 +317,123 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                   SizedBox(height: 16.h),
 
                   // Share NAVYLA Button
-                  GestureDetector(
-                    onTap: _onShareNavyla,
-                    behavior: HitTestBehavior.opaque,
-                    child: Container(
-                      width: double.infinity,
-                      height: 42.h,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFF942B),
-                        borderRadius: BorderRadius.circular(24.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(
-                              0xFFFF942B,
-                            ).withValues(alpha: 0.3),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.file_upload_outlined,
-                            size: 20.sp,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 8.w),
-                          Text(
-                            "Share NAVYLA",
-                            style: GoogleFonts.inter(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  CustomButton(text: 'Submit Rating', onTap: _onShareNavyla),
                   SizedBox(height: 16.h),
 
-                  // Share with friends & family title
-                  Text(
-                    "Share with friends & family",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(
-                      fontSize: 12.5.sp,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF64748B),
+                  // Collapsible Share NAVYLA Card
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFAFBFD),
+                      borderRadius: BorderRadius.circular(16.r),
                     ),
-                  ),
-                  SizedBox(height: 14.h),
+                    foregroundDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16.r),
+                      border: Border.all(
+                        color: const Color(0xFFE2E8F0),
+                        width: 1.0,
+                      ),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Card Header (tap to toggle expand/collapse)
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              _isShareExpanded = !_isShareExpanded;
+                            });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 14.h,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Share NAVYLA with friends & family",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: const Color(0xFF495B70),
+                                  ),
+                                ),
+                                AnimatedRotation(
+                                  turns: _isShareExpanded ? 0.5 : 0.0,
+                                  duration: const Duration(milliseconds: 200),
+                                  child: Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    size: 22.sp,
+                                    color: const Color(0xFF1E293B),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
 
-                  // Social Icons Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildShareOption(
-                        iconWidget: SvgPicture.asset(
-                          ImageAssets.whatsApp,
-                          width: 44.w,
-                          height: 44.w,
+                        // Expandable Social Options
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 250),
+                          curve: Curves.easeInOut,
+                          child: _isShareExpanded
+                              ? Container(
+                                  width: double.infinity,
+                                  color: Colors.white,
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 16.h,
+                                    horizontal: 8.w,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      _buildShareOption(
+                                        iconWidget: SvgPicture.asset(
+                                          ImageAssets.whatsApp,
+                                          width: 44.w,
+                                          height: 44.w,
+                                        ),
+                                        label: "WhatsApp",
+                                        onTap: () => _onSocialShare("WhatsApp"),
+                                      ),
+                                      _buildShareOption(
+                                        iconWidget: SvgPicture.asset(
+                                          ImageAssets.message,
+                                          width: 44.w,
+                                          height: 44.w,
+                                        ),
+                                        label: "Messages",
+                                        onTap: () => _onSocialShare("Messages"),
+                                      ),
+                                      _buildShareOption(
+                                        iconWidget: SvgPicture.asset(
+                                          ImageAssets.mail,
+                                          width: 44.w,
+                                          height: 44.w,
+                                        ),
+                                        label: "Email",
+                                        onTap: () => _onSocialShare("Email"),
+                                      ),
+                                      _buildShareOption(
+                                        iconWidget: SvgPicture.asset(
+                                          ImageAssets.smore,
+                                          width: 44.w,
+                                          height: 44.w,
+                                        ),
+                                        label: "More",
+                                        onTap: () => _onSocialShare("More"),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
                         ),
-                        label: "WhatsApp",
-                        onTap: () => _onSocialShare("WhatsApp"),
-                      ),
-                      _buildShareOption(
-                        iconWidget: SvgPicture.asset(
-                          ImageAssets.message,
-                          width: 44.w,
-                          height: 44.w,
-                        ),
-                        label: "Messages",
-                        onTap: () => _onSocialShare("Messages"),
-                      ),
-                      _buildShareOption(
-                        iconWidget: SvgPicture.asset(
-                          ImageAssets.mail,
-                          width: 44.w,
-                          height: 44.w,
-                        ),
-                        label: "Email",
-                        onTap: () => _onSocialShare("Email"),
-                      ),
-                      _buildShareOption(
-                        iconWidget: SvgPicture.asset(
-                          ImageAssets.smore,
-                          width: 44.w,
-                          height: 44.w,
-                        ),
-                        label: "More",
-                        onTap: () => _onSocialShare("More"),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   SizedBox(height: 20.h),
                 ],
@@ -478,7 +506,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
           Text(
             label,
             style: GoogleFonts.inter(
-              fontSize: 10.sp,
+              fontSize: 11.sp,
               fontWeight: FontWeight.w600,
               color: const Color(0xFF64748B),
             ),
