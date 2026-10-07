@@ -47,7 +47,9 @@ class FeedSponsorCardWidget extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             decoration: BoxDecoration(
-              color: const Color(0xFFEEF2F6),
+              color: isDark
+                  ? AppColors.lightGray.withValues(alpha: 0.3)
+                  : const Color(0xFFEEF2F6),
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: Row(
@@ -56,7 +58,7 @@ class FeedSponsorCardWidget extends StatelessWidget {
                 Icon(
                   Icons.info_rounded,
                   size: 13.sp,
-                  color: const Color(0xFF64748B),
+                  color: isDark ? AppColors.white80 : const Color(0xFF64748B),
                 ),
                 SizedBox(width: 4.w),
                 Text(
@@ -64,7 +66,7 @@ class FeedSponsorCardWidget extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 10.5.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF64748B),
+                    color: isDark ? AppColors.white80 : const Color(0xFF64748B),
                   ),
                 ),
               ],
@@ -161,11 +163,17 @@ class FeedSponsorCardWidget extends StatelessWidget {
                             vertical: 5.h,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFF7ED),
+                            color: isDark
+                                ? AppColors.lightGray.withValues(alpha: 0.3)
+                                : const Color(0xFFFFF7ED),
                             borderRadius: BorderRadius.circular(20.r),
                             border: Border.all(
-                              color: const Color(0xFFFFEDD5),
-                              width: 1.2,
+                              color: isDark
+                                  ? const Color(
+                                      0xFFEA580C,
+                                    ).withValues(alpha: 0.6)
+                                  : const Color(0xFFFFEDD5),
+                              width: .5,
                             ),
                           ),
                           child: Row(

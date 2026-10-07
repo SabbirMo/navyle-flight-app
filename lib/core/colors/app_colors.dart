@@ -107,4 +107,6 @@ class AppColors {
   static const Color noActiveBgColor = Color(0xffFEDBBE); //#FEDBBE
   static const Color noActiveHighlightBgColor = Color(0xffDEE2F9); //#DEE2F9
   static const Color darkBlack = Color(0xff0B101C); //#0B101C
+  static const Color white80 = Color(0xCCFFF3EA); //#FFF3EACC
+  static const Color darkPrimary = Color(0xffFF9D3E); //#FF9D3E
 }

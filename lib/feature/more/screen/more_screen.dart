@@ -58,11 +58,17 @@ class MoreContentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
-        title: Image.asset(ImageAssets.navyla, width: 100.w, height: 30.h),
+        backgroundColor: isDark ? AppColors.darkBlack : null,
+        title: Image.asset(
+          isDark ? ImageAssets.navylaWhite : ImageAssets.navyla,
+          width: 100.w,
+          height: 30.h,
+        ),
         actions: [
           GestureDetector(
             onTap: () => context.push(AppRouterName.settingScreen),
@@ -71,11 +77,13 @@ class MoreContentScreen extends StatelessWidget {
               padding: EdgeInsets.all(8.r),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.primaryFeed.withValues(alpha: 0.12),
+                color: isDark
+                    ? AppColors.white.withValues(alpha: 0.12)
+                    : AppColors.primaryFeed.withValues(alpha: 0.12),
               ),
               child: Icon(
                 Icons.settings_outlined,
-                color: AppColors.lightBlueGray,
+                color: isDark ? AppColors.white : AppColors.lightBlueGray,
               ),
             ),
           ),
@@ -84,7 +92,9 @@ class MoreContentScreen extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(gradient: AppColors.splashGradient),
+        decoration: BoxDecoration(
+          gradient: isDark ? null : AppColors.splashGradient,
+        ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
@@ -95,7 +105,7 @@ class MoreContentScreen extends StatelessWidget {
                 child: Text(
                   "Travel Extras",
                   style: StyleManager.interSemiBold14(
-                    AppColors.black,
+                    isDark ? AppColors.white : AppColors.black,
                   ).copyWith(fontSize: 20.sp, fontWeight: FontWeight.w800),
                 ),
               ),
@@ -103,13 +113,19 @@ class MoreContentScreen extends StatelessWidget {
               Center(
                 child: Text(
                   "Optional services for your trip",
-                  style: StyleManager.interRegular14(AppColors.grayColor),
+                  style: StyleManager.interRegular14(
+                    isDark ? AppColors.grayD3D3D3 : AppColors.grayColor,
+                  ),
                 ),
               ),
               SizedBox(height: 20.h),
               Text(
                 "WHAT DO YOU NEED?",
-                style: StyleManager.interSemiBold14(AppColors.lightBlueGray),
+                style: StyleManager.interSemiBold14(
+                  isDark
+                      ? AppColors.white.withValues(alpha: 0.6)
+                      : AppColors.lightBlueGray,
+                ),
               ),
               SizedBox(height: 10.h),
               Expanded(

@@ -148,7 +148,7 @@ class CustomBottomNavBar extends StatelessWidget {
             Positioned(
               bottom: bottomPadding + 24.0,
               child: _CenterScanButton(
-                borderColor: navBgColor,
+                borderColor: isDark ? AppColors.white : navBgColor,
                 onTap: () {
                   HapticFeedback.lightImpact();
                   onTap?.call(2);

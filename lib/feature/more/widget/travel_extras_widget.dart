@@ -13,13 +13,19 @@ class TravelExtraWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: isDark ? AppColors.darkBlack : AppColors.white,
           borderRadius: BorderRadius.circular(16.r),
+          border: isDark
+              ? Border.all(
+                  color: AppColors.lightBlueGray.withValues(alpha: 0.4),
+                )
+              : null,
           boxShadow: [
             BoxShadow(
               color: AppColors.black.withValues(alpha: 0.05),
@@ -34,8 +40,15 @@ class TravelExtraWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(8.r),
               decoration: BoxDecoration(
-                color: AppColors.primaryFeed.withValues(alpha: 0.3),
+                color: isDark
+                    ? const Color(0xff22252F)
+                    : AppColors.primaryFeed.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(12.r),
+                border: isDark
+                    ? Border.all(
+                        color: AppColors.primaryFeed.withValues(alpha: 0.2),
+                      )
+                    : null,
               ),
               child: Center(
                 child: SvgPicture.asset(
@@ -57,14 +70,18 @@ class TravelExtraWidget extends StatelessWidget {
                   Text(
                     data.title,
                     style: StyleManager.interMedium14(
-                      AppColors.black,
+                      isDark
+                          ? AppColors.white.withValues(alpha: 0.8)
+                          : AppColors.black,
                     ).copyWith(fontSize: 13.sp, fontWeight: FontWeight.w700),
                   ),
                   SizedBox(height: 2.h),
                   Text(
                     data.subtitle,
                     style: StyleManager.interMedium12(
-                      AppColors.lightBlueGray,
+                      isDark
+                          ? AppColors.grayD3D3D3.withValues(alpha: 0.7)
+                          : AppColors.lightBlueGray,
                     ).copyWith(fontSize: 11.sp),
                   ),
                 ],

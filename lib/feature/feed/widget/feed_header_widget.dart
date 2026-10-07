@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
+import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 
 class FeedHeaderWidget extends StatelessWidget {
@@ -25,9 +26,7 @@ class FeedHeaderWidget extends StatelessWidget {
               SizedBox(
                 width: 100.w,
                 child: Image.asset(
-                  isDark
-                      ? "assets/images/navyla_white.png"
-                      : "assets/images/navyla.png",
+                  isDark ? ImageAssets.navylaWhite : ImageAssets.navyla,
                 ),
               ),
               SizedBox(width: 8.w),

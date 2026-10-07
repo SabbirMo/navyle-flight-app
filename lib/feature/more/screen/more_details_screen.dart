@@ -21,11 +21,14 @@ class MoreDetailsScreen extends StatefulWidget {
 class _MoreDetailsScreenState extends State<MoreDetailsScreen> {
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(gradient: AppColors.splashGradient),
+        decoration: BoxDecoration(
+          gradient: isDark ? null : AppColors.splashGradient,
+        ),
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -35,13 +38,14 @@ class _MoreDetailsScreenState extends State<MoreDetailsScreen> {
                 CustomBackButton(
                   title: widget.data.title,
                   subTitle: "Offers from NAVYLA partners",
+                  isBorder: true,
                 ),
                 SizedBox(height: 16.h),
 
                 Container(
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Color(0xffEDF3F8),
+                    color: isDark ? Color(0x1AEDF3F8) : Color(0xffEDF3F8),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Text(
@@ -60,8 +64,15 @@ class _MoreDetailsScreenState extends State<MoreDetailsScreen> {
                     vertical: 12.h,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.white,
+                    color: isDark ? AppColors.darkBlack : AppColors.white,
                     borderRadius: BorderRadius.circular(12.r),
+                    border: isDark
+                        ? Border.all(
+                            color: AppColors.lightBlueGray.withValues(
+                              alpha: 0.4,
+                            ),
+                          )
+                        : null,
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.black.withValues(alpha: 0.1),
@@ -77,14 +88,18 @@ class _MoreDetailsScreenState extends State<MoreDetailsScreen> {
                       Text(
                         "PARTNER OFFERS",
                         style: StyleManager.interMedium12(
-                          AppColors.lightBlueGray,
+                          isDark
+                              ? AppColors.grayD3D3D3.withValues(alpha: 0.7)
+                              : AppColors.lightBlueGray,
                         ).copyWith(fontSize: 11.sp),
                       ),
                       SizedBox(height: 10.h),
                       Text(
                         widget.data.partnerText,
 
-                        style: StyleManager.interSemiBold14(AppColors.black),
+                        style: StyleManager.interSemiBold14(
+                          isDark ? AppColors.white80 : AppColors.black,
+                        ),
                       ),
 
                       SizedBox(height: 10.h),
@@ -92,7 +107,9 @@ class _MoreDetailsScreenState extends State<MoreDetailsScreen> {
                         widget.data.partnerSubText,
 
                         style: StyleManager.interMedium12(
-                          AppColors.lightBlueGray,
+                          isDark
+                              ? AppColors.grayD3D3D3.withValues(alpha: 0.7)
+                              : AppColors.lightBlueGray,
                         ).copyWith(fontSize: 11.sp),
                       ),
 
@@ -118,7 +135,11 @@ class _MoreDetailsScreenState extends State<MoreDetailsScreen> {
                 Text(
                   AppString.partnerText,
                   textAlign: TextAlign.center,
-                  style: StyleManager.interMedium12(AppColors.lightBlueGray),
+                  style: StyleManager.interMedium12(
+                    isDark
+                        ? AppColors.grayD3D3D3.withValues(alpha: 0.7)
+                        : AppColors.lightBlueGray,
+                  ),
                 ),
               ],
             ),

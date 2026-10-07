@@ -29,7 +29,7 @@ class CustomBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final btnSize = size ?? 32.w;
+    final btnSize = size ?? 36.w;
     final button = GestureDetector(
       onTap: onTap ?? () => Navigator.of(context).maybePop(),
       child: Container(
@@ -111,7 +111,9 @@ class CustomBackButton extends StatelessWidget {
                           Text(
                             subTitle!,
                             style: StyleManager.interMedium12(
-                              AppColors.blackShadow,
+                              isDark
+                                  ? AppColors.white.withValues(alpha: 0.7)
+                                  : AppColors.blackShadow,
                             ).copyWith(fontWeight: FontWeight.w400),
                             textAlign: TextAlign.center,
                           ),

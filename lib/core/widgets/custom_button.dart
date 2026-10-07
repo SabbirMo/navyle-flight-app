@@ -41,6 +41,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final radius = borderRadius ?? 30.r;
     final bool canTap = isEnabled && !isLoading && onTap != null;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
       width: width,
@@ -48,7 +49,8 @@ class CustomButton extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
         color: isEnabled
-            ? bgColor ?? AppColors.primaryColor
+            ? bgColor ??
+                  (isDark ? AppColors.darkPrimary : AppColors.primaryColor)
             : AppColors.unSelectColor,
         boxShadow: boxShadow
             ? <BoxShadow>[

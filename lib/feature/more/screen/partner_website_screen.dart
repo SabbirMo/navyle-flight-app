@@ -61,11 +61,17 @@ class _PartnerWebsiteScreenState extends State<PartnerWebsiteScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
+            colorScheme: ColorScheme.light(
               primary: AppColors.primaryColor,
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: AppColors.black,
+              onPrimary: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.blackShadow
+                  : Colors.white,
+              surface: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.blackShadow
+                  : Colors.white,
+              onSurface: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.white
+                  : AppColors.blackShadow,
             ),
           ),
           child: child!,
@@ -104,11 +110,15 @@ class _PartnerWebsiteScreenState extends State<PartnerWebsiteScreen> {
     final title = widget.data?.partnerText ?? AppString.hotelPartnerText;
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(gradient: AppColors.splashGradient),
+        decoration: BoxDecoration(
+          gradient: isDark ? null : AppColors.splashGradient,
+        ),
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -136,6 +146,7 @@ class _PartnerWebsiteScreenState extends State<PartnerWebsiteScreen> {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -145,16 +156,18 @@ class _PartnerWebsiteScreenState extends State<PartnerWebsiteScreen> {
           child: Container(
             width: 38.w,
             height: 38.w,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.white,
+              color: isDark
+                  ? AppColors.white.withValues(alpha: 0.12)
+                  : AppColors.white,
               boxShadow: _closeBtnShadow,
             ),
             child: Center(
               child: Icon(
                 Icons.close_rounded,
                 size: 20.sp,
-                color: AppColors.black,
+                color: isDark ? AppColors.white : AppColors.black,
               ),
             ),
           ),
@@ -167,7 +180,7 @@ class _PartnerWebsiteScreenState extends State<PartnerWebsiteScreen> {
             Text(
               AppString.partnerWebsite,
               style: StyleManager.interSemiBold14(
-                AppColors.black,
+                isDark ? AppColors.white80 : AppColors.black,
               ).copyWith(fontSize: 16.sp, fontWeight: FontWeight.w700),
             ),
             SizedBox(height: 2.h),
@@ -177,14 +190,14 @@ class _PartnerWebsiteScreenState extends State<PartnerWebsiteScreen> {
                 Icon(
                   Icons.lock_outline_rounded,
                   size: 12.sp,
-                  color: const Color(0xFF1E293B),
+                  color: isDark ? AppColors.white80 : const Color(0xFF1E293B),
                 ),
                 SizedBox(width: 4.w),
                 Text(
                   AppString.partnerWebsiteUrl,
                   style: StyleManager.interMedium12(
-                    const Color(0xFF1E293B),
-                  ).copyWith(fontSize: 12.sp),
+                    isDark ? AppColors.white80 : const Color(0xFF1E293B),
+                  ),
                 ),
               ],
             ),
@@ -198,12 +211,18 @@ class _PartnerWebsiteScreenState extends State<PartnerWebsiteScreen> {
   }
 
   Widget _buildPartnerCard(String title) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: isDark ? AppColors.darkBlack : AppColors.white,
         borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(
+          color: isDark
+              ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+              : Colors.transparent,
+        ),
         boxShadow: _cardShadow,
       ),
       child: Column(
@@ -214,7 +233,7 @@ class _PartnerWebsiteScreenState extends State<PartnerWebsiteScreen> {
             width: 48.w,
             height: 48.w,
             decoration: BoxDecoration(
-              color: const Color(0xFFFA8A35),
+              color: AppColors.darkPrimary,
               borderRadius: BorderRadius.circular(14.r),
             ),
             child: Center(
@@ -231,11 +250,14 @@ class _PartnerWebsiteScreenState extends State<PartnerWebsiteScreen> {
           // Title
           Text(
             title,
-            style: StyleManager.interSemiBold14(AppColors.black).copyWith(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w700,
-              height: 1.3,
-            ),
+            style:
+                StyleManager.interSemiBold14(
+                  isDark ? AppColors.white80 : AppColors.black,
+                ).copyWith(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w700,
+                  height: 1.3,
+                ),
           ),
 
           SizedBox(height: 8.h),
@@ -289,7 +311,6 @@ class _PartnerWebsiteScreenState extends State<PartnerWebsiteScreen> {
             text: AppString.searchAvailability,
             height: 40.h,
             borderRadius: 14.r,
-            bgColor: const Color(0xFFFA8A35),
             onTap: () => _onSearch(title),
           ),
         ],
