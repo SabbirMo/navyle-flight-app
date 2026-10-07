@@ -87,12 +87,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     FlightWaveCard(
                       departureTime: journeyState.departureCountdown,
                       flightNumber: journeyState.flightNumber,
-                      originCode: (journeyState.originCode == 'LHR' ||
+                      originCode:
+                          (journeyState.originCode == 'LHR' ||
                               journeyState.originCode.isEmpty)
                           ? 'AMS'
                           : journeyState.originCode,
                       originCity: journeyState.originCity,
-                      destinationCode: (journeyState.destinationCode == 'JFK' ||
+                      destinationCode:
+                          (journeyState.destinationCode == 'JFK' ||
                               journeyState.destinationCode.isEmpty)
                           ? 'FRA'
                           : journeyState.destinationCode,
@@ -104,13 +106,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       status: journeyState.status,
                     ),
                     SizedBox(height: 16.h),
-                    CityWeatherCard(
-                      cityName: journeyState.weatherCity,
-                      temperature: journeyState.weatherTemperature,
-                      weatherCondition: journeyState.weatherCondition,
-                      localTime: journeyState.weatherLocalTime,
-                      date: journeyState.weatherDate,
-                    ),
+                    CityWeatherCard(),
                     SizedBox(height: 16.h),
                   ],
 

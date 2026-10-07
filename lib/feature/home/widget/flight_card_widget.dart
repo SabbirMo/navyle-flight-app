@@ -350,7 +350,7 @@ class FlightAirportWidget extends StatelessWidget {
         FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            city,
+            city.toUpperCase(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: StyleManager.interSemiBold12(
