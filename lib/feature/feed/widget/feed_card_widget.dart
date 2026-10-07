@@ -27,15 +27,19 @@ class FeedCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasSpam = post.isSpamVoted || post.spamCount > 0;
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkBlack : Colors.white,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: const Color(0xFFEEF2F6), width: 1.2),
+        border: Border.all(
+          color: isDark
+              ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+              : const Color(0xFFEEF2F6),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.025),
@@ -98,7 +102,7 @@ class FeedCardWidget extends StatelessWidget {
                     Text(
                       post.authorName,
                       style: StyleManager.interSemiBold14(
-                        AppColors.blackShadow,
+                        isDark ? AppColors.white : AppColors.blackShadow,
                       ).copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
@@ -117,7 +121,9 @@ class FeedCardWidget extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
                 decoration: BoxDecoration(
-                  color: post.tagBackgroundColor,
+                  color: isDark
+                      ? AppColors.grayColor.withValues(alpha: 0.4)
+                      : post.tagBackgroundColor,
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Text(
@@ -134,7 +140,9 @@ class FeedCardWidget extends StatelessWidget {
           SizedBox(height: 14.h),
           Text(
             post.content,
-            style: StyleManager.interRegular14(AppColors.darkGrayColor),
+            style: StyleManager.interRegular14(
+              isDark ? AppColors.lightGray : AppColors.darkGrayColor,
+            ),
           ),
 
           // 3. Status Action Buttons (IT'S REAL & SPAM)
@@ -152,16 +160,10 @@ class FeedCardWidget extends StatelessWidget {
                   child: Container(
                     height: 34.h,
                     decoration: BoxDecoration(
-                      color: post.isRealVoted
-                          ? const Color(0xFFD1FAE5)
+                      color: isDark
+                          ? AppColors.feedGreen.withValues(alpha: 0.3)
                           : AppColors.feedGreenOpacity,
                       borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(
-                        color: post.isRealVoted
-                            ? const Color(0xFF6EE7B7)
-                            : Colors.transparent,
-                        width: 1,
-                      ),
                     ),
                     child: Center(
                       child: FittedBox(
@@ -177,7 +179,9 @@ class FeedCardWidget extends StatelessWidget {
                             SizedBox(width: 6.w),
                             Text(
                               "IT'S REAL (${post.realCount})",
-                              style: StyleManager.interBold10(AppColors.feedGreen),
+                              style: StyleManager.interBold10(
+                                AppColors.feedGreen,
+                              ),
                             ),
                           ],
                         ),
@@ -199,16 +203,10 @@ class FeedCardWidget extends StatelessWidget {
                   child: Container(
                     height: 36.h,
                     decoration: BoxDecoration(
-                      color: hasSpam
-                          ? const Color(0xFFFEF2F2)
+                      color: isDark
+                          ? AppColors.grayColor.withValues(alpha: 0.4)
                           : const Color(0xFFF8FAFC),
                       borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(
-                        color: hasSpam
-                            ? const Color(0xFFFCA5A5)
-                            : Colors.transparent,
-                        width: 1,
-                      ),
                     ),
                     child: Center(
                       child: FittedBox(
@@ -219,15 +217,13 @@ class FeedCardWidget extends StatelessWidget {
                             Icon(
                               Icons.flag_rounded,
                               size: 15.sp,
-                              color: hasSpam
-                                  ? AppColors.errorRed
-                                  : AppColors.lightGray,
+                              color: AppColors.lightGray,
                             ),
                             SizedBox(width: 6.w),
                             Text(
                               "SPAM (${post.spamCount})",
                               style: StyleManager.interBold10(
-                                hasSpam ? AppColors.errorRed : AppColors.lightGray,
+                                AppColors.lightGray,
                               ),
                             ),
                           ],

@@ -17,6 +17,7 @@ class FeedCategoryFilterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
       height: 34.h,
       child: ListView.separated(
@@ -36,12 +37,16 @@ class FeedCategoryFilterWidget extends StatelessWidget {
               curve: Curves.easeInOut,
               padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primaryFeed : Colors.white,
+                color: isSelected
+                    ? AppColors.primaryFeed
+                    : (isDark ? AppColors.textFieldBgColor : Colors.white),
                 borderRadius: BorderRadius.circular(24.r),
                 border: Border.all(
                   color: isSelected
                       ? AppColors.primaryFeed
-                      : const Color(0xFFE2E8F0),
+                      : (isDark
+                            ? AppColors.lightBlueGray
+                            : const Color(0xFFE2E8F0)),
                   width: 1.2,
                 ),
                 boxShadow: [

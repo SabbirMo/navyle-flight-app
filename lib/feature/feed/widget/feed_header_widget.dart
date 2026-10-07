@@ -10,6 +10,7 @@ class FeedHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
       child: Row(
@@ -23,13 +24,17 @@ class FeedHeaderWidget extends StatelessWidget {
             children: [
               SizedBox(
                 width: 100.w,
-                child: Image.asset("assets/images/navyla.png"),
+                child: Image.asset(
+                  isDark
+                      ? "assets/images/navyla_white.png"
+                      : "assets/images/navyla.png",
+                ),
               ),
               SizedBox(width: 8.w),
               Text(
                 'FEED',
                 style: StyleManager.sfProBold16(
-                  AppColors.feedColor,
+                  isDark ? AppColors.white : AppColors.feedColor,
                 ).copyWith(fontSize: 18.sp),
               ),
             ],

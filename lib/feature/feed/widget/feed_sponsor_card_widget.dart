@@ -26,13 +26,19 @@ class FeedSponsorCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkBlack : Colors.white,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color(0xFFE5E7EB), width: 1.2),
+        border: Border.all(
+          color: isDark
+              ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+              : const Color(0xFFE5E7EB),
+          width: 1.2,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +131,9 @@ class FeedSponsorCardWidget extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF0F172A),
+                          color: isDark
+                              ? AppColors.white
+                              : const Color(0xFF0F172A),
                           letterSpacing: -0.2,
                         ),
                         maxLines: 1,

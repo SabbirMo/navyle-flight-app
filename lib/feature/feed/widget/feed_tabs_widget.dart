@@ -56,6 +56,7 @@ class _TabItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -71,7 +72,7 @@ class _TabItem extends StatelessWidget {
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   color: isSelected
-                      ? AppColors.blackShadow
+                      ? (isDark ? AppColors.white : AppColors.blackShadow)
                       : AppColors.lightGray,
                 ),
               ),

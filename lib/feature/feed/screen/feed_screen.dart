@@ -96,8 +96,10 @@ class FeedScreen extends ConsumerWidget {
     final hasBoardingPass = journeyState.hasActiveFlight;
     final filteredPosts = feedState.filteredPosts;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFBFC),
+      backgroundColor: isDark ? AppColors.blackShadow : const Color(0xFFFAFBFC),
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -135,56 +137,60 @@ class FeedScreen extends ConsumerWidget {
                         extra: {'isManual': true},
                       ),
                     )
-                  : (feedState.selectedTab == FeedTab.myPost && filteredPosts.isEmpty)
-                      ? _buildEmptyState(context, feedState.selectedTab)
-                      : ListView(
-                          physics: const BouncingScrollPhysics(),
-                          padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 100.h),
-                          children: [
-                            // Active Journey Flight Card (displayed when boarding pass is added)
-                            if (hasBoardingPass && feedState.selectedTab == FeedTab.feed) ...[
-                              FeedActiveFlightCardWidget(
-                                flightNumber: journeyState.flightNumber,
-                                originCode: (journeyState.originCode == 'LHR' ||
-                                        journeyState.originCode.isEmpty)
-                                    ? 'AMS'
-                                    : journeyState.originCode,
-                                destinationCode:
-                                    (journeyState.destinationCode == 'JFK' ||
-                                            journeyState
-                                                .destinationCode.isEmpty)
-                                        ? 'FRA'
-                                        : journeyState.destinationCode,
-                                flightDate: journeyState.flightDate,
-                                terminal: journeyState.terminal,
-                                gate: journeyState.gate,
-                                status: journeyState.status,
-                                onTap: () {
-                                  ref.read(navbarNotifierProvider.notifier).setIndex(1);
-                                },
-                              ),
-                              SizedBox(height: 12.h),
-                            ],
-                            if (filteredPosts.isEmpty)
-                              _buildEmptyState(context, feedState.selectedTab)
-                            else
-                              ...filteredPosts.map(
-                                (post) => FeedCardWidget(
-                                  key: ValueKey(post.id),
-                                  post: post,
-                                  showMyPostActions:
-                                      feedState.selectedTab == FeedTab.myPost,
-                                  onToggleReal: () =>
-                                      feedNotifier.toggleRealVote(post.id),
-                                  onToggleSpam: () =>
-                                      feedNotifier.toggleSpamVote(post.id),
-                                  onEdit: () => _openEditPost(context, post),
-                                  onDelete: () =>
-                                      _confirmDelete(context, ref, post.id),
-                                ),
-                              ),
-                          ],
-                        ),
+                  : (feedState.selectedTab == FeedTab.myPost &&
+                        filteredPosts.isEmpty)
+                  ? _buildEmptyState(context, feedState.selectedTab)
+                  : ListView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 100.h),
+                      children: [
+                        // Active Journey Flight Card (displayed when boarding pass is added)
+                        if (hasBoardingPass &&
+                            feedState.selectedTab == FeedTab.feed) ...[
+                          FeedActiveFlightCardWidget(
+                            flightNumber: journeyState.flightNumber,
+                            originCode:
+                                (journeyState.originCode == 'LHR' ||
+                                    journeyState.originCode.isEmpty)
+                                ? 'AMS'
+                                : journeyState.originCode,
+                            destinationCode:
+                                (journeyState.destinationCode == 'JFK' ||
+                                    journeyState.destinationCode.isEmpty)
+                                ? 'FRA'
+                                : journeyState.destinationCode,
+                            flightDate: journeyState.flightDate,
+                            terminal: journeyState.terminal,
+                            gate: journeyState.gate,
+                            status: journeyState.status,
+                            onTap: () {
+                              ref
+                                  .read(navbarNotifierProvider.notifier)
+                                  .setIndex(1);
+                            },
+                          ),
+                          SizedBox(height: 12.h),
+                        ],
+                        if (filteredPosts.isEmpty)
+                          _buildEmptyState(context, feedState.selectedTab)
+                        else
+                          ...filteredPosts.map(
+                            (post) => FeedCardWidget(
+                              key: ValueKey(post.id),
+                              post: post,
+                              showMyPostActions:
+                                  feedState.selectedTab == FeedTab.myPost,
+                              onToggleReal: () =>
+                                  feedNotifier.toggleRealVote(post.id),
+                              onToggleSpam: () =>
+                                  feedNotifier.toggleSpamVote(post.id),
+                              onEdit: () => _openEditPost(context, post),
+                              onDelete: () =>
+                                  _confirmDelete(context, ref, post.id),
+                            ),
+                          ),
+                      ],
+                    ),
             ),
           ],
         ),

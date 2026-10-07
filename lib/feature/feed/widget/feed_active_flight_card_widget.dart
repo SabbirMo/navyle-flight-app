@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navyla_flight_app/core/colors/app_colors.dart';
 
 /// Active flight card displayed at the top of the Feed screen
 /// when a user has added a boarding pass.
@@ -108,6 +109,7 @@ class FeedActiveFlightCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -115,9 +117,14 @@ class FeedActiveFlightCardWidget extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? AppColors.darkBlack : Colors.white,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: const Color(0xFFFFEDD5), width: 1.2),
+          border: Border.all(
+            color: isDark
+                ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+                : const Color(0xFFFFEDD5),
+            width: 1.2,
+          ),
           boxShadow: [
             BoxShadow(
               color: const Color(0xFFFA7E23).withValues(alpha: 0.04),
@@ -166,7 +173,9 @@ class FeedActiveFlightCardWidget extends StatelessWidget {
                           style: GoogleFonts.inter(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF0F172A),
+                            color: isDark
+                                ? AppColors.white
+                                : const Color(0xFF0F172A),
                             letterSpacing: -0.2,
                           ),
                           maxLines: 1,
@@ -188,7 +197,9 @@ class FeedActiveFlightCardWidget extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF0F172A),
+                          color: isDark
+                              ? AppColors.white
+                              : const Color(0xFF0F172A),
                         ),
                       ),
                       SizedBox(width: 4.w),
@@ -203,7 +214,9 @@ class FeedActiveFlightCardWidget extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF0F172A),
+                          color: isDark
+                              ? AppColors.white
+                              : const Color(0xFF0F172A),
                         ),
                       ),
                     ],
