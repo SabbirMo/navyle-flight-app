@@ -27,9 +27,9 @@ class TicketBoardingPass extends StatelessWidget {
     this.airlineName = 'BRITISH AIRWAYS',
     this.flightClass = 'ECONOMY',
     this.originCode = 'AMS',
-    this.originCity = 'AMSTERDAM, NETHERLANDS',
+    this.originCity = 'AMSTERDAM, NL',
     this.destinationCode = 'FRA',
-    this.destinationCity = 'FRANKFURT, GERMANY',
+    this.destinationCity = 'FRANKFURT, DE',
     this.flightNumber = 'BA 0215',
     this.date = '24 Oct, 26',
     this.departureTime = '11:15 AM',
@@ -221,10 +221,7 @@ class TicketBoardingPass extends StatelessWidget {
             ),
 
             // Thin divider line
-            Container(
-              height: 1,
-              color: Colors.white.withValues(alpha: 0.18),
-            ),
+            Container(height: 1, color: Colors.white.withValues(alpha: 0.18)),
 
             // Date, Departure, Boarding
             Row(
@@ -418,6 +415,15 @@ class TicketBoardingPass extends StatelessWidget {
     required String city,
     bool isEnd = false,
   }) {
+    String displayCity = city;
+    if (displayCity.toUpperCase() == 'AMSTERDAM, NETHERLANDS' ||
+        displayCity.toUpperCase() == 'AMSTERDAM') {
+      displayCity = 'AMSTERDAM, NL';
+    } else if (displayCity.toUpperCase() == 'FRANKFURT, GERMANY' ||
+        displayCity.toUpperCase() == 'FRANKFURT') {
+      displayCity = 'FRANKFURT, DE';
+    }
+
     return Column(
       crossAxisAlignment: isEnd
           ? CrossAxisAlignment.end
@@ -434,7 +440,8 @@ class TicketBoardingPass extends StatelessWidget {
         ),
         SizedBox(height: 2.h),
         Text(
-          city,
+          displayCity,
+          maxLines: 1,
           style: GoogleFonts.inter(
             fontSize: 9.5.sp,
             fontWeight: FontWeight.w500,

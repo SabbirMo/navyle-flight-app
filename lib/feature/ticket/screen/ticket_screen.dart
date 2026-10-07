@@ -113,6 +113,8 @@ class TicketScreen extends ConsumerWidget {
                             flightNumber: journey.flightNumber,
                             originCode: journey.originCode,
                             destinationCode: journey.destinationCode,
+                            originCity: 'AMSTERDAM, NL',
+                            destinationCity: 'FRANKFURT, DE',
                             terminal: journey.terminal,
                             gate: journey.gate,
                             seat: journey.seat,

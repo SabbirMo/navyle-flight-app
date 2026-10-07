@@ -115,11 +115,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                   QuickAccessToolsWidget(
                     onBoardingPassTap: () {
-                      if (hasBoardingPass) {
-                        context.push(AppRouterName.boardingPassScreen);
-                      } else {
-                        context.push(AppRouterName.scanScreen);
-                      }
+                      ref.read(navbarNotifierProvider.notifier).setIndex(1);
                     },
                   ),
                   SizedBox(height: 16.h),

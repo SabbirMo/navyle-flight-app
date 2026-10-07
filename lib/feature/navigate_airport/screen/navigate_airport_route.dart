@@ -221,7 +221,7 @@ class _NavigateAirportRouteState extends ConsumerState<NavigateAirportRoute>
               isNavigating: state.isNavigating,
               onLocateTap: _resetMapToCenter,
               onNavigateTap: () {
-                //context.push(AppRouterName.liveNavigationScreen);
+                context.push(AppRouterName.liveNavigationScreen);
               },
             ),
           ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/feature/home/model/quick_access_tool_model.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 /// A 2x2 Grid section displaying the 4 Quick Access Tool cards:
@@ -10,7 +12,7 @@ import 'package:navyla_flight_app/router/app_router_name.dart';
 /// - Boarding pass
 /// - Explore nearby
 /// - Ask NAVYLA
-class QuickAccessToolsWidget extends StatelessWidget {
+class QuickAccessToolsWidget extends ConsumerWidget {
   final List<QuickAccessToolModel>? tools;
   final VoidCallback? onAskNavylaTap;
   final VoidCallback? onBoardingPassTap;
@@ -23,7 +25,7 @@ class QuickAccessToolsWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final list = tools ?? QuickAccessToolModel.defaultTools;
 
     if (list.length < 4) {
@@ -47,7 +49,8 @@ class QuickAccessToolsWidget extends StatelessWidget {
                 item: list[1],
                 onTap:
                     onBoardingPassTap ??
-                    () => context.push(AppRouterName.boardingPassScreen),
+                    () =>
+                        ref.read(navbarNotifierProvider.notifier).setIndex(1),
               ),
             ),
           ],
