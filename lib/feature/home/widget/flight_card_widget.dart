@@ -140,6 +140,8 @@ class FlightWaveCard extends StatelessWidget {
                               fit: BoxFit.cover,
                               alignment: Alignment.center,
                               filterQuality: FilterQuality.low,
+                              color: palette.imageColor,
+                              colorBlendMode: palette.imageBlendMode,
                             ),
                             DecoratedBox(
                               decoration: BoxDecoration(
@@ -449,7 +451,7 @@ class FlightRouteWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = scale ?? FlightCardScope.of(context);
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -479,7 +481,7 @@ class FlightRouteWidget extends StatelessWidget {
               child: FlightPathIndicator(
                 scale: s,
                 iconColor: primaryColor,
-                lineColor: lineColor,
+                lineColor: isDark ? AppColors.white : lineColor,
               ),
             ),
             Flexible(
@@ -936,6 +938,8 @@ class _CardPalette {
     required this.lime,
     required this.scrim,
     this.secondaryScrim,
+    this.imageColor,
+    this.imageBlendMode,
   });
 
   final Gradient tab;
@@ -946,6 +950,8 @@ class _CardPalette {
   final Color lime;
   final Gradient scrim;
   final Gradient? secondaryScrim;
+  final Color? imageColor;
+  final BlendMode? imageBlendMode;
 
   static _CardPalette of(BuildContext context) {
     if (Theme.of(context).brightness == Brightness.dark) {
@@ -956,11 +962,29 @@ class _CardPalette {
         secondary: Color(0xFFF2CEAE),
         rule: Color(0x66FFFFFF),
         lime: Color(0xFFA3E635),
+        imageColor: Color(0xFFE56012),
+        imageBlendMode: BlendMode.color,
         scrim: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xDEC25211), Color(0xC4AB450E), Color(0xF26D2405)],
-          stops: [0.0, 0.50, 1.0],
+          colors: [
+            Color.fromARGB(0, 109, 36, 5),
+            Color.fromARGB(0, 109, 36, 5),
+            Color.fromARGB(150, 109, 36, 5),
+            Color(0xF26D2405),
+          ],
+          stops: [0.0, 0.46, 0.70, 0.88],
+        ),
+        secondaryScrim: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            Color.fromARGB(230, 165, 74, 25),
+            Color.fromARGB(210, 165, 74, 25),
+            Color.fromARGB(120, 165, 74, 25),
+            Color.fromARGB(0, 165, 74, 25),
+          ],
+          stops: [0.0, 0.28, 0.42, 0.54],
         ),
       );
     }

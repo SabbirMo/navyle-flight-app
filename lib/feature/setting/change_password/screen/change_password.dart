@@ -25,7 +25,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
       body: CommonScreen(
         child: Column(
           children: [
-            CustomBackButton(title: "CHANGE PASSWORD"),
+            CustomBackButton(title: "CHANGE PASSWORD", isBorder: true),
 
             Expanded(
               child: SingleChildScrollView(

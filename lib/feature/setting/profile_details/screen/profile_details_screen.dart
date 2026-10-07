@@ -51,7 +51,7 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
       body: CommonScreen(
         child: Column(
           children: [
-            const CustomBackButton(title: "PROFILE DETAILS"),
+            const CustomBackButton(title: "PROFILE DETAILS", isBorder: true),
             SizedBox(height: 24.h),
             Expanded(
               child: SingleChildScrollView(
