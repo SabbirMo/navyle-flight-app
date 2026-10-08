@@ -433,7 +433,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                               ? Container(
                                   width: double.infinity,
                                   color: isDark
-                                      ? AppColors.blackShadow
+                                      ? AppColors.reviewGray
                                       : Colors.white,
                                   padding: EdgeInsets.symmetric(
                                     vertical: 16.h,
@@ -444,8 +444,10 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
                                       _buildShareOption(
+                                        context: context,
                                         iconWidget: SvgPicture.asset(
                                           ImageAssets.whatsApp,
+
                                           width: 44.w,
                                           height: 44.w,
                                         ),
@@ -453,6 +455,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                                         onTap: () => _onSocialShare("WhatsApp"),
                                       ),
                                       _buildShareOption(
+                                        context: context,
                                         iconWidget: SvgPicture.asset(
                                           ImageAssets.message,
                                           width: 44.w,
@@ -462,6 +465,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                                         onTap: () => _onSocialShare("Messages"),
                                       ),
                                       _buildShareOption(
+                                        context: context,
                                         iconWidget: SvgPicture.asset(
                                           ImageAssets.mail,
                                           width: 44.w,
@@ -471,6 +475,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                                         onTap: () => _onSocialShare("Email"),
                                       ),
                                       _buildShareOption(
+                                        context: context,
                                         iconWidget: SvgPicture.asset(
                                           ImageAssets.smore,
                                           width: 44.w,
@@ -551,7 +556,9 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
     required Widget iconWidget,
     required String label,
     required VoidCallback onTap,
+    required BuildContext context,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -564,7 +571,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
             style: GoogleFonts.inter(
               fontSize: 11.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF64748B),
+              color: isDark ? AppColors.white : const Color(0xFF64748B),
             ),
           ),
         ],

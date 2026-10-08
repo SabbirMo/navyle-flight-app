@@ -109,4 +109,5 @@ class AppColors {
   static const Color darkBlack = Color(0xff0B101C); //#0B101C
   static const Color white80 = Color(0xCCFFF3EA); //#FFF3EACC
   static const Color darkPrimary = Color(0xffFF9D3E); //#FF9D3E
+  static const Color reviewGray = Color(0xff1C2A3F); //#1C2A3F
 }

@@ -6,6 +6,7 @@ import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
+import 'package:navyla_flight_app/core/widgets/main_image_size.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
 
 class ShareScreen extends StatelessWidget {
@@ -26,12 +27,17 @@ class ShareScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: CommonScreen(
         child: Column(
           children: [
             // Custom Back Button with Centered Logo
-            CustomBackButton(image: ImageAssets.navyla, imageSize: 110.w),
+            CustomBackButton(
+              image: isDark ? ImageAssets.navylaWhite : ImageAssets.navyla,
+              imageSize: 110.w,
+              isBorder: true,
+            ),
 
             Expanded(
               child: SingleChildScrollView(
@@ -45,8 +51,10 @@ class ShareScreen extends StatelessWidget {
                     Text(
                       "SHARE NAVYLA",
                       textAlign: TextAlign.center,
-                      style: StyleManager.sfProBold24(AppColors.blackShadow)
-                          .copyWith(
+                      style:
+                          StyleManager.sfProBold24(
+                            isDark ? AppColors.white : AppColors.blackShadow,
+                          ).copyWith(
                             letterSpacing: 0.8,
                             fontWeight: FontWeight.w900,
                             fontSize: 19.sp,
@@ -62,7 +70,9 @@ class ShareScreen extends StatelessWidget {
                         fontFamily: 'SF-Pro',
                         fontSize: 17.sp,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.blackShadow,
+                        color: isDark
+                            ? AppColors.white80
+                            : AppColors.blackShadow,
                       ),
                     ),
                     SizedBox(height: 6.h),
@@ -74,76 +84,53 @@ class ShareScreen extends StatelessWidget {
                       style: GoogleFonts.inter(
                         fontSize: 13.5.sp,
                         fontWeight: FontWeight.w400,
-                        color: const Color(0xFF64748B),
+                        color: isDark
+                            ? AppColors.grayD3D3D3
+                            : const Color(0xFF64748B),
                       ),
                     ),
                     SizedBox(height: 24.h),
 
                     // 1. Dark Navy Card ("From Home to Gate")
-                    GestureDetector(
-                      onTap: () => _onSocialShare(context, "NAVYLA link"),
-                      behavior: HitTestBehavior.opaque,
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20.w,
-                          vertical: 16.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF1C2A3F),
-                          borderRadius: BorderRadius.circular(20.r),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    ImageAssets.navylaWhite,
-                                    height: 28.h,
-                                    fit: BoxFit.contain,
-                                  ),
-
-                                  Text(
-                                    "From Home to Gate",
-                                    style: GoogleFonts.inter(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xffC4C4C4),
-                                    ),
-                                  ),
-
-                                  Text(
-                                    "navyla.app",
-                                    style: GoogleFonts.inter(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: const Color(0xFF94A3B8),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20.w,
+                        vertical: 16.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1C2A3F),
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          MainImageSize(size: 110.w),
+                          Image.asset(
+                            ImageAssets.navylaWhite,
+                            height: 42.h,
+                            fit: BoxFit.contain,
+                          ),
+                          SizedBox(height: 2.h),
+                          Text(
+                            "Made for Travelers",
+                            style: GoogleFonts.roboto(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -0.1,
+                              color: AppColors.white.withValues(alpha: 0.7),
                             ),
-                            Container(
-                              width: 36.w,
-                              height: 36.w,
-                              decoration: BoxDecoration(
-                                color: AppColors.white.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  size: 15.sp,
-                                  color: AppColors.white,
-                                ),
-                              ),
+                          ),
+                          SizedBox(height: 4.h),
+                          Text(
+                            "From Home to Gate",
+                            style: GoogleFonts.inter(
+                              fontSize: 14.sp,
+                              color: Color(0xffC4C4C4),
+                              fontWeight: FontWeight.w500,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(height: 18.h),
@@ -156,10 +143,12 @@ class ShareScreen extends StatelessWidget {
                         horizontal: 14.w,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: isDark ? AppColors.reviewGray : Colors.white,
                         borderRadius: BorderRadius.circular(18.r),
                         border: Border.all(
-                          color: const Color(0xFFF1F5F9),
+                          color: isDark
+                              ? AppColors.lightGray.withValues(alpha: 0.6)
+                              : const Color(0xFFF1F5F9),
                           width: 1.5,
                         ),
                         boxShadow: [
@@ -176,21 +165,25 @@ class ShareScreen extends StatelessWidget {
                           _buildShareOption(
                             iconWidget: ImageAssets.whatsApp,
                             label: "WhatsApp",
+                            context: context,
                             onTap: () => _onSocialShare(context, "WhatsApp"),
                           ),
                           _buildShareOption(
                             iconWidget: ImageAssets.message,
                             label: "Messages",
+                            context: context,
                             onTap: () => _onSocialShare(context, "Messages"),
                           ),
                           _buildShareOption(
                             iconWidget: ImageAssets.mail,
                             label: "Email",
+                            context: context,
                             onTap: () => _onSocialShare(context, "Email"),
                           ),
                           _buildShareOption(
                             iconWidget: ImageAssets.smore,
                             label: "More",
+                            context: context,
                             onTap: () => _onSocialShare(context, "More"),
                           ),
                         ],
@@ -211,7 +204,9 @@ class ShareScreen extends StatelessWidget {
     required String iconWidget,
     required String label,
     required VoidCallback onTap,
+    required BuildContext context,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -224,7 +219,7 @@ class ShareScreen extends StatelessWidget {
             style: GoogleFonts.inter(
               fontSize: 10.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.lightBlueGray,
+              color: isDark ? AppColors.white : AppColors.lightBlueGray,
             ),
           ),
         ],
