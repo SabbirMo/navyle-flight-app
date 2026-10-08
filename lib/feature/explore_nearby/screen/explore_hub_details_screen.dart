@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/feature/explore_nearby/model/explore_nearby_state.dart';
 
@@ -26,6 +27,8 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
   ];
 
   late final AirportHubItem _currentHub;
+  final TransformationController _transformationController =
+      TransformationController();
 
   @override
   void initState() {
@@ -40,29 +43,53 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
   }
 
   @override
+  void dispose() {
+    _transformationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFBF8F4),
+      backgroundColor: isDark ? AppColors.blackShadow : const Color(0xFFFBF8F4),
       body: SafeArea(
         child: Stack(
           children: [
-            // 1. Interactive Floor Plan / Airport Map
+            // 1. Interactive Floor Plan / Airport Map (uses dark_map.png in dark mode)
             Positioned.fill(
-              child: InteractiveViewer(
-                minScale: 0.8,
-                maxScale: 2.5,
-                boundaryMargin: EdgeInsets.all(80.r),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: 110.h,
-                      bottom: 270.h,
-                      left: 12.w,
-                      right: 12.w,
-                    ),
-                    child: _buildTerminalFloorLayout(),
-                  ),
+              child: GestureDetector(
+                onDoubleTap: () {
+                  _transformationController.value = Matrix4.identity();
+                },
+                child: InteractiveViewer(
+                  transformationController: _transformationController,
+                  minScale: 0.8,
+                  maxScale: 3.5,
+                  boundaryMargin: isDark
+                      ? const EdgeInsets.all(120)
+                      : EdgeInsets.all(80.r),
+                  child: isDark
+                      ? SizedBox.expand(
+                          child: Image.asset(
+                            ImageAssets.darkMap,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              top: 110.h,
+                              bottom: 270.h,
+                              left: 12.w,
+                              right: 12.w,
+                            ),
+                            child: _buildTerminalFloorLayout(),
+                          ),
+                        ),
                 ),
               ),
             ),
@@ -72,7 +99,7 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
               top: 0,
               left: 0,
               right: 0,
-              child: _buildTopHeaderAndChips(context),
+              child: _buildTopHeaderAndChips(context, isDark),
             ),
 
             // 3. Floating Bottom POI Card (Gordon Ramsay Plane Food)
@@ -80,7 +107,7 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
               left: 16.w,
               right: 16.w,
               bottom: 16.h,
-              child: _buildFloatingPoiCard(context),
+              child: _buildFloatingPoiCard(context, isDark),
             ),
           ],
         ),
@@ -88,15 +115,15 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
     );
   }
 
-  Widget _buildTopHeaderAndChips(BuildContext context) {
+  Widget _buildTopHeaderAndChips(BuildContext context, bool isDark) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xF5FBF8F4),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.textFieldBgColor : const Color(0xF5FBF8F4),
         boxShadow: [
           BoxShadow(
-            color: Color(0x05000000),
+            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
             blurRadius: 10,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -115,10 +142,14 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                     width: 38.w,
                     height: 38.w,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: isDark
+                          ? AppColors.white.withValues(alpha: 0.2)
+                          : Colors.white,
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
-                        color: const Color(0xFFE2E8F0),
+                        color: isDark
+                            ? AppColors.lightBlueGray.withValues(alpha: 0.3)
+                            : const Color(0xFFE2E8F0),
                         width: 1,
                       ),
                       boxShadow: const [
@@ -133,7 +164,9 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                       child: Icon(
                         Icons.arrow_back_ios_new_rounded,
                         size: 14.sp,
-                        color: const Color(0xFF1E293B),
+                        color: isDark
+                            ? AppColors.white
+                            : const Color(0xFF1E293B),
                       ),
                     ),
                   ),
@@ -147,7 +180,9 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                         fontSize: 12.5.sp,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 0.6,
-                        color: const Color(0xFF0F172A),
+                        color: isDark
+                            ? AppColors.white
+                            : const Color(0xFF0F172A),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -182,8 +217,14 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                         ),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? const Color(0xFF0F243A)
-                              : const Color(0xFFE9EEF4),
+                              ? (isDark
+                                    ? AppColors.primaryColor.withValues(
+                                        alpha: 0.25,
+                                      )
+                                    : const Color(0xFF0F243A))
+                              : (isDark
+                                    ? AppColors.darkBlack
+                                    : const Color(0xFFE9EEF4)),
                           borderRadius: BorderRadius.circular(22.r),
                         ),
                         child: Row(
@@ -204,8 +245,12 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                                     ? FontWeight.w700
                                     : FontWeight.w600,
                                 color: isSelected
-                                    ? const Color(0XFF5BB8FE)
-                                    : const Color(0xFF334155),
+                                    ? (isDark
+                                          ? AppColors.primaryColor
+                                          : const Color(0XFF5BB8FE))
+                                    : (isDark
+                                          ? AppColors.lightGray
+                                          : const Color(0xFF334155)),
                               ),
                             ),
                             if (isSelected) ...[
@@ -213,9 +258,11 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                               Container(
                                 width: 5.w,
                                 height: 5.w,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Color(0xFF38BDF8),
+                                  color: isDark
+                                      ? AppColors.primaryColor
+                                      : const Color(0xFF38BDF8),
                                 ),
                               ),
                             ],
@@ -548,17 +595,17 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
     );
   }
 
-  Widget _buildFloatingPoiCard(BuildContext context) {
+  Widget _buildFloatingPoiCard(BuildContext context, bool isDark) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.textFieldBgColor : Colors.white,
         borderRadius: BorderRadius.circular(24.r),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color(0x14000000),
+            color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.08),
             blurRadius: 24,
             spreadRadius: 1,
-            offset: Offset(0, 8),
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -584,7 +631,9 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                             vertical: 3.h,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFF7ED),
+                            color: isDark
+                                ? const Color(0xFF78350F).withValues(alpha: 0.3)
+                                : const Color(0xFFFFF7ED),
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                           child: Row(
@@ -593,7 +642,9 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                               Icon(
                                 Icons.stars_rounded,
                                 size: 12.sp,
-                                color: const Color(0xFF78350F),
+                                color: isDark
+                                    ? const Color(0xFFFBBF24)
+                                    : const Color(0xFF78350F),
                               ),
                               SizedBox(width: 4.w),
                               Text(
@@ -601,7 +652,9 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                                 style: GoogleFonts.inter(
                                   fontSize: 9.5.sp,
                                   fontWeight: FontWeight.w800,
-                                  color: const Color(0xFF78350F),
+                                  color: isDark
+                                      ? const Color(0xFFFBBF24)
+                                      : const Color(0xFF78350F),
                                 ),
                               ),
                             ],
@@ -626,7 +679,9 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                       style: GoogleFonts.inter(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF0F172A),
+                        color: isDark
+                            ? AppColors.white
+                            : const Color(0xFF0F172A),
                         height: 1.15,
                       ),
                     ),
@@ -660,7 +715,7 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
             style: GoogleFonts.inter(
               fontSize: 11.5.sp,
               fontWeight: FontWeight.w500,
-              color: const Color(0xFF64748B),
+              color: isDark ? AppColors.lightGray : const Color(0xFF64748B),
             ),
           ),
           SizedBox(height: 8.h),
@@ -682,14 +737,16 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 11.5.sp,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF0F172A),
+                    color: isDark ? AppColors.white : const Color(0xFF0F172A),
                   ),
                 ),
                 Text(
                   ' (1.2k)',
                   style: GoogleFonts.inter(
                     fontSize: 11.sp,
-                    color: const Color(0xFF64748B),
+                    color: isDark
+                        ? AppColors.lightGray
+                        : const Color(0xFF64748B),
                   ),
                 ),
                 Padding(
@@ -697,9 +754,11 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                   child: Container(
                     width: 3.w,
                     height: 3.w,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color(0xFFCBD5E1),
+                      color: isDark
+                          ? AppColors.lightBlueGray
+                          : const Color(0xFFCBD5E1),
                     ),
                   ),
                 ),
@@ -714,7 +773,9 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF334155),
+                    color: isDark
+                        ? AppColors.lightGray
+                        : const Color(0xFF334155),
                   ),
                 ),
                 Padding(
@@ -722,9 +783,11 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                   child: Container(
                     width: 3.w,
                     height: 3.w,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color(0xFFCBD5E1),
+                      color: isDark
+                          ? AppColors.lightBlueGray
+                          : const Color(0xFFCBD5E1),
                     ),
                   ),
                 ),
@@ -742,7 +805,7 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF0F172A),
+                    color: isDark ? AppColors.white : const Color(0xFF0F172A),
                   ),
                 ),
               ],
@@ -754,14 +817,16 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 9.h),
             decoration: BoxDecoration(
-              color: const Color(0xFFF0F6FE),
+              color: isDark ? AppColors.darkBlack : const Color(0xFFF0F6FE),
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: Row(
               children: [
                 Icon(
                   Icons.workspace_premium_outlined,
-                  color: const Color(0xFF78350F),
+                  color: isDark
+                      ? const Color(0xFFFBBF24)
+                      : const Color(0xFF78350F),
                   size: 18.sp,
                 ),
                 SizedBox(width: 8.w),
@@ -771,7 +836,7 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 10.5.sp,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF334155),
+                      color: isDark ? AppColors.white : const Color(0xFF334155),
                       height: 1.35,
                     ),
                   ),
@@ -790,7 +855,9 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
               width: double.infinity,
               height: 42.h,
               decoration: BoxDecoration(
-                color: const Color(0xFF2B1801),
+                color: isDark
+                    ? AppColors.primaryColor
+                    : const Color(0xFF2B1801),
                 borderRadius: BorderRadius.circular(24.r),
               ),
               child: Row(
@@ -798,7 +865,7 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                 children: [
                   Icon(
                     Icons.near_me_outlined,
-                    color: const Color(0xFFF59E0B),
+                    color: isDark ? Colors.white : const Color(0xFFF59E0B),
                     size: 16.sp,
                   ),
                   SizedBox(width: 8.w),
@@ -807,7 +874,7 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 13.5.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFFFFFBEB),
+                      color: Colors.white,
                     ),
                   ),
                 ],

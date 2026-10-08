@@ -55,14 +55,14 @@ class RouteSearchBar extends StatelessWidget {
               style: GoogleFonts.inter(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF1E293B),
+                color: isDark ? AppColors.white : const Color(0xFF1E293B),
               ),
               decoration: InputDecoration(
                 hintText: hintText ?? 'Search terminal',
                 hintStyle: GoogleFonts.inter(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w400,
-                  color: const Color(0xFF94A3B8),
+                  color: isDark ? AppColors.lightGray : const Color(0xFF94A3B8),
                 ),
                 filled: false,
                 fillColor: Colors.transparent,
@@ -88,7 +88,7 @@ class RouteSearchBar extends StatelessWidget {
                 child: Icon(
                   Icons.close_rounded,
                   size: 18.sp,
-                  color: const Color(0xFF94A3B8),
+                  color: isDark ? AppColors.lightGray : const Color(0xFF94A3B8),
                 ),
               ),
             ),
@@ -99,7 +99,7 @@ class RouteSearchBar extends StatelessWidget {
               child: Icon(
                 Icons.mic_none_rounded,
                 size: 22.sp,
-                color: const Color(0xFF64748B),
+                color: isDark ? AppColors.lightGray : const Color(0xFF64748B),
               ),
             ),
           ),

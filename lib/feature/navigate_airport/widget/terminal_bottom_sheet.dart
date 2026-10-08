@@ -52,7 +52,9 @@ class TerminalBottomSheet extends StatelessWidget {
               width: 38.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: const Color(0xFFE2E8F0),
+                color: isDark
+                    ? AppColors.white.withValues(alpha: 0.2)
+                    : const Color(0xFFE2E8F0),
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
@@ -87,11 +89,17 @@ class TerminalBottomSheet extends StatelessWidget {
                     height: 38.w,
                     decoration: BoxDecoration(
                       color: terminalInfo.isBookmarked
-                          ? const Color(0xFFDBEAFE)
-                          : const Color(0xFFEFF6FF),
+                          ? (isDark
+                              ? AppColors.blue2563EB.withValues(alpha: 0.25)
+                              : const Color(0xFFDBEAFE))
+                          : (isDark
+                              ? AppColors.white.withValues(alpha: 0.08)
+                              : const Color(0xFFEFF6FF)),
                       borderRadius: BorderRadius.circular(14.r),
                       border: Border.all(
-                        color: const Color(0xFFBFDBFE),
+                        color: isDark
+                            ? AppColors.blue2563EB.withValues(alpha: 0.4)
+                            : const Color(0xFFBFDBFE),
                         width: 0.8,
                       ),
                     ),
@@ -101,7 +109,9 @@ class TerminalBottomSheet extends StatelessWidget {
                             ? Icons.bookmark_rounded
                             : Icons.bookmark_outline_rounded,
                         size: 22.sp,
-                        color: AppColors.blue2563EB,
+                        color: isDark
+                            ? AppColors.blueShadow
+                            : AppColors.blue2563EB,
                       ),
                     ),
                   ),
@@ -121,7 +131,9 @@ class TerminalBottomSheet extends StatelessWidget {
                     vertical: 4.h,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFDCFCE7),
+                    color: isDark
+                        ? const Color(0xFF064E3B).withValues(alpha: 0.5)
+                        : const Color(0xFFDCFCE7),
                     borderRadius: BorderRadius.circular(16.r),
                   ),
                   child: Row(
@@ -141,7 +153,9 @@ class TerminalBottomSheet extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 11.sp,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF16A34A),
+                          color: isDark
+                              ? const Color(0xFF4ADE80)
+                              : const Color(0xFF16A34A),
                         ),
                       ),
                     ],
@@ -156,7 +170,9 @@ class TerminalBottomSheet extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w500,
-                      color: const Color(0xFF64748B),
+                      color: isDark
+                          ? AppColors.lightGray
+                          : const Color(0xFF64748B),
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -216,7 +232,9 @@ class TerminalBottomSheet extends StatelessWidget {
                             'Tap here to choose an airport to explore',
                             style: GoogleFonts.inter(
                               fontSize: 11.sp,
-                              color: const Color(0xFF64748B),
+                              color: isDark
+                                  ? AppColors.lightGray
+                                  : const Color(0xFF64748B),
                             ),
                           ),
                         ],

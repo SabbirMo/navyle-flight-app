@@ -13,6 +13,7 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(exploreNearbyNotifierProvider);
     final notifier = ref.read(exploreNearbyNotifierProvider.notifier);
     final hubs = state.filteredHubs;
@@ -20,11 +21,11 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.textFieldBgColor : Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
+            color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.12),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -47,7 +48,7 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                   style: GoogleFonts.inter(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF0F172A),
+                    color: isDark ? AppColors.white : const Color(0xFF0F172A),
                   ),
                 ),
                 SizedBox(height: 3.h),
@@ -56,7 +57,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                   style: GoogleFonts.inter(
                     fontSize: 11.5.sp,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xFF64748B),
+                    color: isDark
+                        ? AppColors.lightGray
+                        : const Color(0xFF64748B),
                   ),
                 ),
                 SizedBox(height: 14.h),
@@ -68,17 +71,24 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                     vertical: 9.h,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF8FAFC),
+                    color:
+                        isDark ? AppColors.darkBlack : const Color(0xFFF8FAFC),
                     borderRadius: BorderRadius.circular(14.r),
-                    border: Border.all(color: const Color(0xFFF1F5F9)),
+                    border: Border.all(
+                      color: isDark
+                          ? AppColors.lightBlueGray.withValues(alpha: 0.25)
+                          : const Color(0xFFF1F5F9),
+                    ),
                   ),
                   child: Row(
                     children: [
                       Container(
                         width: 32.w,
                         height: 32.w,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFFEF3C7),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? const Color(0xFF78350F).withValues(alpha: 0.35)
+                              : const Color(0xFFFEF3C7),
                           shape: BoxShape.circle,
                         ),
                         child: Center(
@@ -87,7 +97,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                                 ? Icons.location_on_outlined
                                 : Icons.location_off_outlined,
                             size: 15.sp,
-                            color: const Color(0xFFD97706),
+                            color: isDark
+                                ? const Color(0xFFFBBF24)
+                                : const Color(0xFFD97706),
                           ),
                         ),
                       ),
@@ -103,7 +115,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                               style: GoogleFonts.inter(
                                 fontSize: 12.5.sp,
                                 fontWeight: FontWeight.w700,
-                                color: const Color(0xFF1E293B),
+                                color: isDark
+                                    ? AppColors.white
+                                    : const Color(0xFF1E293B),
                               ),
                             ),
                             SizedBox(height: 1.h),
@@ -113,7 +127,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                                   : 'Showing global hubs',
                               style: GoogleFonts.inter(
                                 fontSize: 10.5.sp,
-                                color: const Color(0xFF64748B),
+                                color: isDark
+                                    ? AppColors.lightGray
+                                    : const Color(0xFF64748B),
                               ),
                             ),
                           ],
@@ -129,9 +145,17 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                             vertical: 6.h,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: isDark
+                                ? AppColors.textFieldBgColor
+                                : Colors.white,
                             borderRadius: BorderRadius.circular(20.r),
-                            border: Border.all(color: const Color(0xFFE2E8F0)),
+                            border: Border.all(
+                              color: isDark
+                                  ? AppColors.lightBlueGray.withValues(
+                                      alpha: 0.3,
+                                    )
+                                  : const Color(0xFFE2E8F0),
+                            ),
                           ),
                           child: Text(
                             state.isLocationEnabled
@@ -140,7 +164,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                             style: GoogleFonts.inter(
                               fontSize: 11.sp,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF1E293B),
+                              color: isDark
+                                  ? AppColors.white
+                                  : const Color(0xFF1E293B),
                             ),
                           ),
                         ),
@@ -160,7 +186,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                         fontSize: 10.5.sp,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.8,
-                        color: const Color(0xFF94A3B8),
+                        color: isDark
+                            ? AppColors.lightGray
+                            : const Color(0xFF94A3B8),
                       ),
                     ),
                     Container(
@@ -169,7 +197,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                         vertical: 3.h,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF1F5F9),
+                        color: isDark
+                            ? AppColors.darkBlack
+                            : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(10.r),
                       ),
                       child: Text(
@@ -177,7 +207,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                         style: GoogleFonts.inter(
                           fontSize: 10.sp,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF64748B),
+                          color: isDark
+                              ? AppColors.lightGray
+                              : const Color(0xFF64748B),
                         ),
                       ),
                     ),
@@ -199,12 +231,18 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                         vertical: 10.h,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: isDark ? AppColors.darkBlack : Colors.white,
                         borderRadius: BorderRadius.circular(14.r),
                         border: Border.all(
                           color: isSelected
-                              ? const Color(0xFF0F172A)
-                              : const Color(0xFFE2E8F0),
+                              ? (isDark
+                                  ? AppColors.primaryColor
+                                  : const Color(0xFF0F172A))
+                              : (isDark
+                                  ? AppColors.lightBlueGray.withValues(
+                                      alpha: 0.25,
+                                    )
+                                  : const Color(0xFFE2E8F0)),
                           width: isSelected ? 1.6 : 1.0,
                         ),
                       ),
@@ -216,8 +254,12 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                             height: 44.w,
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? const Color(0xFF0F172A)
-                                  : const Color(0xFFF1F5F9),
+                                  ? (isDark
+                                      ? AppColors.primaryColor
+                                      : const Color(0xFF0F172A))
+                                  : (isDark
+                                      ? AppColors.textFieldBgColor
+                                      : const Color(0xFFF1F5F9)),
                               borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Column(
@@ -230,7 +272,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                                     fontWeight: FontWeight.w800,
                                     color: isSelected
                                         ? Colors.white
-                                        : const Color(0xFF1E293B),
+                                        : (isDark
+                                            ? AppColors.white
+                                            : const Color(0xFF1E293B)),
                                   ),
                                 ),
                                 Text(
@@ -239,7 +283,11 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                                     fontSize: 8.sp,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 0.6,
-                                    color: const Color(0xFF94A3B8),
+                                    color: isSelected
+                                        ? Colors.white.withValues(alpha: 0.8)
+                                        : (isDark
+                                            ? AppColors.lightGray
+                                            : const Color(0xFF94A3B8)),
                                   ),
                                 ),
                               ],
@@ -260,7 +308,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                                         style: GoogleFonts.inter(
                                           fontSize: 13.5.sp,
                                           fontWeight: FontWeight.w700,
-                                          color: const Color(0xFF0F172A),
+                                          color: isDark
+                                              ? AppColors.white
+                                              : const Color(0xFF0F172A),
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -274,9 +324,12 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                                           vertical: 2.h,
                                         ),
                                         decoration: BoxDecoration(
-                                          color:
-                                              hub.badgeColor ??
-                                              const Color(0xFFEFF6FF),
+                                          color: isDark
+                                              ? AppColors.blue2563EB.withValues(
+                                                  alpha: 0.2,
+                                                )
+                                              : (hub.badgeColor ??
+                                                  const Color(0xFFEFF6FF)),
                                           borderRadius: BorderRadius.circular(
                                             6.r,
                                           ),
@@ -286,9 +339,10 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                                           style: GoogleFonts.inter(
                                             fontSize: 9.sp,
                                             fontWeight: FontWeight.w600,
-                                            color:
-                                                hub.badgeTextColor ??
-                                                const Color(0xFF2563EB),
+                                            color: isDark
+                                                ? AppColors.blueShadow
+                                                : (hub.badgeTextColor ??
+                                                    const Color(0xFF2563EB)),
                                           ),
                                         ),
                                       ),
@@ -300,7 +354,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                                   hub.subtitle,
                                   style: GoogleFonts.inter(
                                     fontSize: 11.sp,
-                                    color: const Color(0xFF64748B),
+                                    color: isDark
+                                        ? AppColors.lightGray
+                                        : const Color(0xFF64748B),
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -315,14 +371,16 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                             Container(
                               width: 20.w,
                               height: 20.w,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF0F172A),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? AppColors.primaryColor
+                                    : const Color(0xFF0F172A),
                                 shape: BoxShape.circle,
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Icon(
                                   Icons.check,
-                                  size: 12.sp,
+                                  size: 12,
                                   color: Colors.white,
                                 ),
                               ),
@@ -334,7 +392,11 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: const Color(0xFFCBD5E1),
+                                  color: isDark
+                                      ? AppColors.lightBlueGray.withValues(
+                                          alpha: 0.4,
+                                        )
+                                      : const Color(0xFFCBD5E1),
                                   width: 1.5,
                                 ),
                               ),
@@ -353,7 +415,9 @@ class ExploreNearbySearchSheet extends ConsumerWidget {
                     width: double.infinity,
                     height: 44.h,
                     decoration: BoxDecoration(
-                      color: AppColors.blackShadow,
+                      color: isDark
+                          ? AppColors.primaryColor
+                          : AppColors.blackShadow,
                       borderRadius: BorderRadius.circular(26.r),
                     ),
                     child: Row(

@@ -80,13 +80,14 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
   }
 
   void _showRoutesModal() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (ctx) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? AppColors.textFieldBgColor : Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
           ),
           padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 24.h),
@@ -99,7 +100,9 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
                   width: 38.w,
                   height: 4.h,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE2E8F0),
+                    color: isDark
+                        ? AppColors.white.withValues(alpha: 0.2)
+                        : const Color(0xFFE2E8F0),
                     borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
@@ -110,7 +113,7 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
                 style: GoogleFonts.inter(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF0F172A),
+                  color: isDark ? AppColors.white : const Color(0xFF0F172A),
                 ),
               ),
               SizedBox(height: 12.h),
@@ -119,6 +122,7 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
                 duration: '40 min',
                 distance: '2.9 km',
                 isSelected: true,
+                isDark: isDark,
                 onTap: () => Navigator.of(ctx).pop(),
               ),
               _buildRouteTile(
@@ -126,6 +130,7 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
                 duration: '43 min',
                 distance: '3.2 km',
                 isSelected: false,
+                isDark: isDark,
                 onTap: () => Navigator.of(ctx).pop(),
               ),
             ],
@@ -140,15 +145,24 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
     required String duration,
     required String distance,
     required bool isSelected,
+    required bool isDark,
     required VoidCallback onTap,
   }) {
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFFFFF7ED) : const Color(0xFFF8FAFC),
+        color: isSelected
+            ? (isDark
+                ? AppColors.primaryColor.withValues(alpha: 0.2)
+                : const Color(0xFFFFF7ED))
+            : (isDark ? AppColors.darkBlack : const Color(0xFFF8FAFC)),
         borderRadius: BorderRadius.circular(14.r),
         border: Border.all(
-          color: isSelected ? AppColors.primaryColor : const Color(0xFFE2E8F0),
+          color: isSelected
+              ? AppColors.primaryColor
+              : (isDark
+                  ? AppColors.lightBlueGray.withValues(alpha: 0.3)
+                  : const Color(0xFFE2E8F0)),
           width: isSelected ? 1.4 : 1.0,
         ),
       ),
@@ -158,14 +172,14 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
           style: GoogleFonts.inter(
             fontSize: 14.sp,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            color: const Color(0xFF0F172A),
+            color: isDark ? AppColors.white : const Color(0xFF0F172A),
           ),
         ),
         subtitle: Text(
           '$distance • Walking route',
           style: GoogleFonts.inter(
             fontSize: 12.sp,
-            color: const Color(0xFF64748B),
+            color: isDark ? AppColors.lightGray : const Color(0xFF64748B),
           ),
         ),
         trailing: Text(
@@ -175,7 +189,7 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
             fontWeight: FontWeight.w700,
             color: isSelected
                 ? AppColors.primaryColor
-                : const Color(0xFF0F172A),
+                : (isDark ? AppColors.white : const Color(0xFF0F172A)),
           ),
         ),
         onTap: onTap,

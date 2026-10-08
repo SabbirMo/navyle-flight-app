@@ -69,6 +69,8 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Consumer(
       builder: (context, ref, child) {
         final state = ref.watch(exploreNearbyNotifierProvider);
@@ -76,10 +78,12 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
         final isSearching = state.searchQuery.trim().isNotEmpty;
 
         return Scaffold(
-          backgroundColor: const Color(0xFFF8FAFC),
+          backgroundColor: isDark
+              ? AppColors.blackShadow
+              : const Color(0xFFF8FAFC),
           body: Stack(
             children: [
-              // 1. Moveable Map View (Interactive route map using route.png)
+              // 1. Moveable Map View (Interactive route map using route.png / dark_map.png)
               Positioned.fill(
                 child: GestureDetector(
                   onTap: () {
@@ -93,7 +97,7 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                     boundaryMargin: const EdgeInsets.all(400),
                     child: SizedBox.expand(
                       child: Image.asset(
-                        ImageAssets.routeMap,
+                        isDark ? ImageAssets.darkMap : ImageAssets.routeMap,
                         fit: BoxFit.cover,
                         alignment: Alignment.center,
                       ),
@@ -107,7 +111,7 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                 top: 0,
                 left: 0,
                 right: 0,
-                child: _buildHeaderCard(context, state, notifier),
+                child: _buildHeaderCard(context, state, notifier, isDark),
               ),
 
               // 3. Floating Recenter Map Button (Only shown when not searching)
@@ -122,11 +126,15 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                         width: 44.w,
                         height: 44.w,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: isDark
+                              ? AppColors.textFieldBgColor
+                              : Colors.white,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.12),
+                              color: Colors.black.withValues(
+                                alpha: isDark ? 0.35 : 0.12,
+                              ),
                               blurRadius: 10,
                               offset: const Offset(0, 3),
                             ),
@@ -135,7 +143,9 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                         child: Center(
                           child: Icon(
                             Icons.my_location_rounded,
-                            color: const Color(0xFF2563EB),
+                            color: isDark
+                                ? AppColors.white
+                                : const Color(0xFF2563EB),
                             size: 22.sp,
                           ),
                         ),
@@ -175,17 +185,18 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
     BuildContext context,
     ExploreNearbyState state,
     ExploreNearbyNotifier notifier,
+    bool isDark,
   ) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.textFieldBgColor : Colors.white,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(30.r),
           bottomRight: Radius.circular(30.r),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
+            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.07),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -207,14 +218,18 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                       width: 38.w,
                       height: 38.w,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF1F5F9),
+                        color: isDark
+                            ? AppColors.white.withValues(alpha: 0.1)
+                            : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Center(
                         child: Icon(
                           Icons.arrow_back_ios_new_rounded,
                           size: 15.sp,
-                          color: const Color(0xFF1E293B),
+                          color: isDark
+                              ? AppColors.white
+                              : const Color(0xFF1E293B),
                         ),
                       ),
                     ),
@@ -227,7 +242,9 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                           fontSize: 15.5.sp,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.5,
-                          color: const Color(0xFF0F172A),
+                          color: isDark
+                              ? AppColors.white
+                              : const Color(0xFF0F172A),
                         ),
                       ),
                     ),
@@ -273,12 +290,20 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 14.w),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: isSelected
+                              ? (isDark ? Colors.transparent : Colors.white)
+                              : (isDark ? AppColors.darkBlack : Colors.white),
                           borderRadius: BorderRadius.circular(20.r),
                           border: Border.all(
                             color: isSelected
-                                ? const Color(0xFF1A73E8)
-                                : const Color(0xFFE2E8F0),
+                                ? (isDark
+                                      ? AppColors.blue2563EB
+                                      : const Color(0xFF1A73E8))
+                                : (isDark
+                                      ? AppColors.lightBlueGray.withValues(
+                                          alpha: 0.4,
+                                        )
+                                      : const Color(0xFFE2E8F0)),
                             width: isSelected ? 1.4 : 1.0,
                           ),
                         ),

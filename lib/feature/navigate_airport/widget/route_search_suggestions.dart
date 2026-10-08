@@ -16,16 +16,18 @@ class RouteSearchSuggestions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     if (suggestions.isEmpty) {
       return Container(
         margin: EdgeInsets.symmetric(horizontal: 16.w),
         padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.w),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? AppColors.textFieldBgColor : Colors.white,
           borderRadius: BorderRadius.circular(18.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.08),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -36,7 +38,7 @@ class RouteSearchSuggestions extends StatelessWidget {
             'No matching locations found',
             style: GoogleFonts.inter(
               fontSize: 13.sp,
-              color: const Color(0xFF64748B),
+              color: isDark ? AppColors.lightGray : const Color(0xFF64748B),
             ),
           ),
         ),
@@ -47,11 +49,11 @@ class RouteSearchSuggestions extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16.w),
       constraints: BoxConstraints(maxHeight: 240.h),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.textFieldBgColor : Colors.white,
         borderRadius: BorderRadius.circular(18.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.10),
+            color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.10),
             blurRadius: 18,
             offset: const Offset(0, 6),
           ),
@@ -65,7 +67,9 @@ class RouteSearchSuggestions extends StatelessWidget {
           itemCount: suggestions.length,
           separatorBuilder: (context, index) => Divider(
             height: 1,
-            color: const Color(0xFFF1F5F9),
+            color: isDark
+                ? AppColors.white.withValues(alpha: 0.08)
+                : const Color(0xFFF1F5F9),
             indent: 52.w,
           ),
           itemBuilder: (context, index) {
@@ -80,7 +84,9 @@ class RouteSearchSuggestions extends StatelessWidget {
                       width: 36.w,
                       height: 36.w,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF1F5F9),
+                        color: isDark
+                            ? AppColors.darkBlack
+                            : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(10.r),
                       ),
                       child: Icon(
@@ -99,7 +105,9 @@ class RouteSearchSuggestions extends StatelessWidget {
                             style: GoogleFonts.inter(
                               fontSize: 13.5.sp,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF0F172A),
+                              color: isDark
+                                  ? AppColors.white
+                                  : const Color(0xFF0F172A),
                             ),
                           ),
                           SizedBox(height: 2.h),
@@ -107,7 +115,9 @@ class RouteSearchSuggestions extends StatelessWidget {
                             poi.subtitle,
                             style: GoogleFonts.inter(
                               fontSize: 11.5.sp,
-                              color: const Color(0xFF64748B),
+                              color: isDark
+                                  ? AppColors.lightGray
+                                  : const Color(0xFF64748B),
                             ),
                           ),
                         ],
@@ -119,7 +129,9 @@ class RouteSearchSuggestions extends StatelessWidget {
                         vertical: 3.h,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEFF6FF),
+                        color: isDark
+                            ? AppColors.blue2563EB.withValues(alpha: 0.2)
+                            : const Color(0xFFEFF6FF),
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: Text(
@@ -127,7 +139,9 @@ class RouteSearchSuggestions extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 10.5.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.blue2563EB,
+                          color: isDark
+                              ? AppColors.blueShadow
+                              : AppColors.blue2563EB,
                         ),
                       ),
                     ),

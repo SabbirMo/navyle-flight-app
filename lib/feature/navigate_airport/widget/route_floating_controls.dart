@@ -16,6 +16,7 @@ class RouteFloatingControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -26,11 +27,11 @@ class RouteFloatingControls extends StatelessWidget {
             width: 42.w,
             height: 42.w,
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: isDark ? AppColors.textFieldBgColor : AppColors.white,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.10),
+                  color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.10),
                   blurRadius: 10,
                   offset: const Offset(0, 3),
                 ),
@@ -40,7 +41,7 @@ class RouteFloatingControls extends StatelessWidget {
               child: Icon(
                 Icons.my_location_rounded,
                 size: 20.sp,
-                color: const Color(0xFF475569),
+                color: isDark ? AppColors.white : const Color(0xFF475569),
               ),
             ),
           ),
