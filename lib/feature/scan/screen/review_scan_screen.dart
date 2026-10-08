@@ -53,19 +53,24 @@ class ReviewScanScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scanState = ref.watch(scanCameraNotifierProvider);
     final currentImagePath = imagePath ?? scanState.capturedImage?.path;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(ImageAssets.scanCameraBg),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Color.fromARGB(57, 252, 224, 199),
-              BlendMode.srcOver,
+            image: AssetImage(
+              isDark ? ImageAssets.darkShowC : ImageAssets.scanCameraBg,
             ),
+            fit: BoxFit.cover,
+            colorFilter: isDark
+                ? null
+                : ColorFilter.mode(
+                    Color.fromARGB(57, 252, 224, 199),
+                    BlendMode.srcOver,
+                  ),
           ),
         ),
         child: SafeArea(
@@ -78,7 +83,7 @@ class ReviewScanScreen extends ConsumerWidget {
                 children: [
                   SizedBox(height: 4.h),
                   // Header Back button with centered title
-                  const CustomBackButton(title: 'Review Scan'),
+                  const CustomBackButton(title: 'Review Scan', isBorder: true),
                   SizedBox(height: 16.h),
 
                   // Boarding Pass small category label
@@ -87,7 +92,7 @@ class ReviewScanScreen extends ConsumerWidget {
                     style: GoogleFonts.inter(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.black,
+                      color: isDark ? AppColors.white : AppColors.black,
                     ),
                   ),
                   SizedBox(height: 4.h),
@@ -98,7 +103,7 @@ class ReviewScanScreen extends ConsumerWidget {
                     style: GoogleFonts.inter(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.black,
+                      color: isDark ? AppColors.white : AppColors.black,
                     ),
                   ),
                   SizedBox(height: 4.h),
@@ -109,7 +114,9 @@ class ReviewScanScreen extends ConsumerWidget {
                     style: GoogleFonts.inter(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
-                      color: AppColors.grayColor,
+                      color: isDark
+                          ? AppColors.lightBlueGray
+                          : AppColors.grayColor,
                       height: 1.4,
                     ),
                   ),
@@ -162,8 +169,13 @@ class ReviewScanScreen extends ConsumerWidget {
                       vertical: 14.h,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: isDark ? AppColors.darkBlack : Colors.white,
                       borderRadius: BorderRadius.circular(16.r),
+                      border: isDark
+                          ? Border.all(
+                              color: AppColors.lightGray.withValues(alpha: 0.6),
+                            )
+                          : null,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.04),
@@ -180,7 +192,7 @@ class ReviewScanScreen extends ConsumerWidget {
                           style: GoogleFonts.inter(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.black,
+                            color: isDark ? AppColors.white : AppColors.black,
                           ),
                         ),
                         SizedBox(height: 4.h),
@@ -189,7 +201,9 @@ class ReviewScanScreen extends ConsumerWidget {
                           style: GoogleFonts.inter(
                             fontSize: 11.sp,
                             fontWeight: FontWeight.w400,
-                            color: AppColors.grayColor,
+                            color: isDark
+                                ? AppColors.lightGray
+                                : AppColors.grayColor,
                           ),
                         ),
                       ],

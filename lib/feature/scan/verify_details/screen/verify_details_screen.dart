@@ -183,7 +183,9 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
     TextCapitalization textCapitalization = TextCapitalization.characters,
     VoidCallback? onTap,
     bool readOnly = false,
+    required BuildContext context,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20.r),
@@ -191,9 +193,14 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 12.h),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? AppColors.darkBlack : Colors.white,
           borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: const Color(0xFFF1F5F9), width: 1.2),
+          border: Border.all(
+            color: isDark
+                ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+                : const Color(0xFFF1F5F9),
+            width: 1.2,
+          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -232,11 +239,13 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.black,
+                      color: isDark ? AppColors.white : AppColors.black,
                       letterSpacing: 0.3,
                     ),
                     decoration: InputDecoration(
                       isDense: true,
+                      filled: false,
+                      fillColor: Colors.transparent,
                       contentPadding: EdgeInsets.zero,
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -261,13 +270,13 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final isManual = widget.isManual;
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return CommonScreen(
       child: Column(
         children: [
           SizedBox(height: 4.h),
           // Header with Back Button and centered VERIFY DETAILS title
-          const CustomBackButton(title: 'VERIFY DETAILS'),
+          const CustomBackButton(title: 'VERIFY DETAILS', isBorder: true),
           SizedBox(height: 18.h),
 
           Expanded(
@@ -283,10 +292,14 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                       vertical: 14.h,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFDCFCE7).withValues(alpha: 0.2),
+                      color: isDark
+                          ? Colors.transparent
+                          : const Color(0xFFDCFCE7).withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(20.r),
                       border: Border.all(
-                        color: const Color(0xFF22C55E).withValues(alpha: 0.4),
+                        color: isDark
+                            ? AppColors.lightGray.withValues(alpha: 0.4)
+                            : const Color(0xFF22C55E).withValues(alpha: 0.4),
                         width: 1.0,
                       ),
                     ),
@@ -319,7 +332,9 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                                 style: GoogleFonts.inter(
                                   fontSize: 13.sp,
                                   fontWeight: FontWeight.w900,
-                                  color: AppColors.black,
+                                  color: isDark
+                                      ? AppColors.white
+                                      : AppColors.black,
                                 ),
                               ),
                               SizedBox(height: 3.h),
@@ -330,7 +345,9 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                                 style: GoogleFonts.inter(
                                   fontSize: 10.sp,
                                   fontWeight: FontWeight.w500,
-                                  color: AppColors.grayColor,
+                                  color: isDark
+                                      ? AppColors.lightBlueGray
+                                      : AppColors.grayColor,
                                 ),
                               ),
                             ],
@@ -343,6 +360,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
 
                   // Name Field
                   _buildCard(
+                    context: context,
                     label: 'NAME',
                     controller: _nameController,
                     hintText: 'e.g. Alex Rivers',
@@ -354,6 +372,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
 
                   // Flight Number Field
                   _buildCard(
+                    context: context,
                     label: 'FLIGHT NUMBER',
                     controller: _flightNumberController,
                     hintText: 'e.g. BA 0215',
@@ -366,6 +385,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                     children: [
                       Expanded(
                         child: _buildCard(
+                          context: context,
                           label: 'FROM',
                           controller: _fromController,
                           hintText: 'e.g. AMS',
@@ -374,6 +394,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                       SizedBox(width: 12.w),
                       Expanded(
                         child: _buildCard(
+                          context: context,
                           label: 'TO',
                           controller: _toController,
                           hintText: 'e.g. FRA',
@@ -388,6 +409,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                     children: [
                       Expanded(
                         child: _buildCard(
+                          context: context,
                           label: 'DATE',
                           controller: _dateController,
                           hintText: 'e.g. 24/09/26',
@@ -398,6 +420,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                       SizedBox(width: 12.w),
                       Expanded(
                         child: _buildCard(
+                          context: context,
                           label: 'SEAT',
                           controller: _seatController,
                           hintText: 'e.g. 14A',
@@ -412,6 +435,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                     children: [
                       Expanded(
                         child: _buildCard(
+                          context: context,
                           label: 'TERMINAL',
                           controller: _terminalController,
                           hintText: 'e.g. 5',
@@ -420,6 +444,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                       SizedBox(width: 12.w),
                       Expanded(
                         child: _buildCard(
+                          context: context,
                           label: 'GATE',
                           controller: _gateController,
                           hintText: 'e.g. B24',
@@ -437,10 +462,14 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                       vertical: 8.h,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEFF6FF),
+                      color: isDark
+                          ? AppColors.darkBlack
+                          : const Color(0xFFEFF6FF),
                       borderRadius: BorderRadius.circular(14.r),
                       border: Border.all(
-                        color: const Color(0xFFBFDBFE),
+                        color: isDark
+                            ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+                            : const Color(0xFFBFDBFE),
                         width: 1.0,
                       ),
                     ),

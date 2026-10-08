@@ -17,11 +17,14 @@ class ScanOptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.sp),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFFEFF4FA),
+          color: isDark
+              ? AppColors.white.withValues(alpha: 0.36)
+              : const Color(0xFFEFF4FA),
           borderRadius: BorderRadius.circular(18.r),
           border: Border.all(color: AppColors.white, width: 2),
           boxShadow: [
@@ -80,7 +83,7 @@ class ScanOptionCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 11.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF1E293B),
+                      color: isDark ? AppColors.white : const Color(0xFF1E293B),
                     ),
                   ),
                 ],

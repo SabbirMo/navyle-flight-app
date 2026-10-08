@@ -43,13 +43,16 @@ class ScanScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(ImageAssets.scanBg),
+            image: AssetImage(
+              isDark ? ImageAssets.darkScan : ImageAssets.scanBg,
+            ),
             fit: BoxFit.cover,
           ),
         ),
@@ -63,7 +66,7 @@ class ScanScreen extends StatelessWidget {
                   // Back button at top left
                   const Align(
                     alignment: Alignment.topLeft,
-                    child: CustomBackButton(),
+                    child: CustomBackButton(isBorder: true),
                   ),
                   SizedBox(height: 40.h),
 
@@ -86,7 +89,7 @@ class ScanScreen extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 24.sp,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF1E293B),
+                      color: isDark ? AppColors.white : const Color(0xFF1E293B),
                     ),
                   ),
                   SizedBox(height: 8.h),
@@ -98,7 +101,9 @@ class ScanScreen extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xFF64748B),
+                      color: isDark
+                          ? AppColors.grayD3D3D3.withValues(alpha: 0.9)
+                          : const Color(0xFF64748B),
                       height: 1.45,
                     ),
                   ),

@@ -83,4 +83,7 @@ class ImageAssets {
   static const String mail = "$_svgPath/mail.svg";
   static const String smore = "$_svgPath/smore.svg";
   static const String review = "$_svgPath/review.svg";
+
+  static const String darkScan = "$_imagePath/dark_scan.png";
+  static const String darkShowC = "$_imagePath/dark_show_camera.png";
 }

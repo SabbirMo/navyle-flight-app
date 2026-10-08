@@ -17,10 +17,7 @@ class ScanCameraScreen extends ConsumerWidget {
   const ScanCameraScreen({super.key});
 
   void _handleManualEntry(BuildContext context) {
-    context.push(
-      AppRouterName.verifyDetailsScreen,
-      extra: {'isManual': true},
-    );
+    context.push(AppRouterName.verifyDetailsScreen, extra: {'isManual': true});
   }
 
   Widget _buildCameraContent(ScanCameraState state) {
@@ -61,19 +58,23 @@ class ScanCameraScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(scanCameraNotifierProvider);
     final notifier = ref.read(scanCameraNotifierProvider.notifier);
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(ImageAssets.scanCameraBg),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Color.fromARGB(57, 252, 224, 199),
-              BlendMode.srcOver,
+            image: AssetImage(
+              isDark ? ImageAssets.darkShowC : ImageAssets.scanCameraBg,
             ),
+            fit: BoxFit.cover,
+            colorFilter: isDark
+                ? null
+                : ColorFilter.mode(
+                    Color.fromARGB(57, 252, 224, 199),
+                    BlendMode.srcOver,
+                  ),
           ),
         ),
         child: SafeArea(
@@ -81,11 +82,11 @@ class ScanCameraScreen extends ConsumerWidget {
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Column(
               children: [
-                SizedBox(height: 4.h),
                 // Top header with Back button & NAVYLA logo
                 const CustomBackButton(
                   image: ImageAssets.navylaWhite,
                   isImage: true,
+                  isBorder: true,
                 ),
                 SizedBox(height: 8.h),
 
@@ -96,7 +97,7 @@ class ScanCameraScreen extends ConsumerWidget {
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
                     letterSpacing: 2.5,
-                    color: const Color(0xFF1A1A1A),
+                    color: isDark ? AppColors.white : const Color(0xFF1A1A1A),
                   ),
                 ),
                 SizedBox(height: 14.h),
@@ -151,7 +152,9 @@ class ScanCameraScreen extends ConsumerWidget {
                         style: GoogleFonts.inter(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF1E293B),
+                          color: isDark
+                              ? AppColors.white
+                              : const Color(0xFF1E293B),
                         ),
                       ),
                       SizedBox(height: 6.h),
@@ -161,7 +164,7 @@ class ScanCameraScreen extends ConsumerWidget {
                         style: GoogleFonts.inter(
                           fontSize: 10.sp,
                           fontWeight: FontWeight.w400,
-                          color: AppColors.black,
+                          color: isDark ? AppColors.lightGray : AppColors.black,
                         ),
                       ),
                       SizedBox(height: 20.h),
@@ -228,6 +231,7 @@ class ScanCameraScreen extends ConsumerWidget {
                           children: [
                             // Gallery button
                             scanPassWidget(
+                              context: context,
                               onTap: () async {
                                 final picked = await notifier
                                     .pickGalleryImage();
@@ -244,6 +248,7 @@ class ScanCameraScreen extends ConsumerWidget {
 
                             // Manual button
                             scanPassWidget(
+                              context: context,
                               onTap: () => _handleManualEntry(context),
                               icon: Icons.keyboard_alt_outlined,
                               title: 'MANUAL',
@@ -267,7 +272,9 @@ class ScanCameraScreen extends ConsumerWidget {
     required VoidCallback onTap,
     required IconData icon,
     required String title,
+    required BuildContext context,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -276,7 +283,9 @@ class ScanCameraScreen extends ConsumerWidget {
             width: 46.w,
             height: 46.w,
             decoration: BoxDecoration(
-              color: Colors.transparent,
+              color: isDark
+                  ? AppColors.white.withValues(alpha: 0.1)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(16.r),
               border: Border.all(
                 color: const Color(0xFF00559F).withValues(alpha: 0.6),
@@ -284,14 +293,18 @@ class ScanCameraScreen extends ConsumerWidget {
               ),
             ),
             child: Center(
-              child: Icon(icon, size: 22.sp, color: const Color(0xFF1E293B)),
+              child: Icon(
+                icon,
+                size: 22.sp,
+                color: isDark ? AppColors.white : const Color(0xFF1E293B),
+              ),
             ),
           ),
           SizedBox(height: 6.h),
           Text(
             title,
             style: StyleManager.interBold10(
-              AppColors.black,
+              isDark ? AppColors.white : AppColors.black,
             ).copyWith(letterSpacing: 0.6),
           ),
         ],
