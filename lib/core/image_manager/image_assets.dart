@@ -89,4 +89,8 @@ class ImageAssets {
   static const String darkShowC = "$_imagePath/dark_show_camera.png";
   static const String darkMap = "$_imagePath/dark_map.png";
   static const String darkMapRoute = "$_imagePath/dark_map_route.png";
+  static const String darkAirportNav = "$_imagePath/dark_airport_nav.png";
+  static const String darkBoardingPass = "$_imagePath/dark_boarding_pass.png";
+  static const String darkExploreNearby = "$_imagePath/dark_explore_nearby.png";
+  static const String darkNavylaBg = "$_imagePath/dark_navyla_bg.png";
 }

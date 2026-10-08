@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/feature/home/model/quick_access_tool_model.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
@@ -103,82 +104,113 @@ class _QuickAccessCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgImage = (isDark && item.darkBgImage != null)
+        ? item.darkBgImage!
+        : item.bgImage;
+    final icon = (isDark && item.darkIconWidget != null)
+        ? item.darkIconWidget!
+        : item.iconWidget;
+    final overlay = isDark
+        ? (item.darkOverlayWidget ?? item.overlayWidget)
+        : item.overlayWidget;
+
     return GestureDetector(
       onTap: onTap ?? item.onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        height: 94.h,
+        height: isDark ? 104.h : 94.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(isDark ? 22.r : 16.r),
+          border: isDark
+              ? Border.all(
+                  color: const Color(0xFFC07028).withValues(alpha: 0.75),
+                  width: 1.2,
+                )
+              : null,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 10,
+              color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.04),
+              blurRadius: isDark ? 12 : 10,
               offset: const Offset(0, 4),
             ),
           ],
           image: DecorationImage(
-            image: AssetImage(item.bgImage),
-            fit: BoxFit.fill,
+            image: AssetImage(bgImage),
+            fit: isDark ? BoxFit.cover : BoxFit.fill,
           ),
         ),
         clipBehavior: Clip.antiAlias,
         child: Stack(
           children: [
             // Optional overlay illustration (e.g. Robot mascot for Ask NAVYLA)
-            if (item.overlayWidget != null) item.overlayWidget!,
+            ?overlay,
 
             // Top-left Icon Box
             Positioned(
-              top: 13.h,
-              left: 13.w,
+              top: isDark ? 12.h : 13.h,
+              left: isDark ? 12.w : 13.w,
               child: Container(
-                width: 36.w,
-                height: 36.w,
+                width: isDark ? 40.w : 36.w,
+                height: isDark ? 40.w : 36.w,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.r),
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.18)
+                      : Colors.white,
+                  borderRadius: BorderRadius.circular(isDark ? 14.r : 10.r),
+                  border: isDark
+                      ? Border.all(
+                          color: const Color(
+                            0xFFC07028,
+                          ).withValues(alpha: 0.75),
+                          width: 1.1,
+                        )
+                      : null,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.06),
+                      color: Colors.black.withValues(
+                        alpha: isDark ? 0.2 : 0.06,
+                      ),
                       blurRadius: 5,
                       offset: const Offset(0, 2),
                     ),
                   ],
                 ),
                 alignment: Alignment.center,
-                child: item.iconWidget,
+                child: icon,
               ),
             ),
 
             // Bottom-left Text (Title & Subtitle)
             Positioned(
-              left: 13.w,
-              bottom: 13.h,
-              right: 36.w,
+              left: isDark ? 12.w : 13.w,
+              bottom: isDark ? 12.h : 13.h,
+              right: 32.w,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     item.title,
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 12.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black,
+                      fontWeight: FontWeight.w800,
+                      color: isDark ? Colors.white : AppColors.black,
                       letterSpacing: -0.2,
                       height: 1.15,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 3.h),
+                  SizedBox(height: isDark ? 4.h : 3.h),
                   Text(
                     item.subtitle,
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 9.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.lightBlueGray,
+                      fontWeight: FontWeight.w700,
+                      color: isDark
+                          ? const Color(0xFFF59E0B)
+                          : AppColors.lightBlueGray,
                       letterSpacing: 0.5,
                     ),
                     maxLines: 1,
@@ -188,14 +220,16 @@ class _QuickAccessCard extends StatelessWidget {
               ),
             ),
 
-            // Bottom-right Action Chevron (always on right side)
+            // Bottom-right Action Chevron
             Positioned(
-              right: 13.w,
-              bottom: 13.h,
+              right: isDark ? 8.w : 13.w,
+              bottom: isDark ? 10.h : 13.h,
               child: Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 13.sp,
-                color: AppColors.black,
+                isDark
+                    ? Icons.chevron_right_rounded
+                    : Icons.arrow_forward_ios_rounded,
+                size: isDark ? 22.sp : 13.sp,
+                color: isDark ? const Color(0xFFF59E0B) : AppColors.black,
               ),
             ),
           ],

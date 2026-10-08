@@ -11,8 +11,11 @@ class QuickAccessToolModel {
   final String title;
   final String subtitle;
   final String bgImage;
+  final String? darkBgImage;
   final Widget iconWidget;
+  final Widget? darkIconWidget;
   final Widget? overlayWidget;
+  final Widget? darkOverlayWidget;
   final bool isChevronAtEnd;
   final VoidCallback? onTap;
 
@@ -21,8 +24,11 @@ class QuickAccessToolModel {
     required this.title,
     required this.subtitle,
     required this.bgImage,
+    this.darkBgImage,
     required this.iconWidget,
+    this.darkIconWidget,
     this.overlayWidget,
+    this.darkOverlayWidget,
     this.isChevronAtEnd = true,
     this.onTap,
   });
@@ -32,8 +38,11 @@ class QuickAccessToolModel {
     String? title,
     String? subtitle,
     String? bgImage,
+    String? darkBgImage,
     Widget? iconWidget,
+    Widget? darkIconWidget,
     Widget? overlayWidget,
+    Widget? darkOverlayWidget,
     bool? isChevronAtEnd,
     VoidCallback? onTap,
   }) {
@@ -42,8 +51,11 @@ class QuickAccessToolModel {
       title: title ?? this.title,
       subtitle: subtitle ?? this.subtitle,
       bgImage: bgImage ?? this.bgImage,
+      darkBgImage: darkBgImage ?? this.darkBgImage,
       iconWidget: iconWidget ?? this.iconWidget,
+      darkIconWidget: darkIconWidget ?? this.darkIconWidget,
       overlayWidget: overlayWidget ?? this.overlayWidget,
+      darkOverlayWidget: darkOverlayWidget ?? this.darkOverlayWidget,
       isChevronAtEnd: isChevronAtEnd ?? this.isChevronAtEnd,
       onTap: onTap ?? this.onTap,
     );
@@ -57,6 +69,7 @@ class QuickAccessToolModel {
       title: 'Airport Navigation',
       subtitle: 'FIND YOUR WAY',
       bgImage: ImageAssets.airportNav,
+      darkBgImage: ImageAssets.darkAirportNav,
       isChevronAtEnd: true,
       iconWidget: Transform.rotate(
         angle: math.pi / 4,
@@ -77,6 +90,25 @@ class QuickAccessToolModel {
           ),
         ),
       ),
+      darkIconWidget: Transform.rotate(
+        angle: math.pi / 4,
+        child: Container(
+          width: 20.w,
+          height: 20.w,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5.r),
+          ),
+          child: Transform.rotate(
+            angle: -math.pi / 4,
+            child: Icon(
+              Icons.turn_right_rounded,
+              color: const Color(0xFF1E293B),
+              size: 14.sp,
+            ),
+          ),
+        ),
+      ),
     ),
 
     // 2. Boarding Pass
@@ -85,10 +117,19 @@ class QuickAccessToolModel {
       title: 'Boarding pass',
       subtitle: 'VIEW YOUR PASS',
       bgImage: ImageAssets.boardingPass,
+      darkBgImage: ImageAssets.darkBoardingPass,
       isChevronAtEnd: true,
       iconWidget: Padding(
         padding: EdgeInsets.all(6.w),
         child: Image.asset(ImageAssets.boardingPassIcon, fit: BoxFit.contain),
+      ),
+      darkIconWidget: Padding(
+        padding: EdgeInsets.all(6.w),
+        child: Image.asset(
+          ImageAssets.boardingPassIcon,
+          color: Colors.white,
+          fit: BoxFit.contain,
+        ),
       ),
     ),
 
@@ -98,11 +139,17 @@ class QuickAccessToolModel {
       title: 'Explore nearby',
       subtitle: 'SHOP, FOODS & MORE',
       bgImage: ImageAssets.exploreNearby,
+      darkBgImage: ImageAssets.darkExploreNearby,
       isChevronAtEnd: true,
       iconWidget: Icon(
         Icons.shopping_bag_rounded,
         color: const Color(0xFF7C3AED),
         size: 20.sp,
+      ),
+      darkIconWidget: const Icon(
+        Icons.shopping_bag_rounded,
+        color: Colors.white,
+        size: 20,
       ),
     ),
 
@@ -112,18 +159,33 @@ class QuickAccessToolModel {
       title: 'Ask NAVYLA',
       subtitle: 'YOUR AI ASSISTANT',
       bgImage: ImageAssets.navylaBg,
+      darkBgImage: ImageAssets.darkNavylaBg,
       isChevronAtEnd: true,
       iconWidget: Padding(
         padding: EdgeInsets.all(3.w),
         child: Image.asset(ImageAssets.navylaAi, fit: BoxFit.contain),
       ),
+      darkIconWidget: Padding(
+        padding: EdgeInsets.all(3.w),
+        child: Image.asset(ImageAssets.navylaAi, fit: BoxFit.contain),
+      ),
       overlayWidget: Positioned(
-        top: 10.h,
+        top: 14.h,
         right: 10.w,
-        width: 64.w,
-        height: 64.h,
+        width: 55.w,
+        height: 55.h,
         child: Opacity(
           opacity: 0.72,
+          child: Image.asset(ImageAssets.navylaAi, fit: BoxFit.contain),
+        ),
+      ),
+      darkOverlayWidget: Positioned(
+        top: 0.h,
+        right: 4.w,
+        bottom: 6.h,
+        width: 55.w,
+        child: Opacity(
+          opacity: 0.7,
           child: Image.asset(ImageAssets.navylaAi, fit: BoxFit.contain),
         ),
       ),
