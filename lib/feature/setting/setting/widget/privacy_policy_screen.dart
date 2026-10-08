@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
+import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
@@ -11,6 +12,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     const paragraphs = [
       AppString.privacyPolicyP1,
       AppString.privacyPolicyP2,
@@ -26,7 +28,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
         child: Column(
           children: [
             // Top App Bar with back button and centered title
-            const CustomBackButton(title: AppString.privacyPolicyUpper),
+            const CustomBackButton(
+              title: AppString.privacyPolicyUpper,
+              isBorder: true,
+            ),
             SizedBox(height: 18.h),
 
             // Scrollable Privacy Policy Content
@@ -40,13 +45,13 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     Text(
                       AppString.privacyPolicyUpper,
                       style: StyleManager.interBold16(
-                        const Color(0xFF000000),
+                        isDark ? AppColors.white : const Color(0xFF000000),
                       ).copyWith(letterSpacing: 0.6),
                     ),
                     SizedBox(height: 14.h),
 
                     // Paragraphs
-                    ...paragraphs.map(_buildParagraph),
+                    ...paragraphs.map((text) => _buildParagraph(text, context)),
 
                     // Bottom spacing
                     SizedBox(height: 24.h),
@@ -60,7 +65,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildParagraph(String text) {
+  Widget _buildParagraph(String text, BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: EdgeInsets.only(bottom: 18.h),
       child: Text(
@@ -69,7 +75,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
         style: GoogleFonts.inter(
           fontSize: 13.5.sp,
           fontWeight: FontWeight.w400,
-          color: const Color(0xFF000000),
+          color: isDark
+              ? AppColors.white.withValues(alpha: 0.7)
+              : const Color(0xFF000000),
           height: 1.55,
           letterSpacing: 0.1,
         ),
