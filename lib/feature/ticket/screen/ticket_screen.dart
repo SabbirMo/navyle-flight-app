@@ -36,11 +36,15 @@ class TicketScreen extends ConsumerWidget {
     final journey = ref.watch(flightJourneyNotifierProvider);
     final hasPass = journey.hasActiveFlight;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(gradient: AppColors.splashGradient),
+        decoration: BoxDecoration(
+          gradient: isDark ? null : AppColors.splashGradient,
+        ),
         child: SafeArea(
           bottom: false,
           child: Padding(
@@ -59,7 +63,9 @@ class TicketScreen extends ConsumerWidget {
                           style: GoogleFonts.inter(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF1E293B),
+                            color: isDark
+                                ? AppColors.white
+                                : const Color(0xFF1E293B),
                             letterSpacing: 1.2,
                           ),
                         ),
@@ -69,6 +75,7 @@ class TicketScreen extends ConsumerWidget {
                           alignment: Alignment.centerLeft,
                           child: CustomBackButton(
                             size: 38.w,
+                            isBorder: true,
                             onTap: () {
                               ref
                                   .read(navbarNotifierProvider.notifier)
@@ -84,9 +91,11 @@ class TicketScreen extends ConsumerWidget {
                             child: Container(
                               width: 38.w,
                               height: 38.w,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Color(0xFFFFECEB),
+                                color: isDark
+                                    ? AppColors.errorRed.withValues(alpha: 0.12)
+                                    : Color(0xFFFFECEB),
                               ),
                               child: Center(
                                 child: Image.asset(
@@ -120,9 +129,7 @@ class TicketScreen extends ConsumerWidget {
                             seat: journey.seat,
                           ),
                         )
-                      : Center(
-                          child: _buildEmptyTicketState(context),
-                        ),
+                      : Center(child: _buildEmptyTicketState(context)),
                 ),
 
                 // Bottom spacing for floating navigation bar

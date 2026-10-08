@@ -46,6 +46,7 @@ class TicketBoardingPass extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final double notchRadius = 16.r;
     final double cornerRadius = 24.r;
 
@@ -60,7 +61,7 @@ class TicketBoardingPass extends StatelessWidget {
         notchY: topSectionHeight,
         notchRadius: notchRadius,
         cornerRadius: cornerRadius,
-        borderColor: ticketBlue,
+        borderColor: isDark ? Colors.white : ticketBlue,
         borderWidth: 2.w,
       ),
       child: ClipPath(
@@ -81,7 +82,7 @@ class TicketBoardingPass extends StatelessWidget {
               ),
               SizedBox(
                 height: middleSectionHeight,
-                child: _buildQrSection(middleSectionHeight),
+                child: _buildQrSection(middleSectionHeight, context),
               ),
               SizedBox(
                 height: bottomSectionHeight,
@@ -257,11 +258,12 @@ class TicketBoardingPass extends StatelessWidget {
     );
   }
 
-  Widget _buildQrSection(double height) {
+  Widget _buildQrSection(double height, BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       height: height,
-      color: Colors.white,
+      color: isDark ? Color(0xff000D2D) : Colors.white,
       child: Column(
         children: [
           Padding(
@@ -269,10 +271,10 @@ class TicketBoardingPass extends StatelessWidget {
             child: CustomPaint(
               size: Size(double.infinity, 2.h),
               painter: _DashedLinePainter(
-                color: const Color(0xff0453BC),
+                color: isDark ? Colors.white : const Color(0xff0453BC),
                 dashWidth: 6.5.w,
                 dashSpace: 12.5.w,
-                strokeWidth: 6,
+                strokeWidth: 3,
                 strokeCap: StrokeCap.round,
               ),
             ),
