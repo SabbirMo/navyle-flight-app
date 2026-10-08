@@ -22,13 +22,19 @@ class SmartWatchFeatureCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: isDark ? AppColors.blackShadow : AppColors.white,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color(0xFFF1F5F9), width: 1.2),
+        border: Border.all(
+          color: isDark
+              ? AppColors.lightGray.withValues(alpha: 0.6)
+              : const Color(0xFFF1F5F9),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF0F172A).withValues(alpha: 0.035),
@@ -45,12 +51,21 @@ class SmartWatchFeatureCard extends StatelessWidget {
             width: 38.w,
             height: 38.w,
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF9F3),
+              color: isDark
+                  ? AppColors.white.withValues(alpha: 0.1)
+                  : const Color(0xFFFFF9F3),
               borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: const Color(0xFFFFEDD5), width: 1),
+              border: Border.all(
+                color: isDark ? Colors.transparent : const Color(0xFFFFEDD5),
+                width: 1,
+              ),
             ),
             child: Center(
-              child: Icon(icon, color: const Color(0xFF475569), size: 19.sp),
+              child: Icon(
+                icon,
+                color: isDark ? Colors.white : const Color(0xFF475569),
+                size: 19.sp,
+              ),
             ),
           ),
           SizedBox(width: 10.w),
@@ -71,12 +86,14 @@ class SmartWatchFeatureCard extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF0F172A),
+                          color: isDark
+                              ? Colors.white
+                              : const Color(0xFF0F172A),
                         ),
                       ),
                     ),
                     SizedBox(width: 6.w),
-                    _buildStatusBadge(),
+                    _buildStatusBadge(context: context),
                   ],
                 ),
                 SizedBox(height: 5.h),
@@ -86,7 +103,7 @@ class SmartWatchFeatureCard extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.organicBrown,
+                    color: isDark ? Color(0xffA6A6A6) : AppColors.organicBrown,
                     height: 1.35,
                   ),
                 ),
@@ -98,7 +115,8 @@ class SmartWatchFeatureCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusBadge() {
+  Widget _buildStatusBadge({required BuildContext context}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     Color bg;
     Color border;
     Color contentColor;
@@ -106,21 +124,29 @@ class SmartWatchFeatureCard extends StatelessWidget {
 
     switch (statusType) {
       case FeatureStatusType.unavailable:
-        bg = const Color(0xFFFFF7ED);
-        border = const Color(0xFFFED7AA);
-        contentColor = const Color(0xFFEA580C);
+        bg = isDark
+            ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+            : const Color(0xFFFFF7ED);
+        border = isDark ? Colors.transparent : const Color(0xFFFED7AA);
+        contentColor = isDark
+            ? const Color(0xffCF731E)
+            : const Color(0xFFEA580C);
         badgeIcon = Icons.error_outline_rounded;
         break;
       case FeatureStatusType.waiting:
-        bg = const Color(0xFFEFF6FF);
-        border = const Color(0xFFBFDBFE);
+        bg = isDark
+            ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+            : const Color(0xFFEFF6FF);
+        border = isDark ? Colors.transparent : const Color(0xFFBFDBFE);
         contentColor = const Color(0xFF2563EB);
         badgeIcon = Icons.access_time_rounded;
         break;
       case FeatureStatusType.available:
-        bg = const Color(0xFFF0FDF4);
-        border = const Color(0xFFBBF7D0);
-        contentColor = AppColors.darkGreen;
+        bg = isDark
+            ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+            : const Color(0xFFF0FDF4);
+        border = isDark ? Colors.transparent : const Color(0xFFBBF7D0);
+        contentColor = isDark ? Color(0xff059669) : AppColors.darkGreen;
         badgeIcon = Icons.check_circle_outline_rounded;
         break;
     }

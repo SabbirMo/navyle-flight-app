@@ -134,7 +134,7 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
         child: Column(
           children: [
             // Top App Bar
-            _buildAppBar(),
+            _buildAppBar(context: context),
             SizedBox(height: 4.h),
 
             // Scrollable Content
@@ -148,7 +148,7 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
                     SizedBox(height: 8.h),
 
                     // Title & Description
-                    _buildHeadings(),
+                    _buildHeadings(context: context),
                     SizedBox(height: 18.h),
 
                     // Feature Status Section
@@ -169,7 +169,8 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
   }
 
   // 1. App Bar with Back Button, Centered Title, and Help Icon
-  Widget _buildAppBar() {
+  Widget _buildAppBar({required BuildContext context}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -180,7 +181,9 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
             width: 36.w,
             height: 36.w,
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: isDark
+                  ? AppColors.white.withValues(alpha: 0.1)
+                  : AppColors.white,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
@@ -189,13 +192,12 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
                   offset: const Offset(0, 2),
                 ),
               ],
-              border: Border.all(color: const Color(0xFFF1F5F9)),
             ),
             child: Center(
               child: Icon(
                 Icons.arrow_back_ios_new_rounded,
                 size: 14.sp,
-                color: AppColors.black,
+                color: isDark ? AppColors.white : AppColors.black,
               ),
             ),
           ),
@@ -205,7 +207,7 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
         Text(
           "Smartwatch",
           style: StyleManager.sfProBold16(
-            AppColors.black,
+            isDark ? AppColors.white : AppColors.black,
           ).copyWith(fontSize: 17.sp, fontWeight: FontWeight.w700),
         ),
 
@@ -240,7 +242,8 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
   }
 
   // 2. Floating Device Badge ("Android • Wear OS" / "iPhone • Apple Watch")
-  Widget _buildFloatingDeviceBadge() {
+  Widget _buildFloatingDeviceBadge({required BuildContext context}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final String badgeText = _isAppleWatch
         ? "iPhone • Apple Watch"
         : "Android • Wear OS";
@@ -248,7 +251,7 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
         ? Icon(
             Icons.phone_iphone_rounded,
             size: 13.5.sp,
-            color: const Color(0xFF2563EB),
+            color: isDark ? Colors.white : const Color(0xFF2563EB),
           )
         : SvgPicture.asset(ImageAssets.android, width: 12.5.w, height: 14.5.h);
 
@@ -261,7 +264,9 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
             decoration: BoxDecoration(
-              color: const Color(0xFFEAF0FE),
+              color: isDark
+                  ? AppColors.white.withValues(alpha: 0.12)
+                  : const Color(0xFFEAF0FE),
               borderRadius: BorderRadius.circular(16.r),
             ),
             child: Row(
@@ -274,7 +279,7 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
                   style: GoogleFonts.inter(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF2563EB),
+                    color: isDark ? Colors.white : const Color(0xFF2563EB),
                   ),
                 ),
               ],
@@ -286,12 +291,19 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
   }
 
   // Active & Connected badge for State 3 (Ready)
-  Widget _buildActiveConnectedBadge() {
+  Widget _buildActiveConnectedBadge({required BuildContext context}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 3.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFDCFCE7).withValues(alpha: 0.8),
+        color: isDark
+            ? AppColors.white.withValues(alpha: 0.32)
+            : const Color(0xFFDCFCE7).withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(
+          color: isDark ? Colors.transparent : const Color(0xFFBBF7D0),
+          width: 1,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -299,8 +311,8 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
           Container(
             width: 5.w,
             height: 5.w,
-            decoration: const BoxDecoration(
-              color: Color(0xFF16A34A),
+            decoration: BoxDecoration(
+              color: isDark ? Color(0xff00FF89) : const Color(0xFF16A34A),
               shape: BoxShape.circle,
             ),
           ),
@@ -310,7 +322,7 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
             style: GoogleFonts.inter(
               fontSize: 10.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF16A34A),
+              color: isDark ? Color(0xff00FF89) : const Color(0xFF16A34A),
             ),
           ),
         ],
@@ -319,7 +331,8 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
   }
 
   // Bottom detected chip for State 2 (App Not Installed)
-  Widget _buildBottomDetectedChip() {
+  Widget _buildBottomDetectedChip({required BuildContext context}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final String detectedText = _isAppleWatch
         ? "Apple Watch detected"
         : "Wear OS watch detected";
@@ -327,9 +340,14 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.5.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF6FF),
+        color: isDark
+            ? AppColors.white.withValues(alpha: 0.12)
+            : const Color(0xFFEFF6FF),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color(0xFFBFDBFE), width: 1),
+        border: Border.all(
+          color: isDark ? Colors.transparent : const Color(0xFFBFDBFE),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF2563EB).withValues(alpha: 0.08),
@@ -390,24 +408,28 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildFloatingDeviceBadge(),
+                      _buildFloatingDeviceBadge(context: context),
                       SizedBox(height: 5.h),
-                      _buildActiveConnectedBadge(),
+                      _buildActiveConnectedBadge(context: context),
                     ],
                   )
-                : _buildFloatingDeviceBadge(),
+                : _buildFloatingDeviceBadge(context: context),
           ),
 
           // 3. Screen 2 Bottom Detected Chip (sitting on the bottom curve of the radar)
           if (_syncState == SmartWatchSyncState.appNotInstalled)
-            Positioned(bottom: 6.h, child: _buildBottomDetectedChip()),
+            Positioned(
+              bottom: 6.h,
+              child: _buildBottomDetectedChip(context: context),
+            ),
         ],
       ),
     );
   }
 
   // 4. Headings & Subtitles based on Watch Type & State
-  Widget _buildHeadings() {
+  Widget _buildHeadings({required BuildContext context}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     String title;
     String subtitle;
     String? extraNote;
@@ -460,7 +482,7 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
             style: GoogleFonts.inter(
               fontSize: 19.sp,
               fontWeight: FontWeight.w700,
-              color: const Color(0xFF0F172A),
+              color: isDark ? Colors.white : const Color(0xFF0F172A),
             ),
             textAlign: TextAlign.center,
           ),
@@ -470,7 +492,9 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
             style: GoogleFonts.inter(
               fontSize: 12.sp,
               fontWeight: FontWeight.w400,
-              color: const Color(0xFF64748B),
+              color: isDark
+                  ? AppColors.grayD3D3D3.withValues(alpha: 0.9)
+                  : const Color(0xFF64748B),
               height: 1.4,
             ),
             textAlign: TextAlign.center,
