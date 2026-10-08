@@ -13,6 +13,7 @@ class RouteMapView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onDoubleTap: onDoubleTap,
       child: InteractiveViewer(
@@ -22,7 +23,7 @@ class RouteMapView extends StatelessWidget {
         boundaryMargin: const EdgeInsets.all(120),
         child: SizedBox.expand(
           child: Image.asset(
-            ImageAssets.route,
+            isDark ? ImageAssets.darkMap : ImageAssets.routeMap,
             fit: BoxFit.cover,
             alignment: Alignment.center,
           ),

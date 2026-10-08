@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
+import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/widget/live_nav_bottom_panel.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/widget/live_nav_floating_buttons.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/widget/live_nav_map_canvas.dart';
@@ -25,14 +26,15 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
   void initState() {
     super.initState();
     _transformationController = TransformationController();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 350),
-    )..addListener(() {
-        if (_mapAnimation != null) {
-          _transformationController.value = _mapAnimation!.value;
-        }
-      });
+    _animationController =
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 350),
+        )..addListener(() {
+          if (_mapAnimation != null) {
+            _transformationController.value = _mapAnimation!.value;
+          }
+        });
   }
 
   @override
@@ -43,15 +45,16 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
   }
 
   void _resetMap() {
-    _mapAnimation = Matrix4Tween(
-      begin: _transformationController.value,
-      end: Matrix4.identity(),
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeOutCubic,
-      ),
-    );
+    _mapAnimation =
+        Matrix4Tween(
+          begin: _transformationController.value,
+          end: Matrix4.identity(),
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
     _animationController.forward(from: 0);
   }
 
@@ -64,10 +67,7 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
       SnackBar(
         content: Text(
           _isMuted ? 'Voice guidance muted' : 'Voice guidance enabled',
-          style: GoogleFonts.inter(
-            fontSize: 12.5.sp,
-            color: Colors.white,
-          ),
+          style: GoogleFonts.inter(fontSize: 12.5.sp, color: Colors.white),
         ),
         backgroundColor: const Color(0xFF0F172A),
         behavior: SnackBarBehavior.floating,
@@ -173,7 +173,9 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
           style: GoogleFonts.inter(
             fontSize: 15.sp,
             fontWeight: FontWeight.w700,
-            color: isSelected ? AppColors.primaryColor : const Color(0xFF0F172A),
+            color: isSelected
+                ? AppColors.primaryColor
+                : const Color(0xFF0F172A),
           ),
         ),
         onTap: onTap,
@@ -183,15 +185,18 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: const Color(0xFFE7ECEF),
+      backgroundColor: isDark ? AppColors.darkBlack : Color(0xFFE7ECEF),
       body: Stack(
         children: [
           // 1. Live Navigation Map Canvas (Interactive & pinch-to-zoom)
           Positioned.fill(
-            child: LiveNavMapCanvas(
-              transformationController: _transformationController,
-            ),
+            child: isDark
+                ? Image.asset(ImageAssets.darkMapRoute)
+                : LiveNavMapCanvas(
+                    transformationController: _transformationController,
+                  ),
           ),
 
           // 2. Top Direction Banner

@@ -143,13 +143,15 @@ class TicketScreen extends ConsumerWidget {
   }
 
   Widget _buildEmptyTicketState(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
       margin: EdgeInsets.symmetric(horizontal: 8.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkBlack : Colors.white,
         borderRadius: BorderRadius.circular(24.r),
+
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF0F172A).withValues(alpha: 0.05),
@@ -157,7 +159,12 @@ class TicketScreen extends ConsumerWidget {
             offset: const Offset(0, 8),
           ),
         ],
-        border: Border.all(color: const Color(0xFFF1F5F9), width: 1.2),
+        border: isDark
+            ? Border.all(
+                color: AppColors.lightBlueGray.withValues(alpha: 0.4),
+                width: 1.2,
+              )
+            : null,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -167,7 +174,10 @@ class TicketScreen extends ConsumerWidget {
             height: 64.w,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: const Color(0xFFFFF2E6),
+              border: isDark ? Border.all(color: AppColors.lightGray) : null,
+              color: isDark
+                  ? AppColors.white.withValues(alpha: 0.12)
+                  : const Color(0xFFFFF2E6),
             ),
             child: Center(
               child: Icon(
@@ -183,7 +193,7 @@ class TicketScreen extends ConsumerWidget {
             style: GoogleFonts.inter(
               fontSize: 18.sp,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF1E293B),
+              color: isDark ? AppColors.white : const Color(0xFF1E293B),
             ),
           ),
           SizedBox(height: 8.h),
@@ -193,7 +203,7 @@ class TicketScreen extends ConsumerWidget {
             style: GoogleFonts.inter(
               fontSize: 12.5.sp,
               fontWeight: FontWeight.w400,
-              color: const Color(0xFF64748B),
+              color: isDark ? AppColors.lightGray : const Color(0xFF64748B),
               height: 1.45,
             ),
           ),
@@ -202,7 +212,7 @@ class TicketScreen extends ConsumerWidget {
             text: 'Scan Boarding Pass',
             prefixIcon: Icons.qr_code_scanner_rounded,
             iconSize: 20.sp,
-            height: 48.h,
+            height: 40.h,
             borderRadius: 24.r,
             boxShadow: true,
             onTap: () => context.push(AppRouterName.scanScreen),

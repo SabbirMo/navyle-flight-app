@@ -21,11 +21,12 @@ class TerminalBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: isDark ? AppColors.textFieldBgColor : AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
         boxShadow: [
           BoxShadow(
@@ -71,7 +72,7 @@ class TerminalBottomSheet extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF0F172A),
+                    color: isDark ? AppColors.white : const Color(0xFF0F172A),
                     letterSpacing: -0.2,
                   ),
                 ),
@@ -168,18 +169,27 @@ class TerminalBottomSheet extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 9.h),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF8FAFC),
+                  color: isDark ? AppColors.darkBlack : const Color(0xFFF8FAFC),
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                  border: Border.all(
+                    color: isDark
+                        ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+                        : const Color(0xFFE2E8F0),
+                  ),
                 ),
                 child: Row(
                   children: [
                     Container(
                       width: 28.w,
                       height: 28.w,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFEFF6FF),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? AppColors.white.withValues(alpha: 0.12)
+                            : const Color(0xFFEFF6FF),
                         shape: BoxShape.circle,
+                        border: isDark
+                            ? Border.all(color: AppColors.lightGray)
+                            : null,
                       ),
                       child: Icon(
                         Icons.search_rounded,
@@ -197,7 +207,9 @@ class TerminalBottomSheet extends StatelessWidget {
                             style: GoogleFonts.inter(
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w700,
-                              color: const Color(0xFF1E293B),
+                              color: isDark
+                                  ? AppColors.white
+                                  : const Color(0xFF1E293B),
                             ),
                           ),
                           Text(

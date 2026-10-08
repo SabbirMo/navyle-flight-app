@@ -32,9 +32,10 @@ class RouteTopHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: isDark ? AppColors.textFieldBgColor : AppColors.white,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(28.r),
           bottomRight: Radius.circular(28.r),
@@ -63,14 +64,18 @@ class RouteTopHeader extends StatelessWidget {
                       width: 38.w,
                       height: 38.w,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF1F5F9),
+                        color: isDark
+                            ? AppColors.white.withValues(alpha: 0.1)
+                            : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Center(
                         child: Icon(
                           Icons.arrow_back_ios_new_rounded,
                           size: 14.sp,
-                          color: const Color(0xFF1E293B),
+                          color: isDark
+                              ? AppColors.white
+                              : const Color(0xFF1E293B),
                         ),
                       ),
                     ),
@@ -83,7 +88,9 @@ class RouteTopHeader extends StatelessWidget {
                           fontSize: 14.5.sp,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.8,
-                          color: const Color(0xFF0F172A),
+                          color: isDark
+                              ? AppColors.white
+                              : const Color(0xFF1E293B),
                         ),
                       ),
                     ),

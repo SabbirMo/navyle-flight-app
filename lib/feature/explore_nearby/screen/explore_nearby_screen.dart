@@ -93,7 +93,7 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                     boundaryMargin: const EdgeInsets.all(400),
                     child: SizedBox.expand(
                       child: Image.asset(
-                        ImageAssets.route,
+                        ImageAssets.routeMap,
                         fit: BoxFit.cover,
                         alignment: Alignment.center,
                       ),

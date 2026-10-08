@@ -18,6 +18,7 @@ class RouteCategoryChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
       height: 34.h,
       child: ListView.separated(
@@ -36,11 +37,19 @@ class RouteCategoryChips extends StatelessWidget {
               duration: const Duration(milliseconds: 200),
               padding: EdgeInsets.symmetric(horizontal: 12.w),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.white : AppColors.white,
+                color: isSelected
+                    ? isDark
+                          ? Colors.transparent
+                          : AppColors.white
+                    : isDark
+                    ? AppColors.darkBlack
+                    : AppColors.white,
                 borderRadius: BorderRadius.circular(26.r),
                 border: Border.all(
                   color: isSelected
                       ? AppColors.blue2563EB.withValues(alpha: 0.4)
+                      : isDark
+                      ? AppColors.lightBlueGray.withValues(alpha: 0.4)
                       : const Color(0xFFE2E8F0),
                   width: isSelected ? 1.4 : 1.0,
                 ),
@@ -61,7 +70,9 @@ class RouteCategoryChips extends StatelessWidget {
                     chip.icon,
                     size: 16.sp,
                     color: isPrimary
-                        ? Color(0xff1A73E8)
+                        ? isDark
+                              ? AppColors.primaryColor
+                              : Color(0xff1A73E8)
                         : AppColors.lightBlueGray,
                   ),
                   SizedBox(width: 6.w),
@@ -71,7 +82,9 @@ class RouteCategoryChips extends StatelessWidget {
                       fontSize: 13.sp,
                       fontWeight: isPrimary ? FontWeight.w700 : FontWeight.w600,
                       color: isPrimary
-                          ? Color(0xff1A73E8)
+                          ? isDark
+                                ? AppColors.primaryColor
+                                : Color(0xff1A73E8)
                           : AppColors.lightBlueGray,
                     ),
                   ),

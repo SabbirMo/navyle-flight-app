@@ -148,8 +148,10 @@ class _NavigateAirportRouteState extends ConsumerState<NavigateAirportRoute>
     final journeyState = ref.watch(flightJourneyNotifierProvider);
     final hasActiveJourney = journeyState.hasActiveFlight;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF1F4F9),
+      backgroundColor: isDark ? AppColors.blackShadow : const Color(0xFFF1F4F9),
       body: Stack(
         children: [
           // 1. Map View (Full screen Interactive route map)

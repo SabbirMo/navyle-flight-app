@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
+import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 
 class LiveNavTopBanner extends StatelessWidget {
   final String streetName;
@@ -17,11 +19,12 @@ class LiveNavTopBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 14.w),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.textFieldBgColor : Colors.white,
         borderRadius: BorderRadius.circular(18.r),
         boxShadow: [
           BoxShadow(
@@ -34,19 +37,9 @@ class LiveNavTopBanner extends StatelessWidget {
       child: Row(
         children: [
           // Upward direction arrow
-          Container(
-            width: 38.w,
-            height: 38.w,
-            decoration: BoxDecoration(
-              color: AppColors.primaryColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-            child: Icon(
-              Icons.arrow_upward_rounded,
-              color: AppColors.primaryColor,
-              size: 24.sp,
-            ),
-          ),
+          isDark
+              ? SvgPicture.asset(ImageAssets.uparrow)
+              : SvgPicture.asset(ImageAssets.uparrow),
           SizedBox(width: 14.w),
 
           // Street & Instruction Text
@@ -60,7 +53,7 @@ class LiveNavTopBanner extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF0F172A),
+                    color: isDark ? AppColors.white : const Color(0xFF0F172A),
                   ),
                 ),
                 SizedBox(height: 2.h),

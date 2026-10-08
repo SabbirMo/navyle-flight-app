@@ -25,7 +25,7 @@ class ImageAssets {
   static const String scanPassPreview = "$_imagePath/scan_pass_preview.png";
   static const String qrScan = "$_imagePath/qr-scan.png";
   static const String ticketBottomBg = "$_imagePath/ticket_bottom_bg.png";
-  static const String route = "$_imagePath/route.png";
+  static const String routeMap = "$_imagePath/route.png";
   static const String showing = "$_imagePath/showing.png";
   static const String appleWatch = "$_imagePath/apple_watch.png";
   static const String smartWatch = "$_imagePath/smart_watch.png";
@@ -76,6 +76,7 @@ class ImageAssets {
   static const String sofa = "$_svgPath/sofa.svg";
   static const String wifi = "$_svgPath/wifi.svg";
   static const String bag = "$_svgPath/bag.svg";
+  static const String uparrow = "$_svgPath/uparrow.svg";
 
   //review
   static const String whatsApp = "$_svgPath/whatsApp.svg";
@@ -86,4 +87,6 @@ class ImageAssets {
 
   static const String darkScan = "$_imagePath/dark_scan.png";
   static const String darkShowC = "$_imagePath/dark_show_camera.png";
+  static const String darkMap = "$_imagePath/dark_map.png";
+  static const String darkMapRoute = "$_imagePath/dark_map_route.png";
 }

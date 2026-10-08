@@ -6,10 +6,7 @@ import 'package:navyla_flight_app/core/colors/app_colors.dart';
 class LiveNavMapCanvas extends StatelessWidget {
   final TransformationController transformationController;
 
-  const LiveNavMapCanvas({
-    super.key,
-    required this.transformationController,
-  });
+  const LiveNavMapCanvas({super.key, required this.transformationController});
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +38,7 @@ class LiveNavMapCanvas extends StatelessWidget {
                   left: 0,
                   right: 0,
                   height: 72.h,
-                  child: Container(
-                    color: const Color(0xFFBAE6FD),
-                  ),
+                  child: Container(color: const Color(0xFFBAE6FD)),
                 ),
 
                 // 3. Central Vertical White Road
@@ -52,9 +47,7 @@ class LiveNavMapCanvas extends StatelessWidget {
                   bottom: 0,
                   left: (width / 2) - 16.w,
                   width: 32.w,
-                  child: Container(
-                    color: Colors.white,
-                  ),
+                  child: Container(color: Colors.white),
                 ),
 
                 // 4. Central Dotted Orange Navigation Path
@@ -80,11 +73,7 @@ class LiveNavMapCanvas extends StatelessWidget {
                   height: 12.h,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildDot(),
-                      _buildDot(),
-                      _buildDot(),
-                    ],
+                    children: [_buildDot(), _buildDot(), _buildDot()],
                   ),
                 ),
 
@@ -104,9 +93,7 @@ class LiveNavMapCanvas extends StatelessWidget {
                   right: 25.w,
                   width: 155.w,
                   height: 68.h,
-                  child: _buildBuildingCard(
-                    title: 'Kaderia Tower',
-                  ),
+                  child: _buildBuildingCard(title: 'Kaderia Tower'),
                 ),
 
                 // Middle Left building (Masjid-e-Gausul Azam)
@@ -115,9 +102,7 @@ class LiveNavMapCanvas extends StatelessWidget {
                   left: 60.w,
                   width: 118.w,
                   height: 98.h,
-                  child: _buildBuildingCard(
-                    title: 'Masjid-e-Gausul\nAzam',
-                  ),
+                  child: _buildBuildingCard(title: 'Masjid-e-Gausul\nAzam'),
                 ),
 
                 // Middle Right building (blank)
@@ -155,13 +140,12 @@ class LiveNavMapCanvas extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: const Color(0xFFDBEAFE).withValues(alpha: 0.8),
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 2.5,
-                          ),
+                          border: Border.all(color: Colors.white, width: 2.5),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF93C5FD).withValues(alpha: 0.6),
+                              color: const Color(
+                                0xFF93C5FD,
+                              ).withValues(alpha: 0.6),
                               blurRadius: 10,
                               spreadRadius: 2,
                             ),

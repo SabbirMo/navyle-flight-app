@@ -20,11 +20,12 @@ class LiveNavBottomPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.textFieldBgColor : Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(26.r)),
         boxShadow: [
           BoxShadow(
@@ -52,17 +53,14 @@ class LiveNavBottomPanel extends StatelessWidget {
               height: 48.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white,
-                border: Border.all(
-                  color: const Color(0xFFE2E8F0),
-                  width: 1.2,
-                ),
+                color: isDark ? Colors.transparent : Colors.white,
+                border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
               ),
               child: Center(
                 child: Icon(
                   Icons.close_rounded,
                   size: 22.sp,
-                  color: const Color(0xFF1E293B),
+                  color: isDark ? AppColors.white : const Color(0xFF1E293B),
                 ),
               ),
             ),
@@ -82,7 +80,7 @@ class LiveNavBottomPanel extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 28.sp,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF0F172A),
+                      color: isDark ? AppColors.white : const Color(0xFF0F172A),
                     ),
                   ),
                   SizedBox(width: 4.w),
@@ -91,7 +89,9 @@ class LiveNavBottomPanel extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF0F172A),
+                      color: isDark
+                          ? AppColors.lightBlueGray
+                          : const Color(0xFF0F172A),
                     ),
                   ),
                   SizedBox(width: 8.w),
@@ -109,7 +109,7 @@ class LiveNavBottomPanel extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w500,
-                  color: const Color(0xFF64748B),
+                  color: AppColors.lightGray,
                 ),
               ),
             ],
@@ -123,17 +123,14 @@ class LiveNavBottomPanel extends StatelessWidget {
               height: 48.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white,
-                border: Border.all(
-                  color: const Color(0xFFE2E8F0),
-                  width: 1.2,
-                ),
+                color: isDark ? Colors.transparent : Colors.white,
+                border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
               ),
               child: Center(
                 child: Icon(
                   Icons.alt_route_rounded,
                   size: 22.sp,
-                  color: const Color(0xFF1E293B),
+                  color: isDark ? AppColors.white : const Color(0xFF1E293B),
                 ),
               ),
             ),

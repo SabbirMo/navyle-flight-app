@@ -28,10 +28,11 @@ class RouteSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       height: 40.h,
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F7FA),
+        color: isDark ? AppColors.darkBlack : const Color(0xFFF5F7FA),
         borderRadius: BorderRadius.circular(30.r),
       ),
       padding: EdgeInsets.symmetric(horizontal: 14.w),
