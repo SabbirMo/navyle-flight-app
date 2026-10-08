@@ -36,25 +36,26 @@ class PlanOptionsCard extends ConsumerWidget {
     return Column(
       children: [
         // 1. Billing Card (Managed by App Store)
-        _buildBillingCard(),
-        if (Platform.isIOS) SizedBox(height: 10.h),
+        _buildBillingCard(context),
+        SizedBox(height: 10.h),
 
         // 2. Manage Subscription
-        if (Platform.isIOS)
-          _buildOptionTile(
-            icon: Icons.settings_outlined,
-            title: "Manage Subscription",
-            subtitle: "Open App Store subscription settings",
-            onTap: () => _showFeedback(
-              context,
-              "Opening App Store subscription settings...",
-            ),
+        _buildOptionTile(
+          context: context,
+          icon: Icons.settings_outlined,
+          title: "Manage Subscription",
+          subtitle: "Open App Store subscription settings",
+          onTap: () => _showFeedback(
+            context,
+            "Opening App Store subscription settings...",
           ),
-        if (Platform.isIOS) SizedBox(height: 10.h),
+        ),
+        SizedBox(height: 10.h),
 
         // 3. Restore Purchases
         if (Platform.isIOS)
           _buildOptionTile(
+            context: context,
             icon: Icons.refresh_rounded,
             title: "Restore Purchases",
             subtitle: "Re-sync your premium access",
@@ -64,6 +65,7 @@ class PlanOptionsCard extends ConsumerWidget {
 
         // 4. Auto-renewal
         _buildOptionTile(
+          context: context,
           icon: isAutoRenew
               ? Icons.toggle_on_rounded
               : Icons.toggle_off_rounded,
@@ -91,6 +93,7 @@ class PlanOptionsCard extends ConsumerWidget {
 
         // 5. Upgrade to Yearly
         _buildOptionTile(
+          context: context,
           customIcon: SvgPicture.asset(
             ImageAssets.king,
             width: 17.w,
@@ -110,6 +113,7 @@ class PlanOptionsCard extends ConsumerWidget {
 
         // 6. Terms of Service
         _buildOptionTile(
+          context: context,
           icon: Icons.description_outlined,
           title: "Terms of Service",
           onTap: () {
@@ -120,6 +124,7 @@ class PlanOptionsCard extends ConsumerWidget {
 
         // 7. Privacy Policy
         _buildOptionTile(
+          context: context,
           icon: Icons.shield_outlined,
           title: "Privacy Policy",
           onTap: () {
@@ -129,19 +134,25 @@ class PlanOptionsCard extends ConsumerWidget {
         SizedBox(height: 14.h),
 
         // 8. Bottom Notice Pill
-        _buildNoticeCard(),
+        _buildNoticeCard(context: context),
       ],
     );
   }
 
-  Widget _buildBillingCard() {
+  Widget _buildBillingCard(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 18.h),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkBlack : Colors.white,
         borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: const Color(0xFFF1F5F9), width: 1.2),
+        border: Border.all(
+          color: isDark
+              ? AppColors.white.withValues(alpha: 0.6)
+              : const Color(0xFFF1F5F9),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -158,7 +169,7 @@ class PlanOptionsCard extends ConsumerWidget {
             style: GoogleFonts.inter(
               fontSize: 11.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.lightBlueGray,
+              color: isDark ? AppColors.white : AppColors.lightBlueGray,
             ),
           ),
           SizedBox(height: 6.h),
@@ -166,7 +177,11 @@ class PlanOptionsCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Platform.isIOS
-                  ? Icon(Icons.apple, size: 28.sp, color: Colors.black)
+                  ? Icon(
+                      Icons.apple,
+                      size: 28.sp,
+                      color: isDark ? AppColors.white : Colors.black,
+                    )
                   : SvgPicture.asset(
                       ImageAssets.playStore,
                       width: 28.w,
@@ -184,7 +199,9 @@ class PlanOptionsCard extends ConsumerWidget {
                       style: GoogleFonts.inter(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF111827),
+                        color: isDark
+                            ? AppColors.white
+                            : const Color(0xFF111827),
                       ),
                     ),
                     SizedBox(height: 2.h),
@@ -195,7 +212,9 @@ class PlanOptionsCard extends ConsumerWidget {
                       style: GoogleFonts.inter(
                         fontSize: 11.sp,
                         fontWeight: FontWeight.w400,
-                        color: const Color(0xFF6B7280),
+                        color: isDark
+                            ? AppColors.grayD3D3D3.withValues(alpha: 0.9)
+                            : const Color(0xFF6B7280),
                         height: 1.35,
                       ),
                     ),
@@ -221,7 +240,9 @@ class PlanOptionsCard extends ConsumerWidget {
     Color? trailingBadgeBgColor,
     Color? trailingBadgeTextColor,
     VoidCallback? onTap,
+    required BuildContext context,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -229,9 +250,14 @@ class PlanOptionsCard extends ConsumerWidget {
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? AppColors.darkBlack : Colors.white,
           borderRadius: BorderRadius.circular(18.r),
-          border: Border.all(color: const Color(0xFFF1F5F9), width: 1.2),
+          border: Border.all(
+            color: isDark
+                ? AppColors.lightGray.withValues(alpha: 0.6)
+                : const Color(0xFFF1F5F9),
+            width: 1.2,
+          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.02),
@@ -273,7 +299,7 @@ class PlanOptionsCard extends ConsumerWidget {
                     style: GoogleFonts.inter(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF111827),
+                      color: isDark ? AppColors.white : const Color(0xFF111827),
                     ),
                   ),
                   if (subtitle != null) ...[
@@ -282,7 +308,9 @@ class PlanOptionsCard extends ConsumerWidget {
                       style: GoogleFonts.inter(
                         fontSize: 11.sp,
                         fontWeight: FontWeight.w400,
-                        color: const Color(0xFF9CA3AF),
+                        color: isDark
+                            ? AppColors.grayD3D3D3.withValues(alpha: 0.9)
+                            : const Color(0xFF9CA3AF),
                       ),
                     ),
                   ],
@@ -319,18 +347,23 @@ class PlanOptionsCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildNoticeCard() {
+  Widget _buildNoticeCard({required BuildContext context}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF4F9),
+        color: isDark ? const Color(0xB2EBF0F5) : const Color(0xFFEFF4F9),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info_rounded, size: 17.sp, color: const Color(0xFF64748B)),
+          Icon(
+            Icons.info_rounded,
+            size: 17.sp,
+            color: isDark ? AppColors.black : const Color(0xFF64748B),
+          ),
           SizedBox(width: 10.w),
           Expanded(
             child: Text(
@@ -340,7 +373,7 @@ class PlanOptionsCard extends ConsumerWidget {
               style: GoogleFonts.inter(
                 fontSize: 11.sp,
                 fontWeight: FontWeight.w400,
-                color: const Color(0xFF64748B),
+                color: isDark ? AppColors.black : const Color(0xFF64748B),
                 height: 1.35,
               ),
             ),

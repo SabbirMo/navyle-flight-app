@@ -23,7 +23,7 @@ class _ManagePlanScreenState extends ConsumerState<ManagePlanScreen> {
       body: CommonScreen(
         child: Column(
           children: [
-            const CustomBackButton(title: "MANAGE PLAN"),
+            const CustomBackButton(title: "MANAGE PLAN", isBorder: true),
             SizedBox(height: 16.h),
             Expanded(
               child: SingleChildScrollView(
