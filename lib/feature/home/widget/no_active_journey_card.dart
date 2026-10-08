@@ -20,19 +20,23 @@ class NoActiveJourneyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.r),
-        gradient: const LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [
-            AppColors.noActiveBgColor,
-            AppColors.noActiveHighlightBgColor,
-          ],
-        ),
+        color: isDark ? Color(0xff5B6377) : null,
+        gradient: isDark
+            ? null
+            : const LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  AppColors.noActiveBgColor,
+                  AppColors.noActiveHighlightBgColor,
+                ],
+              ),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF0F172A).withValues(alpha: 0.05),
@@ -72,7 +76,7 @@ class NoActiveJourneyCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.black,
+                      color: isDark ? Colors.white : AppColors.black,
                     ),
                   ),
                   Text(
@@ -80,7 +84,7 @@ class NoActiveJourneyCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 10.sp,
                       fontWeight: FontWeight.w400,
-                      color: AppColors.black,
+                      color: isDark ? Colors.white : AppColors.black,
                     ),
                   ),
                 ],

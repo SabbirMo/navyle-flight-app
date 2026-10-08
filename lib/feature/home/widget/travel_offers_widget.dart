@@ -39,7 +39,9 @@ class TravelOffersWidget extends StatelessWidget {
             color: isDark ? Color(0xff04294F) : Colors.white,
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(
-              color: isDark ? AppColors.lightBlueGray : const Color(0xFFF1F5F9),
+              color: isDark
+                  ? AppColors.primaryColor.withValues(alpha: 0.6)
+                  : const Color(0xFFF1F5F9),
               width: 1.0,
             ),
             boxShadow: [
@@ -55,13 +57,11 @@ class TravelOffersWidget extends StatelessWidget {
               // Row 1: Global eSIM
               _OfferItem(
                 onTap: onEsimTap,
-                iconColor: AppColors.bedgeColor,
+                iconColor: isDark ? AppColors.white : AppColors.primaryColor,
                 icon: Icons.cell_tower_rounded,
                 categoryText: 'eSIM ',
                 subCategoryText: '• Instant',
-                subCategoryTextColor: isDark
-                    ? Color(0xff8DCAFF)
-                    : AppColors.bedgeColor,
+                subCategoryTextColor: AppColors.primaryColor,
                 titleText: 'Global eSIM',
                 subtitleText: 'Stay connected in 150+ countries.',
                 badgeText: 'From \$4.50',
@@ -80,15 +80,11 @@ class TravelOffersWidget extends StatelessWidget {
               // Row 2: Lounge Access
               _OfferItem(
                 onTap: onLoungeTap,
-                iconColor: isDark
-                    ? AppColors.primaryColor
-                    : AppColors.bedgeGreen,
+                iconColor: isDark ? AppColors.white : AppColors.primaryColor,
                 icon: Icons.chair_rounded,
                 categoryText: 'lounge ',
                 subCategoryText: '• T1 & T2',
-                subCategoryTextColor: isDark
-                    ? AppColors.primaryColor
-                    : AppColors.bedgeGreen,
+                subCategoryTextColor: AppColors.primaryColor,
                 titleText: 'Lounge Access',
                 subtitleText: 'Complimentary artisan coffee, hot showers.',
                 badgeText: 'Partner Perk',
@@ -140,10 +136,13 @@ class _OfferItem extends StatelessWidget {
               height: 36.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.white,
-                border: isDark
-                    ? null
-                    : Border.all(color: AppColors.primaryColor, width: 1.6),
+                color: isDark
+                    ? AppColors.white.withValues(alpha: 0.2)
+                    : AppColors.white,
+                border: Border.all(
+                  color: AppColors.primaryColor,
+                  width: isDark ? 0.5 : 1.5,
+                ),
               ),
               child: Center(
                 child: Icon(icon, color: iconColor, size: 18.sp),

@@ -195,7 +195,7 @@ class _QuickAccessCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w800,
-                      color: isDark ? Colors.white : AppColors.black,
+                      color: isDark ? AppColors.grayD3D3D3 : AppColors.black,
                       letterSpacing: -0.2,
                       height: 1.15,
                     ),
@@ -209,7 +209,7 @@ class _QuickAccessCard extends StatelessWidget {
                       fontSize: 9.sp,
                       fontWeight: FontWeight.w700,
                       color: isDark
-                          ? const Color(0xFFF59E0B)
+                          ? const Color(0xFFFDB561)
                           : AppColors.lightBlueGray,
                       letterSpacing: 0.5,
                     ),
