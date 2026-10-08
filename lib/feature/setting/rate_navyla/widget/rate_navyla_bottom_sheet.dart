@@ -135,11 +135,13 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
     final viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     final maxAvailableHeight = (screenHeight - viewInsetsBottom) * 0.92;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       constraints: BoxConstraints(maxHeight: maxAvailableHeight),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.blackShadow : Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
         boxShadow: [
           BoxShadow(
@@ -172,11 +174,17 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                         height: 34.h,
                         fit: BoxFit.contain,
                       ),
-                      Image.asset(
-                        ImageAssets.navyla,
-                        height: 24.h,
-                        fit: BoxFit.contain,
-                      ),
+                      isDark
+                          ? Image.asset(
+                              ImageAssets.navylaWhite,
+                              height: 24.h,
+                              fit: BoxFit.contain,
+                            )
+                          : Image.asset(
+                              ImageAssets.navyla,
+                              height: 24.h,
+                              fit: BoxFit.contain,
+                            ),
                     ],
                   ),
 
@@ -193,7 +201,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w900,
-                      color: AppColors.blackShadow,
+                      color: isDark ? AppColors.white : AppColors.blackShadow,
                     ),
                   ),
                   SizedBox(height: 6.h),
@@ -222,10 +230,14 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                       horizontal: 16.w,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: isDark
+                          ? Color(0x4DFF9D3E).withValues(alpha: 0.1)
+                          : Colors.white,
                       borderRadius: BorderRadius.circular(16.r),
                       border: Border.all(
-                        color: const Color(0xFFFFE0C2),
+                        color: isDark
+                            ? Color(0x4DFF9D3E)
+                            : const Color(0xFFFFE0C2),
                         width: 1.2,
                       ),
                     ),
@@ -256,12 +268,18 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                                       Icon(
                                         Icons.star_rounded,
                                         size: 38.sp,
-                                        color: const Color(0xFFFFF7ED),
+                                        color: isDark
+                                            ? Color(
+                                                0xffFF9D3E,
+                                              ).withValues(alpha: 0.3)
+                                            : const Color(0xFFFFF7ED),
                                       ),
                                       Icon(
                                         Icons.star_border_rounded,
                                         size: 38.sp,
-                                        color: const Color(0xFFFDBA74),
+                                        color: isDark
+                                            ? Color(0xffFF9D3E)
+                                            : const Color(0xFFFDBA74),
                                       ),
                                     ],
                                   ),
@@ -298,12 +316,14 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                     decoration: InputDecoration(
                       isDense: true,
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: isDark ? AppColors.darkBlack : Colors.white,
                       hintText: "Type here",
                       hintStyle: GoogleFonts.inter(
                         fontSize: 12.5.sp,
                         fontWeight: FontWeight.w400,
-                        color: const Color(0xFF94A3B8),
+                        color: isDark
+                            ? AppColors.lightGray.withValues(alpha: 0.6)
+                            : const Color(0xFF94A3B8),
                       ),
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: 14.w,
@@ -311,8 +331,10 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(14.r),
-                        borderSide: const BorderSide(
-                          color: Color(0xFFCBD5E1),
+                        borderSide: BorderSide(
+                          color: isDark
+                              ? AppColors.lightGray.withValues(alpha: 0.6)
+                              : Color(0xFFCBD5E1),
                           width: 1.0,
                         ),
                       ),
@@ -342,13 +364,17 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFAFBFD),
+                      color: isDark
+                          ? AppColors.darkBlack
+                          : const Color(0xFFFAFBFD),
                       borderRadius: BorderRadius.circular(16.r),
                     ),
                     foregroundDecoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16.r),
                       border: Border.all(
-                        color: const Color(0xFFE2E8F0),
+                        color: isDark
+                            ? AppColors.lightGray.withValues(alpha: 0.6)
+                            : const Color(0xFFE2E8F0),
                         width: 1.0,
                       ),
                     ),
@@ -377,7 +403,9 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                                     style: GoogleFonts.inter(
                                       fontSize: 13.sp,
                                       fontWeight: FontWeight.w700,
-                                      color: const Color(0xFF495B70),
+                                      color: isDark
+                                          ? AppColors.lightGray
+                                          : const Color(0xFF495B70),
                                     ),
                                   ),
                                 ),
@@ -387,7 +415,9 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                                   child: Icon(
                                     Icons.keyboard_arrow_down_rounded,
                                     size: 22.sp,
-                                    color: const Color(0xFF1E293B),
+                                    color: isDark
+                                        ? AppColors.white80
+                                        : const Color(0xFF1E293B),
                                   ),
                                 ),
                               ],
@@ -402,7 +432,9 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                           child: _isShareExpanded
                               ? Container(
                                   width: double.infinity,
-                                  color: Colors.white,
+                                  color: isDark
+                                      ? AppColors.blackShadow
+                                      : Colors.white,
                                   padding: EdgeInsets.symmetric(
                                     vertical: 16.h,
                                     horizontal: 8.w,
@@ -488,18 +520,22 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                   width: 30.w,
                   height: 30.w,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF1F5F9),
+                    color: isDark
+                        ? AppColors.white.withValues(alpha: 0.3)
+                        : const Color(0xFFF1F5F9),
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: const Color(0xFFE2E8F0),
-                      width: 1.0,
-                    ),
+                    border: isDark
+                        ? null
+                        : Border.all(
+                            color: const Color(0xFFE2E8F0),
+                            width: 1.0,
+                          ),
                   ),
                   child: Center(
                     child: Icon(
                       Icons.close_rounded,
                       size: 16.sp,
-                      color: const Color(0xFF64748B),
+                      color: isDark ? AppColors.white : const Color(0xFF64748B),
                     ),
                   ),
                 ),
