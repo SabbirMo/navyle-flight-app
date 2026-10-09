@@ -8,6 +8,7 @@ import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/feature/explore_nearby/model/explore_nearby_state.dart';
 import 'package:navyla_flight_app/feature/explore_nearby/provider/explore_nearby_notifier.dart';
 import 'package:navyla_flight_app/feature/explore_nearby/widget/explore_nearby_search_sheet.dart';
+import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/widget/route_search_bar.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
@@ -75,6 +76,13 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
       builder: (context, ref, child) {
         final state = ref.watch(exploreNearbyNotifierProvider);
         final notifier = ref.read(exploreNearbyNotifierProvider.notifier);
+        final journey = ref.watch(flightJourneyNotifierProvider);
+
+        final effectiveAirport = state.getEffectiveAirportCode(
+          hasActiveFlight: journey.hasActiveFlight,
+          journeyOriginCode: journey.originCode,
+        );
+
         final isSearching = state.searchQuery.trim().isNotEmpty;
 
         return Scaffold(
@@ -111,7 +119,13 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                 top: 0,
                 left: 0,
                 right: 0,
-                child: _buildHeaderCard(context, state, notifier, isDark),
+                child: _buildHeaderCard(
+                  context,
+                  state,
+                  notifier,
+                  effectiveAirport,
+                  isDark,
+                ),
               ),
 
               // 3. Floating Recenter Map Button (Only shown when not searching)
@@ -185,6 +199,7 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
     BuildContext context,
     ExploreNearbyState state,
     ExploreNearbyNotifier notifier,
+    String? effectiveAirport,
     bool isDark,
   ) {
     return Container(
@@ -209,7 +224,7 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Top Bar: Back Button & SELECT AIRPORT Title
+              // Top Bar: Back Button & Dynamic Airport Title (or SELECT AIRPORT)
               Row(
                 children: [
                   GestureDetector(
@@ -237,11 +252,11 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                   Expanded(
                     child: Center(
                       child: Text(
-                        "AMS",
+                        effectiveAirport ?? "SELECT AIRPORT",
                         style: GoogleFonts.inter(
-                          fontSize: 15.5.sp,
+                          fontSize: effectiveAirport != null ? 15.5.sp : 14.sp,
                           fontWeight: FontWeight.w800,
-                          letterSpacing: 1.5,
+                          letterSpacing: effectiveAirport != null ? 1.5 : 1.1,
                           color: isDark
                               ? AppColors.white
                               : const Color(0xFF0F172A),

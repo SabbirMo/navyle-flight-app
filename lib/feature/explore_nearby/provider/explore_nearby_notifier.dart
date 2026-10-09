@@ -18,11 +18,18 @@ class ExploreNearbyNotifier extends Notifier<ExploreNearbyState> {
   }
 
   void toggleLocation() {
-    state = state.copyWith(isLocationEnabled: !state.isLocationEnabled);
+    final nextLocation = !state.isLocationEnabled;
+    state = state.copyWith(
+      isLocationEnabled: nextLocation,
+      detectedLocationAirportCode: () => nextLocation ? 'AMS' : null,
+    );
   }
 
   void selectHubCode(String code) {
-    state = state.copyWith(selectedHubCode: code);
+    state = state.copyWith(
+      selectedHubCode: code,
+      manualAirportCode: () => code,
+    );
   }
 }
 

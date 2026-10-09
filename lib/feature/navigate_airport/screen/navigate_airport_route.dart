@@ -100,15 +100,15 @@ class _NavigateAirportRouteState extends ConsumerState<NavigateAirportRoute>
         break;
       case 'home':
         ref.read(navbarNotifierProvider.notifier).setIndex(0);
-        // context.go(AppRouterName.homeScreen);
+        context.go(AppRouterName.navbarScreen);
         break;
       case 'ticket':
         ref.read(navbarNotifierProvider.notifier).setIndex(1);
-        //context.go(AppRouterName.navbarScreen);
+        context.go(AppRouterName.navbarScreen);
         break;
       case 'feed':
         ref.read(navbarNotifierProvider.notifier).setIndex(3);
-        //context.go(AppRouterName.navbarScreen);
+        context.go(AppRouterName.navbarScreen);
         break;
       default:
         break;

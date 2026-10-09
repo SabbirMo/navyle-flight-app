@@ -23,14 +23,26 @@ class ExploreNearbyState {
   final String searchQuery;
   final bool isLocationEnabled;
   final String selectedHubCode;
+  final String? manualAirportCode;
+  final String? detectedLocationAirportCode;
   final List<AirportHubItem> allHubs;
 
   const ExploreNearbyState({
     this.selectedRegion = 'All Hubs',
     this.searchQuery = '',
     this.isLocationEnabled = false,
-    this.selectedHubCode = 'LHR',
+    this.selectedHubCode = 'AMS',
+    this.manualAirportCode,
+    this.detectedLocationAirportCode,
     this.allHubs = const [
+      AirportHubItem(
+        code: 'AMS',
+        name: 'Amsterdam Schiphol',
+        badge: 'Hub',
+        badgeColor: Color(0xFFEFF6FF),
+        badgeTextColor: Color(0xFF2563EB),
+        subtitle: 'Amsterdam, Netherlands • Departure 1, 2, 3',
+      ),
       AirportHubItem(
         code: 'LHR',
         name: 'London Heathrow',
@@ -40,11 +52,16 @@ class ExploreNearbyState {
         subtitle: 'London, UK • T2, T3, T4, T5',
       ),
       AirportHubItem(
-        code: 'BRU',
-        name: 'Brussels Airport',
+        code: 'FRA',
+        name: 'Frankfurt Airport',
         badge: 'Upcoming Trip',
         badgeColor: Color(0xFFFEF3C7),
         badgeTextColor: Color(0xFFD97706),
+        subtitle: 'Frankfurt, Germany • Terminal 1, 2',
+      ),
+      AirportHubItem(
+        code: 'BRU',
+        name: 'Brussels Airport',
         subtitle: 'Zaventem, Belgium • Main & Gates A, B',
       ),
       AirportHubItem(
@@ -59,6 +76,31 @@ class ExploreNearbyState {
       ),
     ],
   });
+
+  /// Resolves which airport context should currently be active:
+  /// 1. Manual selection by passenger (highest priority once picked)
+  /// 2. Active journey airport (from active boarding pass)
+  /// 3. Reliably detected from user's location
+  /// 4. Otherwise null (No active journey + no detected airport -> Show Select/Search Airport)
+  String? getEffectiveAirportCode({
+    required bool hasActiveFlight,
+    String? journeyOriginCode,
+  }) {
+    if (manualAirportCode != null && manualAirportCode!.isNotEmpty) {
+      return manualAirportCode;
+    }
+    if (hasActiveFlight &&
+        journeyOriginCode != null &&
+        journeyOriginCode.isNotEmpty) {
+      return journeyOriginCode;
+    }
+    if (isLocationEnabled &&
+        detectedLocationAirportCode != null &&
+        detectedLocationAirportCode!.isNotEmpty) {
+      return detectedLocationAirportCode;
+    }
+    return null;
+  }
 
   List<AirportHubItem> get filteredHubs {
     if (searchQuery.trim().isEmpty) {
@@ -86,6 +128,8 @@ class ExploreNearbyState {
     String? searchQuery,
     bool? isLocationEnabled,
     String? selectedHubCode,
+    String? Function()? manualAirportCode,
+    String? Function()? detectedLocationAirportCode,
     List<AirportHubItem>? allHubs,
   }) {
     return ExploreNearbyState(
@@ -93,6 +137,12 @@ class ExploreNearbyState {
       searchQuery: searchQuery ?? this.searchQuery,
       isLocationEnabled: isLocationEnabled ?? this.isLocationEnabled,
       selectedHubCode: selectedHubCode ?? this.selectedHubCode,
+      manualAirportCode: manualAirportCode != null
+          ? manualAirportCode()
+          : this.manualAirportCode,
+      detectedLocationAirportCode: detectedLocationAirportCode != null
+          ? detectedLocationAirportCode()
+          : this.detectedLocationAirportCode,
       allHubs: allHubs ?? this.allHubs,
     );
   }
