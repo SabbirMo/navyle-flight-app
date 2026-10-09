@@ -10,10 +10,6 @@ class ProfileDetailsNotifier extends Notifier<ProfileDetailsState> {
   @override
   ProfileDetailsState build() => ProfileDetailsState();
 
-  void togglePasswordVisibility() {
-    state = state.copyWith(isPasswordVisible: !state.isPasswordVisible);
-  }
-
   Future<void> pickImageFromGallery() async {
     try {
       debugPrint("Opening gallery...");

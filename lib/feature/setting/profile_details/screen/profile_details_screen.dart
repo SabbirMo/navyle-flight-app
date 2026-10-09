@@ -177,21 +177,13 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                       label: AppString.emailAddress,
                       isRequired: false,
                       controller: _emailController,
+                      readOnly: true,
                       hintText: "your.email@example.com",
-                      prefixIcon: Icons.mail_outline_rounded,
-                      obscureText: state.isPasswordVisible,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          notifier.togglePasswordVisibility();
-                        },
-                        icon: Icon(
-                          state.isPasswordVisible
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          size: 18.sp,
-                          color: const Color(0xFF9CA3AF),
-                        ),
+                      focusedBorderColor: AppColors.lightGray.withValues(
+                        alpha: 0.4,
                       ),
+                      prefixIcon: Icons.mail_outline_rounded,
+                      suffixIcon: Icon(Icons.lock_outline),
                     ),
                     SizedBox(height: 20.h),
 
@@ -216,7 +208,26 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                       height: 44.h,
                       boxShadow: true,
                       onTap: () {
-                        // Handle save changes
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Update Profile',
+                                style: TextStyle(color: AppColors.white),
+                              ),
+                              backgroundColor: AppColors.primaryColor,
+                              duration: Duration(milliseconds: 2000),
+                            ),
+                          );
+                          Future.delayed(
+                            const Duration(milliseconds: 2000),
+                            () {
+                              if (mounted) {
+                                context.pop();
+                              }
+                            },
+                          );
+                        }
                       },
                     ),
                     SizedBox(height: 24.h),
