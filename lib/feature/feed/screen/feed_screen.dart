@@ -107,7 +107,10 @@ class FeedScreen extends ConsumerWidget {
         child: Column(
           children: [
             // 1. Top Header (Logo + Orange Add Button)
-            FeedHeaderWidget(onAddPostTap: () => _openCreatePost(context)),
+            FeedHeaderWidget(
+              showAddButton: hasBoardingPass,
+              onAddPostTap: () => _openCreatePost(context),
+            ),
             SizedBox(height: 8.h),
 
             // 2. Horizontal Filter Categories
@@ -141,7 +144,11 @@ class FeedScreen extends ConsumerWidget {
                     )
                   : (feedState.selectedTab == FeedTab.myPost &&
                         filteredPosts.isEmpty)
-                  ? _buildEmptyState(context, feedState.selectedTab)
+                  ? _buildEmptyState(
+                      context,
+                      feedState.selectedTab,
+                      hasBoardingPass: hasBoardingPass,
+                    )
                   : ListView(
                       physics: const BouncingScrollPhysics(),
                       padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 100.h),
@@ -174,7 +181,11 @@ class FeedScreen extends ConsumerWidget {
                           SizedBox(height: 12.h),
                         ],
                         if (filteredPosts.isEmpty)
-                          _buildEmptyState(context, feedState.selectedTab)
+                          _buildEmptyState(
+                            context,
+                            feedState.selectedTab,
+                            hasBoardingPass: hasBoardingPass,
+                          )
                         else
                           ...filteredPosts.map(
                             (post) => FeedCardWidget(
@@ -200,9 +211,14 @@ class FeedScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context, FeedTab tab) {
+  Widget _buildEmptyState(
+    BuildContext context,
+    FeedTab tab, {
+    required bool hasBoardingPass,
+  }) {
     if (tab == FeedTab.myPost) {
       return FeedMyPostEmptyWidget(
+        showCreateButton: hasBoardingPass,
         onCreatePostTap: () => _openCreatePost(context),
       );
     }

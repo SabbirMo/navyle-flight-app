@@ -12,8 +12,13 @@ import 'package:navyla_flight_app/router/app_router_name.dart';
 /// Displayed on the Feed screen under "My post" tab when the user has not posted any updates yet.
 class FeedMyPostEmptyWidget extends StatelessWidget {
   final VoidCallback onCreatePostTap;
+  final bool showCreateButton;
 
-  const FeedMyPostEmptyWidget({super.key, required this.onCreatePostTap});
+  const FeedMyPostEmptyWidget({
+    super.key,
+    required this.onCreatePostTap,
+    this.showCreateButton = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -95,56 +100,58 @@ class FeedMyPostEmptyWidget extends StatelessWidget {
           SizedBox(height: 22.h),
 
           // 5. Create Your First Post Button
-          GestureDetector(
-            onTap: onCreatePostTap,
-            child: Container(
-              width: double.infinity,
-              height: 42.h,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFFF9E45), Color(0xFFFA7E23)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                borderRadius: BorderRadius.circular(28.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFFA7E23).withValues(alpha: 0.35),
-                    blurRadius: 16,
-                    offset: const Offset(0, 6),
+          if (showCreateButton) ...[
+            GestureDetector(
+              onTap: onCreatePostTap,
+              child: Container(
+                width: double.infinity,
+                height: 42.h,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFFF9E45), Color(0xFFFA7E23)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
-                ],
-              ),
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.add_rounded,
-                          color: Colors.white,
-                          size: 20.sp,
-                        ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          'Create Your First Post',
-                          style: GoogleFonts.inter(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w700,
+                  borderRadius: BorderRadius.circular(28.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFFA7E23).withValues(alpha: 0.35),
+                      blurRadius: 16,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_rounded,
                             color: Colors.white,
+                            size: 20.sp,
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 8.w),
+                          Text(
+                            'Create Your First Post',
+                            style: GoogleFonts.inter(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 18.h),
+            SizedBox(height: 18.h),
+          ],
 
           // 6. Sponsored Stay Connected Worldwide (eSIM) Card
           FeedSponsorCardWidget(

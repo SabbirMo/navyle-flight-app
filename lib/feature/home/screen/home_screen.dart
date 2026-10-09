@@ -120,23 +120,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   SizedBox(height: 16.h),
 
-                  TitleRowClick(
-                    title: "NAVYLA Feed",
-                    subTitle: "See all",
-                    isEnable: true,
-                    onTap: () {
-                      ref.read(navbarNotifierProvider.notifier).setIndex(3);
-                    },
-                  ),
-                  SizedBox(height: 12.h),
+                  if (hasBoardingPass) ...[
+                    TitleRowClick(
+                      title: "NAVYLA Feed",
+                      subTitle: "See all",
+                      isEnable: true,
+                      onTap: () {
+                        ref.read(navbarNotifierProvider.notifier).setIndex(3);
+                      },
+                    ),
+                    SizedBox(height: 12.h),
 
-                  HomeFeedCard(
-                    post: homePost,
-                    onTap: () {
-                      ref.read(navbarNotifierProvider.notifier).setIndex(3);
-                    },
-                  ),
-                  SizedBox(height: 16.h),
+                    HomeFeedCard(
+                      post: homePost,
+                      onTap: () {
+                        ref.read(navbarNotifierProvider.notifier).setIndex(3);
+                      },
+                    ),
+                    SizedBox(height: 16.h),
+                  ],
                 ],
               ),
             ),

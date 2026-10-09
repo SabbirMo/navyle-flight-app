@@ -6,66 +6,75 @@ import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 
 class FeedHeaderWidget extends StatelessWidget {
   final VoidCallback onAddPostTap;
+  final bool showAddButton;
 
-  const FeedHeaderWidget({super.key, required this.onAddPostTap});
+  const FeedHeaderWidget({
+    super.key,
+    required this.onAddPostTap,
+    this.showAddButton = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // NAVYLA FEED Brand Header
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 100.w,
-                child: Image.asset(
-                  isDark ? ImageAssets.navylaWhite : ImageAssets.navyla,
-                ),
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                'FEED',
-                style: StyleManager.sfProBold16(
-                  isDark ? AppColors.white : AppColors.feedColor,
-                ).copyWith(fontSize: 18.sp),
-              ),
-            ],
-          ),
-
-          // Orange '+' Button
-          GestureDetector(
-            onTap: onAddPostTap,
-            child: Container(
-              width: 38.w,
-              height: 38.w,
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor,
-                borderRadius: BorderRadius.circular(14.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primaryColor.withValues(alpha: 0.38),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: 38.w),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // NAVYLA FEED Brand Header
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 100.w,
+                  child: Image.asset(
+                    isDark ? ImageAssets.navylaWhite : ImageAssets.navyla,
                   ),
-                ],
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.add_rounded,
-                  color: Colors.white,
-                  size: 26.sp,
+                ),
+                SizedBox(width: 8.w),
+                Text(
+                  'FEED',
+                  style: StyleManager.sfProBold16(
+                    isDark ? AppColors.white : AppColors.feedColor,
+                  ).copyWith(fontSize: 18.sp),
+                ),
+              ],
+            ),
+
+            // Orange '+' Button
+            if (showAddButton)
+              GestureDetector(
+                onTap: onAddPostTap,
+                child: Container(
+                  width: 38.w,
+                  height: 38.w,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColor,
+                    borderRadius: BorderRadius.circular(14.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primaryColor.withValues(alpha: 0.38),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.add_rounded,
+                      color: Colors.white,
+                      size: 26.sp,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
