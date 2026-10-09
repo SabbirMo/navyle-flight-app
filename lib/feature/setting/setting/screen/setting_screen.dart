@@ -270,7 +270,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                     SettingActionButton(
                       text: "SIGN OUT ACCOUNT",
                       onTap: () {
-                        // Handle sign out
+                        context.pushReplacement(AppRouterName.loginScreen);
                       },
                     ),
                     SizedBox(height: 12.h),

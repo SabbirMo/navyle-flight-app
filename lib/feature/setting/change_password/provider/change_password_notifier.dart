@@ -5,6 +5,20 @@ class ChangePasswordNotifier extends Notifier<ChangePasswordState> {
   @override
   ChangePasswordState build() => ChangePasswordState();
 
+  void onNewPasswordChanged(String password) {
+    final bool hasMinLength = password.length >= 8;
+    final bool hasSpecialChar = RegExp(
+      r'[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\/`~]',
+    ).hasMatch(password);
+    final bool hasUppercase = RegExp(r'[A-Z]').hasMatch(password);
+
+    state = state.copyWith(
+      hasMinLength: hasMinLength,
+      hasSpecialChar: hasSpecialChar,
+      hasUppercase: hasUppercase,
+    );
+  }
+
   void toggleCurrentPassword() {
     state = state.copyWith(currentPassword: !state.currentPassword);
   }

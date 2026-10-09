@@ -9,6 +9,7 @@ import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/core/widgets/custom_input_field.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
+import 'package:navyla_flight_app/feature/auth/new_password/widget/password_criteria_card.dart';
 import 'package:navyla_flight_app/feature/setting/change_password/provider/change_password_notifier.dart';
 
 class ChangePassword extends ConsumerStatefulWidget {
@@ -27,7 +28,20 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
       TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _newPasswordController.addListener(_onNewPasswordChanged);
+  }
+
+  void _onNewPasswordChanged() {
+    ref
+        .read(changePasswordNotifierProvider.notifier)
+        .onNewPasswordChanged(_newPasswordController.text);
+  }
+
+  @override
   void dispose() {
+    _newPasswordController.removeListener(_onNewPasswordChanged);
     _currentPasswordController.dispose();
     _newPasswordController.dispose();
     _confirmPasswordController.dispose();
@@ -77,6 +91,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                         controller: _newPasswordController,
                         label: "New Password",
                         isRequired: false,
+                        onChanged: notifier.onNewPasswordChanged,
                         validator: AppValidator.validatePassword,
                         hintText: AppString.enterYourPassword,
                         prefixIcon: Icons.lock_outline_rounded,
@@ -116,6 +131,15 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                           ),
                         ),
                       ),
+
+                      SizedBox(height: 18.h),
+
+                      PasswordCriteriaCard(
+                        hasMinLength: state.hasMinLength,
+                        hasSpecialChar: state.hasSpecialChar,
+                        hasUppercase: state.hasUppercase,
+                      ),
+
                       SizedBox(height: 40.h),
 
                       CustomButton(
@@ -123,6 +147,19 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                         boxShadow: true,
                         onTap: () {
                           if (_formKey.currentState?.validate() ?? false) {
+                            if (!state.isPasswordValid) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Please fulfill all password requirements',
+                                    style: TextStyle(color: AppColors.white),
+                                  ),
+                                  backgroundColor: Color(0xFFEF4444),
+                                  duration: Duration(milliseconds: 2000),
+                                ),
+                              );
+                              return;
+                            }
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
