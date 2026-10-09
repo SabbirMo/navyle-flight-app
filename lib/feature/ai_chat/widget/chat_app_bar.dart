@@ -14,7 +14,6 @@ class ChatAppBar extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Left: Squircle Back Button
           GestureDetector(
@@ -51,56 +50,58 @@ class ChatAppBar extends StatelessWidget {
           ),
 
           // Center: Mascot Avatar + "ASK NAVYLA"
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                ImageAssets.navylaAi,
-                width: 36.w,
-                height: 36.w,
-                fit: BoxFit.contain,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                'ASK NAVYLA',
-                style: TextStyle(
-                  fontFamily: 'SF-Pro',
-                  fontSize: 17.sp,
-                  fontWeight: FontWeight.w800,
-                  color: isDark ? Colors.white : const Color(0xFF0F172A),
-                  letterSpacing: 0.8,
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  ImageAssets.navylaAi,
+                  width: 36.w,
+                  height: 36.w,
+                  fit: BoxFit.contain,
                 ),
-              ),
-            ],
+                SizedBox(width: 8.w),
+                Text(
+                  'ASK NAVYLA',
+                  style: TextStyle(
+                    fontFamily: 'SF-Pro',
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.w800,
+                    color: isDark ? Colors.white : const Color(0xFF0F172A),
+                    letterSpacing: 0.8,
+                  ),
+                ),
+              ],
+            ),
           ),
 
           // Right: More Options Button (matching screenshot)
-          GestureDetector(
-            onTap: onInfoTap,
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              width: 36.w,
-              height: 36.w,
-              decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF1E293B)
-                    : const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(14.r),
-                border: Border.all(
-                  color: isDark
-                      ? const Color(0xFF334155).withValues(alpha: 0.6)
-                      : const Color(0xFFE2E8F0).withValues(alpha: 0.6),
-                ),
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.more_vert_rounded,
-                  size: 18.sp,
-                  color: isDark ? Colors.white : const Color(0xFF475569),
-                ),
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: onInfoTap,
+          //   behavior: HitTestBehavior.opaque,
+          //   child: Container(
+          //     width: 36.w,
+          //     height: 36.w,
+          //     decoration: BoxDecoration(
+          //       color: isDark
+          //           ? const Color(0xFF1E293B)
+          //           : const Color(0xFFF8FAFC),
+          //       borderRadius: BorderRadius.circular(14.r),
+          //       border: Border.all(
+          //         color: isDark
+          //             ? const Color(0xFF334155).withValues(alpha: 0.6)
+          //             : const Color(0xFFE2E8F0).withValues(alpha: 0.6),
+          //       ),
+          //     ),
+          //     child: Center(
+          //       child: Icon(
+          //         Icons.more_vert_rounded,
+          //         size: 18.sp,
+          //         color: isDark ? Colors.white : const Color(0xFF475569),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

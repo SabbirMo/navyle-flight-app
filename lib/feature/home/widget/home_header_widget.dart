@@ -111,12 +111,29 @@ class HomeHeaderWidget extends StatelessWidget {
               ),
             ),
             child: Center(
-              child: SvgPicture.asset(
-                ImageAssets.notification,
-                colorFilter: ColorFilter.mode(
-                  isDark ? AppColors.white : AppColors.black,
-                  BlendMode.srcIn,
-                ),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    top: -2,
+                    right: 0,
+                    child: Container(
+                      width: 8.w,
+                      height: 8.h,
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                  SvgPicture.asset(
+                    ImageAssets.notification,
+                    colorFilter: ColorFilter.mode(
+                      isDark ? AppColors.white : AppColors.black,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

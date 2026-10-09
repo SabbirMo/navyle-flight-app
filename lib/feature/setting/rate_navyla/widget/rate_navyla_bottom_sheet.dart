@@ -303,7 +303,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                     minLines: 3,
                     style: GoogleFonts.inter(
                       fontSize: 13.sp,
-                      color: const Color(0xFF1E293B),
+                      color: isDark ? AppColors.white : const Color(0xFF1E293B),
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -325,15 +325,17 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                         borderRadius: BorderRadius.circular(14.r),
                         borderSide: BorderSide(
                           color: isDark
-                              ? AppColors.lightGray.withValues(alpha: 0.6)
+                              ? AppColors.lightGray.withValues(alpha: 0.4)
                               : Color(0xFFCBD5E1),
                           width: 1.0,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(14.r),
-                        borderSide: const BorderSide(
-                          color: Color(0xFFCBD5E1),
+                        borderSide: BorderSide(
+                          color: isDark
+                              ? AppColors.lightBlueGray.withValues(alpha: 0.3)
+                              : Color(0xFFCBD5E1),
                           width: 1.0,
                         ),
                       ),
