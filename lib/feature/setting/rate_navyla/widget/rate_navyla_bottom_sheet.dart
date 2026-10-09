@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
+import 'package:navyla_flight_app/core/utils/app_share_helper.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 
 class RateNavylaBottomSheet extends StatefulWidget {
@@ -117,16 +118,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
   }
 
   void _onSocialShare(String channel) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Sharing via $channel..."),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.r),
-        ),
-      ),
-    );
+    AppShareHelper.onSocialShare(context, channel);
   }
 
   @override
@@ -482,7 +474,10 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                                           height: 44.w,
                                         ),
                                         label: "More",
-                                        onTap: () => _onSocialShare("More"),
+                                        onTap: () =>
+                                            AppShareHelper.shareWithSystem(
+                                              context,
+                                            ),
                                       ),
                                     ],
                                   ),
