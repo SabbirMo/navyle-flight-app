@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,6 +31,14 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final ScrollController _activeScrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _activeScrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final feedPosts = ref.watch(feedNotifierProvider).posts;
@@ -46,110 +55,142 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (hasBoardingPass) {
       return Scaffold(
         backgroundColor: isDark ? AppColors.darkBlack : const Color(0xFFF8FAFC),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              // 1. Hero Section with darkBg / lightBg Airport Window Image
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  // Airport Window Background (darkBg.png for dark, lightBg.png for light)
-                  SizedBox(
-                    width: double.infinity,
-                    height: 340.h,
-                    child: Image.asset(
-                      isDark ? ImageAssets.darkBg : ImageAssets.lightBg,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.topCenter,
-                    ),
-                  ),
-
-                  // Bottom gradient overlay to blend into scaffold background
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    height: 80.h,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            (isDark
-                                    ? AppColors.darkBlack
-                                    : const Color(0xFFF8FAFC))
-                                .withValues(alpha: 0.0),
-                            (isDark
-                                ? AppColors.darkBlack
-                                : const Color(0xFFF8FAFC)),
-                          ],
+        body: Stack(
+          children: [
+            // 1. Scrollable Page Content
+            Positioned.fill(
+              child: SingleChildScrollView(
+                controller: _activeScrollController,
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    // Hero Section with darkBg / lightBg Airport Window Image
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        // Airport Window Background (darkBg.png for dark, lightBg.png for light)
+                        SizedBox(
+                          width: double.infinity,
+                          height: 340.h,
+                          child: Image.asset(
+                            isDark ? ImageAssets.darkBg : ImageAssets.lightBg,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.topCenter,
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
 
-                  // Hero content
-                  SafeArea(
-                    bottom: false,
-                    child: Padding(
+                        // Bottom gradient overlay to blend into scaffold background
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          height: 80.h,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  (isDark
+                                          ? AppColors.darkBlack
+                                          : const Color(0xFFF8FAFC))
+                                      .withValues(alpha: 0.0),
+                                  (isDark
+                                      ? AppColors.darkBlack
+                                      : const Color(0xFFF8FAFC)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Hero content inside scrollable view
+                        SafeArea(
+                          bottom: false,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            child: Column(
+                              children: [
+                                // Clearance for fixed sticky top header
+                                SizedBox(height: 60.h),
+                                // Weather / City / Local Time Strip
+                                const CityWeatherCard(),
+                                SizedBox(height: 36.h),
+                                // Flight Card
+                                const FlightCardWidget(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 26.h),
+
+                    // 2. Bottom Section below Hero
+                    Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Column(
                         children: [
-                          _buildActiveHeroHeader(context, isDark),
-                          SizedBox(height: 18.h),
-                          // Weather / City / Local Time Strip
-                          const CityWeatherCard(),
-                          SizedBox(height: 36.h),
-                          // Flight Card
-                          FlightCardWidget(),
+                          const TitleRowClick(title: "Quick access tools"),
+                          SizedBox(height: 12.h),
+
+                          QuickAccessToolsWidget(
+                            onBoardingPassTap: () {
+                              ref
+                                  .read(navbarNotifierProvider.notifier)
+                                  .setIndex(1);
+                            },
+                          ),
+                          SizedBox(height: 16.h),
+
+                          TitleRowClick(
+                            title: "NAVYLA Feed",
+                            subTitle: "See all",
+                            isEnable: true,
+                            onTap: () {
+                              ref
+                                  .read(navbarNotifierProvider.notifier)
+                                  .setIndex(3);
+                            },
+                          ),
+                          SizedBox(height: 12.h),
+
+                          HomeFeedCard(
+                            post: homePost,
+                            onTap: () {
+                              ref
+                                  .read(navbarNotifierProvider.notifier)
+                                  .setIndex(3);
+                            },
+                          ),
+                          // Bottom clearance for floating CustomBottomNavBar
+                          SizedBox(height: 110.h),
                         ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 20.h),
-
-              // 2. Bottom Section below Hero
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Column(
-                  children: [
-                    const TitleRowClick(title: "Quick access tools"),
-                    SizedBox(height: 12.h),
-
-                    QuickAccessToolsWidget(
-                      onBoardingPassTap: () {
-                        ref.read(navbarNotifierProvider.notifier).setIndex(1);
-                      },
-                    ),
-                    SizedBox(height: 16.h),
-
-                    TitleRowClick(
-                      title: "NAVYLA Feed",
-                      subTitle: "See all",
-                      isEnable: true,
-                      onTap: () {
-                        ref.read(navbarNotifierProvider.notifier).setIndex(3);
-                      },
-                    ),
-                    SizedBox(height: 12.h),
-
-                    HomeFeedCard(
-                      post: homePost,
-                      onTap: () {
-                        ref.read(navbarNotifierProvider.notifier).setIndex(3);
-                      },
-                    ),
-                    SizedBox(height: 24.h),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+
+            // 2. Fixed Sticky Top Header
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 4.h,
+                  ),
+                  child: _buildActiveHeroHeader(context, isDark),
+                ),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -207,27 +248,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ref.read(navbarNotifierProvider.notifier).setIndex(1);
                     },
                   ),
-                  SizedBox(height: 16.h),
-
-                  if (hasBoardingPass) ...[
-                    TitleRowClick(
-                      title: "NAVYLA Feed",
-                      subTitle: "See all",
-                      isEnable: true,
-                      onTap: () {
-                        ref.read(navbarNotifierProvider.notifier).setIndex(3);
-                      },
-                    ),
-                    SizedBox(height: 12.h),
-
-                    HomeFeedCard(
-                      post: homePost,
-                      onTap: () {
-                        ref.read(navbarNotifierProvider.notifier).setIndex(3);
-                      },
-                    ),
-                    SizedBox(height: 16.h),
-                  ],
+                  SizedBox(height: 110.h),
                 ],
               ),
             ),
@@ -238,113 +259,118 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildActiveHeroHeader(BuildContext context, bool isDark) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.black.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Row(
-        children: [
-          // User Avatar + "Hi, Alex"
-          GestureDetector(
-            onTap: () => context.push(AppRouterName.settingScreen),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 44.w,
-                  height: 44.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.white.withValues(alpha: 0.8),
-                      width: 2,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(100.r),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.46),
+          borderRadius: BorderRadius.circular(100.r),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.15),
+            width: 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            // User Avatar + "Hi, Alex"
+            GestureDetector(
+              onTap: () => context.push(AppRouterName.settingScreen),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 42.w,
+                    height: 42.w,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.85),
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.2),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+                    child: ClipOval(
+                      child: Image.asset(
+                        ImageAssets.profile,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Hi,',
+                        style: GoogleFonts.inter(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white.withValues(alpha: 0.85),
+                        ),
+                      ),
+                      Text(
+                        'Alex',
+                        style: TextStyle(
+                          fontFamily: 'SF-Pro',
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          height: 1.1,
+                        ),
                       ),
                     ],
                   ),
-                  child: ClipOval(
-                    child: Image.asset(ImageAssets.profile, fit: BoxFit.cover),
+                ],
+              ),
+            ),
+
+            const Spacer(),
+
+            // NAVYLA Logo in center
+            Image.asset(
+              ImageAssets.navylaWhite,
+              height: 22.h,
+              fit: BoxFit.contain,
+            ),
+
+            const Spacer(),
+
+            // Notification Bell Icon button
+            GestureDetector(
+              onTap: () => context.push(AppRouterName.notificationScreen),
+              child: Container(
+                width: 42.w,
+                height: 42.w,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.35),
+                    width: 1.2,
                   ),
                 ),
-                SizedBox(width: 8.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Hi,',
-                      style: GoogleFonts.inter(
-                        fontSize: 12.sp,
-                        color: isDark
-                            ? Colors.white.withValues(alpha: 0.8)
-                            : AppColors.darkGrayColor,
-                      ),
+                child: Center(
+                  child: SvgPicture.asset(
+                    ImageAssets.notification,
+                    width: 20.w,
+                    height: 20.w,
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
                     ),
-                    Text(
-                      'Alex',
-                      style: TextStyle(
-                        fontFamily: 'SF-Pro',
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: isDark ? AppColors.white : AppColors.black,
-                        height: 1.1,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          const Spacer(),
-
-          // NAVYLA Logo in center
-          Image.asset(
-            isDark ? ImageAssets.navylaWhite : ImageAssets.navyla,
-            height: 24.h,
-            fit: BoxFit.contain,
-          ),
-
-          const Spacer(),
-
-          // Notification Bell Icon button
-          GestureDetector(
-            onTap: () => context.push(AppRouterName.notificationScreen),
-            child: Container(
-              width: 38.w,
-              height: 38.w,
-              decoration: BoxDecoration(
-                color: isDark
-                    ? AppColors.white.withValues(alpha: 0.16)
-                    : Colors.white.withValues(alpha: 0.8),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: isDark
-                      ? AppColors.white.withValues(alpha: 0.25)
-                      : Colors.black.withValues(alpha: 0.08),
-                  width: 1,
-                ),
-              ),
-              child: Center(
-                child: SvgPicture.asset(
-                  ImageAssets.notification,
-                  width: 20.w,
-                  height: 20.w,
-                  colorFilter: ColorFilter.mode(
-                    isDark ? AppColors.white : AppColors.black,
-                    BlendMode.srcIn,
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

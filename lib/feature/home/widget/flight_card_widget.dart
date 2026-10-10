@@ -144,15 +144,7 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _cityBlock(
-                      journey.originCode?.isNotEmpty == true
-                          ? journey.originCode!
-                          : 'AMS',
-                      journey.originCity?.isNotEmpty == true
-                          ? journey.originCity!
-                          : 'AMSTERDAM',
-                      CrossAxisAlignment.start,
-                    ),
+                    _cityBlock('AMS', 'AMSTERDAM', CrossAxisAlignment.start),
                     Row(
                       children: [
                         Container(
@@ -178,15 +170,7 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
                         ),
                       ],
                     ),
-                    _cityBlock(
-                      journey.destinationCode?.isNotEmpty == true
-                          ? journey.destinationCode!
-                          : 'FRA',
-                      journey.destinationCity?.isNotEmpty == true
-                          ? journey.destinationCity!
-                          : 'FRANKFURT',
-                      CrossAxisAlignment.end,
-                    ),
+                    _cityBlock('FRA', 'FRANKFURT', CrossAxisAlignment.end),
                   ],
                 ),
 
