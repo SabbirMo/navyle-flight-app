@@ -19,13 +19,58 @@ class AppShareHelper {
     String text = defaultShareText,
     String subject = defaultSubject,
   }) async {
-    final box = context.findRenderObject() as RenderBox?;
-    final origin = (box != null && box.hasSize)
-        ? box.localToGlobal(Offset.zero) & box.size
-        : null;
+    try {
+      final box = context.findRenderObject() as RenderBox?;
+      final origin = (box != null && box.hasSize)
+          ? box.localToGlobal(Offset.zero) & box.size
+          : null;
 
-    await SharePlus.instance.share(
-      ShareParams(text: text, subject: subject, sharePositionOrigin: origin),
+      await SharePlus.instance.share(
+        ShareParams(text: text, subject: subject, sharePositionOrigin: origin),
+      );
+    } catch (e) {
+      debugPrint('SharePlus error: $e');
+    }
+  }
+
+  /// Shares boarding pass details via native system share sheet.
+  static Future<void> shareBoardingPass(
+    BuildContext context, {
+    required String flightNumber,
+    required String originCode,
+    required String destinationCode,
+    String? airlineName,
+    String? passengerName,
+    String? date,
+    String? seat,
+    String? gate,
+    String? terminal,
+  }) async {
+    final buffer = StringBuffer();
+    buffer.writeln(
+      '✈️ Boarding Pass: $flightNumber${airlineName != null && airlineName.isNotEmpty ? ' ($airlineName)' : ''}',
+    );
+    buffer.writeln('📍 $originCode ➔ $destinationCode');
+    if (passengerName != null && passengerName.isNotEmpty) {
+      buffer.writeln('👤 Passenger: $passengerName');
+    }
+    if (date != null && date.isNotEmpty) {
+      buffer.writeln('📅 Date: $date');
+    }
+    final details = [
+      if (seat != null && seat.isNotEmpty) 'Seat: $seat',
+      if (gate != null && gate.isNotEmpty) 'Gate: $gate',
+      if (terminal != null && terminal.isNotEmpty) 'Terminal: $terminal',
+    ];
+    if (details.isNotEmpty) {
+      buffer.writeln('🎫 ${details.join(' | ')}');
+    }
+    buffer.writeln('\nShared via NAVYLA - From Home to Gate: https://navyla.com');
+
+    await shareWithSystem(
+      context,
+      text: buffer.toString(),
+      subject: 'Boarding Pass - $flightNumber ($originCode to $destinationCode)',
     );
   }
 

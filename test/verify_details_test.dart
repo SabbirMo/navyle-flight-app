@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
@@ -15,14 +16,14 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     await tester.pumpWidget(
-      ScreenUtilInit(
-        designSize: const Size(393, 852),
-        minTextAdapt: true,
-        builder: (context, child) {
-          return const MaterialApp(
+      const ProviderScope(
+        child: ScreenUtilInit(
+          designSize: Size(393, 852),
+          minTextAdapt: true,
+          child: MaterialApp(
             home: VerifyDetailsScreen(),
-          );
-        },
+          ),
+        ),
       ),
     );
 
@@ -44,9 +45,9 @@ void main() {
     expect(find.text('BA 0215'), findsOneWidget);
 
     expect(find.text('FROM'), findsOneWidget);
-    expect(find.text('LHR'), findsOneWidget);
+    expect(find.text('AMS'), findsOneWidget);
     expect(find.text('TO'), findsOneWidget);
-    expect(find.text('JFK'), findsOneWidget);
+    expect(find.text('FRA'), findsOneWidget);
 
     expect(find.text('DATE'), findsOneWidget);
     expect(find.text('24/09/26'), findsOneWidget);
@@ -80,14 +81,14 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     await tester.pumpWidget(
-      ScreenUtilInit(
-        designSize: const Size(393, 852),
-        minTextAdapt: true,
-        builder: (context, child) {
-          return const MaterialApp(
+      const ProviderScope(
+        child: ScreenUtilInit(
+          designSize: Size(393, 852),
+          minTextAdapt: true,
+          child: MaterialApp(
             home: VerifyDetailsScreen(isManual: true),
-          );
-        },
+          ),
+        ),
       ),
     );
 
@@ -125,14 +126,14 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     await tester.pumpWidget(
-      ScreenUtilInit(
-        designSize: const Size(393, 852),
-        minTextAdapt: true,
-        builder: (context, child) {
-          return const MaterialApp(
+      const ProviderScope(
+        child: ScreenUtilInit(
+          designSize: Size(393, 852),
+          minTextAdapt: true,
+          child: MaterialApp(
             home: VerifyDetailsScreen(),
-          );
-        },
+          ),
+        ),
       ),
     );
 
@@ -144,5 +145,43 @@ void main() {
 
     // Verify DatePickerDialog is displayed
     expect(find.byType(DatePickerDialog), findsOneWidget);
+  });
+
+  testWidgets(
+      'VerifyDetailsScreen blocks proceeding and shows error when fields are empty',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      const ProviderScope(
+        child: ScreenUtilInit(
+          designSize: Size(393, 852),
+          minTextAdapt: true,
+          child: MaterialApp(
+            home: VerifyDetailsScreen(isManual: true),
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // In manual mode, all fields are empty initially. Tap Confirm & Create Pass.
+    final confirmBtn = find.text('Confirm & Create Pass');
+    expect(confirmBtn, findsOneWidget);
+    await tester.tap(confirmBtn);
+    await tester.pumpAndSettle();
+
+    // Verify error snackbar appears
+    expect(
+      find.text('Please fill in all required fields before continuing.'),
+      findsOneWidget,
+    );
+
+    // Verify 'Required' indicators appear on empty fields
+    expect(find.text('Required'), findsWidgets);
   });
 }

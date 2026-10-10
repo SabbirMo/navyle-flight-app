@@ -25,7 +25,7 @@ class PlanSelectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final activeColor = AppColors.primaryColor;
     final inactiveBorderColor = const Color(0xFFE2E8F0);
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     Widget cardBody = GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -33,10 +33,14 @@ class PlanSelectionCard extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: isDark ? AppColors.darkBlack : AppColors.white,
           borderRadius: BorderRadius.circular(50.r),
           border: Border.all(
-            color: isSelected ? activeColor : inactiveBorderColor,
+            color: isSelected
+                ? activeColor
+                : isDark
+                ? AppColors.lightGray.withValues(alpha: 0.4)
+                : inactiveBorderColor,
             width: isSelected ? 1.8 : 1.2,
           ),
         ),
@@ -64,7 +68,7 @@ class PlanSelectionCard extends StatelessWidget {
                         fontFamily: 'SF-Pro',
                         fontSize: 17.sp,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.blackShadow,
+                        color: isDark ? AppColors.white : AppColors.blackShadow,
                       ),
                     ),
                     Text(

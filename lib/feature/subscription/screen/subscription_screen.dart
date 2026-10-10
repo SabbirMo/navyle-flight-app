@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
@@ -22,6 +23,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: CommonScreen(
         child: Column(
@@ -96,7 +98,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     Text(
                       "NAVAYLA PLUS",
                       style: StyleManager.sfProBold24(
-                        AppColors.black,
+                        isDark ? AppColors.white : AppColors.black,
                       ).copyWith(fontSize: 25.sp, fontWeight: FontWeight.w900),
                     ),
                     SizedBox(height: 6.h),
@@ -195,6 +197,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       text: "START 7-DAY FREE TRIAL",
                       height: 42.h,
                       boxShadow: true,
+                      onTap: () {
+                        context.pop();
+                      },
                     ),
                     SizedBox(height: 20.h),
 

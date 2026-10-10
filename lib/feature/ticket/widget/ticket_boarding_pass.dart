@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
-import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 
 class TicketBoardingPass extends StatelessWidget {
   final String airlineName;
@@ -21,6 +20,14 @@ class TicketBoardingPass extends StatelessWidget {
   final String gate;
   final String seat;
   final String luggage;
+  final Color? primaryColor;
+  final Color? secondaryColor;
+  final Color? borderColor;
+  final Widget? logoWidget;
+  final Color? planeIconColor;
+  final Color? airlineLogoColor;
+  final Color? economyBgColor;
+  final Color? economyTextColor;
 
   const TicketBoardingPass({
     super.key,
@@ -39,6 +46,14 @@ class TicketBoardingPass extends StatelessWidget {
     this.gate = 'B24',
     this.seat = '14A',
     this.luggage = '03',
+    this.primaryColor,
+    this.secondaryColor,
+    this.borderColor,
+    this.logoWidget,
+    this.planeIconColor,
+    this.airlineLogoColor,
+    this.economyBgColor,
+    this.economyTextColor,
   });
 
   static const Color ticketBlue = Color(0xFF0456C8);
@@ -46,23 +61,53 @@ class TicketBoardingPass extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final double notchRadius = 16.r;
     final double cornerRadius = 24.r;
 
-    final double topSectionHeight = 146.h;
-    final double middleSectionHeight = 215.h;
-    final double bottomSectionHeight = 130.h;
+    final double topSectionHeight = 142.h;
+    final double middleSectionHeight = 196.h;
+    final double bottomSectionHeight = 118.h;
     final double totalHeight =
         topSectionHeight + middleSectionHeight + bottomSectionHeight;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final resolvedBorderColor =
+        borderColor ??
+        (isDark ? Colors.white : AppColors.lightGray.withValues(alpha: 0.7));
+
+    final upperName = airlineName.toUpperCase();
+    final bool isLufthansa = upperName.contains('LUFTHANSA');
+    final bool isWizz = upperName.contains('WIZZ');
+
+    final Color effectivePrimary = isLufthansa
+        ? const Color(0xFFFFFFFF)
+        : (isWizz
+              ? const Color(0xFFEDE8FF)
+              : (primaryColor != null &&
+                        primaryColor != const Color(0xFF4C1D95) &&
+                        primaryColor != const Color(0xFFBE185D)
+                    ? primaryColor!
+                    : const Color(0xFF0453BC)));
+
+    final Color effectiveSecondary = isLufthansa
+        ? const Color(0xFFFFFFFF)
+        : (isWizz
+              ? const Color(0xFFE5DEFF)
+              : (secondaryColor != null &&
+                        secondaryColor != const Color(0xFF3B0764) &&
+                        secondaryColor != const Color(0xFF831843)
+                    ? secondaryColor!
+                    : const Color(0xFF024699)));
+
+    final bool isLight = effectivePrimary.computeLuminance() > 0.45;
+
     return CustomPaint(
-      painter: _TicketCardPainter(
+      foregroundPainter: _TicketBorderPainter(
         notchY: topSectionHeight,
         notchRadius: notchRadius,
         cornerRadius: cornerRadius,
-        borderColor: isDark ? Colors.white : ticketBlue,
-        borderWidth: 2.w,
+        borderColor: resolvedBorderColor,
+        borderWidth: 2.2.w,
       ),
       child: ClipPath(
         clipper: _TicketClipper(
@@ -78,7 +123,14 @@ class TicketBoardingPass extends StatelessWidget {
             children: [
               SizedBox(
                 height: topSectionHeight,
-                child: _buildTopSection(topSectionHeight),
+                child: _buildTopSection(
+                  topSectionHeight,
+                  isLight,
+                  effectivePrimary,
+                  effectiveSecondary,
+                  isLufthansa,
+                  isWizz,
+                ),
               ),
               SizedBox(
                 height: middleSectionHeight,
@@ -86,7 +138,13 @@ class TicketBoardingPass extends StatelessWidget {
               ),
               SizedBox(
                 height: bottomSectionHeight,
-                child: _buildBottomSection(bottomSectionHeight),
+                child: _buildBottomSection(
+                  bottomSectionHeight,
+                  isLight,
+                  effectivePrimary,
+                  isLufthansa,
+                  isWizz,
+                ),
               ),
             ],
           ),
@@ -95,43 +153,83 @@ class TicketBoardingPass extends StatelessWidget {
     );
   }
 
-  Widget _buildTopSection(double height) {
+  Widget _buildTopSection(
+    double height,
+    bool isLight,
+    Color bgPrimary,
+    Color bgSecondary,
+    bool isLufthansa,
+    bool isWizz,
+  ) {
+    final textColor = isLight ? const Color(0xFF0F172A) : Colors.white;
+    final secondaryTextColor = isLight
+        ? const Color(0xFF64748B)
+        : const Color(0xffD3D3D3);
+    final subtleTextColor = isLight
+        ? const Color(0xFF64748B)
+        : Colors.white.withValues(alpha: 0.65);
+    final dividerColor = isLight
+        ? AppColors.lightGray
+        : Colors.white.withValues(alpha: 0.18);
+    final flightLineColor = isLight
+        ? const Color(0xFFCBD5E1)
+        : Colors.white.withValues(alpha: 0.35);
+    final planeColor =
+        planeIconColor ??
+        (isLufthansa
+            ? const Color(0xFF0B1B3D)
+            : (isWizz ? const Color(0xFF8B5CF6) : ticketOrange));
+    final resolvedEconomyBg =
+        economyBgColor ??
+        (isLufthansa
+            ? const Color(0xFFCAD4F8)
+            : (isWizz ? const Color(0xFFB4A5F8) : const Color(0xff196CCB)));
+    final resolvedEconomyText =
+        economyTextColor ??
+        (isLufthansa ? const Color(0xFF1E1B4B) : Colors.white);
+    final resolvedLogoBg =
+        airlineLogoColor ??
+        (isLufthansa
+            ? const Color(0xFF0B1B3D)
+            : (isWizz ? const Color(0xFF9A84F8) : const Color(0xff2563EB)));
+
     return Container(
       width: double.infinity,
       height: height,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff0453BC), Color(0xff024699)],
+          colors: [bgPrimary, bgSecondary],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 8.h),
+        padding: EdgeInsets.fromLTRB(18.w, 8.h, 18.w, 6.h),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Airline row
             Row(
               children: [
-                Container(
-                  width: 28.w,
-                  height: 28.w,
-                  decoration: BoxDecoration(
-                    color: const Color(0xff2563EB),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Center(
-                    child: Transform.rotate(
-                      angle: 1.5708,
-                      child: Icon(
-                        Icons.flight,
-                        color: Colors.white,
-                        size: 18.sp,
+                logoWidget ??
+                    Container(
+                      width: 28.w,
+                      height: 28.w,
+                      decoration: BoxDecoration(
+                        color: resolvedLogoBg,
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Center(
+                        child: Transform.rotate(
+                          angle: 0.785398,
+                          child: Icon(
+                            Icons.flight,
+                            color: Colors.white,
+                            size: 16.sp,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
                 SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
@@ -139,7 +237,7 @@ class TicketBoardingPass extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                      color: textColor,
                       letterSpacing: 0.5,
                     ),
                     maxLines: 1,
@@ -153,12 +251,17 @@ class TicketBoardingPass extends StatelessWidget {
                     vertical: 3.h,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xff196CCB),
+                    color: resolvedEconomyBg,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Text(
                     flightClass,
-                    style: StyleManager.interBold10(AppColors.white),
+                    style: GoogleFonts.inter(
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.w700,
+                      color: resolvedEconomyText,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
               ],
@@ -174,6 +277,8 @@ class TicketBoardingPass extends StatelessWidget {
                     code: originCode,
                     city: originCity,
                     isEnd: false,
+                    textColor: textColor,
+                    secondaryTextColor: secondaryTextColor,
                   ),
                 ),
                 Padding(
@@ -183,19 +288,19 @@ class TicketBoardingPass extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _buildFlightLine(),
+                          _buildFlightLine(flightLineColor),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 4.w),
                             child: Transform.rotate(
                               angle: 1.5708,
                               child: Icon(
                                 Icons.flight,
-                                color: ticketOrange,
+                                color: planeColor,
                                 size: 15.sp,
                               ),
                             ),
                           ),
-                          _buildFlightLine(),
+                          _buildFlightLine(flightLineColor),
                         ],
                       ),
                       SizedBox(height: 3.h),
@@ -204,7 +309,7 @@ class TicketBoardingPass extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 10.5.sp,
                           fontWeight: FontWeight.w800,
-                          color: Colors.white,
+                          color: textColor,
                           letterSpacing: 0.4,
                         ),
                       ),
@@ -216,13 +321,15 @@ class TicketBoardingPass extends StatelessWidget {
                     code: destinationCode,
                     city: destinationCity,
                     isEnd: true,
+                    textColor: textColor,
+                    secondaryTextColor: secondaryTextColor,
                   ),
                 ),
               ],
             ),
 
             // Thin divider line
-            Container(height: 1, color: Colors.white.withValues(alpha: 0.18)),
+            Container(height: 1, color: dividerColor),
 
             // Date, Departure, Boarding
             Row(
@@ -232,22 +339,28 @@ class TicketBoardingPass extends StatelessWidget {
                     label: 'DATE',
                     value: date,
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    labelColor: subtleTextColor,
+                    valueColor: textColor,
                   ),
                 ),
-                _buildVerticalDivider(),
+                _buildVerticalDivider(color: dividerColor),
                 Expanded(
                   child: _buildColumnInfo(
                     label: 'DEPARTURE',
                     value: departureTime,
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    labelColor: subtleTextColor,
+                    valueColor: textColor,
                   ),
                 ),
-                _buildVerticalDivider(),
+                _buildVerticalDivider(color: dividerColor),
                 Expanded(
                   child: _buildColumnInfo(
                     label: 'BOARDING',
                     value: boardingTime,
                     crossAxisAlignment: CrossAxisAlignment.end,
+                    labelColor: subtleTextColor,
+                    valueColor: textColor,
                   ),
                 ),
               ],
@@ -263,7 +376,7 @@ class TicketBoardingPass extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: height,
-      color: isDark ? Color(0xff000D2D) : Colors.white,
+      color: isDark ? const Color(0xff000D2D) : Colors.white,
       child: Column(
         children: [
           Padding(
@@ -297,117 +410,161 @@ class TicketBoardingPass extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomSection(double height) {
+  Widget _buildBottomSection(
+    double height,
+    bool isLight,
+    Color bgPrimary,
+    bool isLufthansa,
+    bool isWizz,
+  ) {
+    final bg = bgPrimary;
+    final textColor = isLight ? const Color(0xFF0F172A) : Colors.white;
+    final subtleTextColor = isLight
+        ? const Color(0xFF64748B)
+        : Colors.white.withValues(alpha: 0.65);
+    final dividerColor = isLight
+        ? AppColors.lightGray
+        : Colors.white.withValues(alpha: 0.18);
+    final planeColor =
+        planeIconColor ??
+        (isLufthansa
+            ? const Color(0xFF0B1B3D)
+            : (isWizz ? const Color(0xFF8B5CF6) : Colors.white));
+    final waveColor = isLufthansa
+        ? const Color(0xFFDCE7F9)
+        : const Color(0xFFDDD6FE);
+
     return Container(
       width: double.infinity,
       height: height,
-      decoration: const BoxDecoration(
-        color: ticketBlue,
-        image: DecorationImage(
-          image: AssetImage(ImageAssets.ticketBottomBg),
-          fit: BoxFit.cover,
-          alignment: Alignment.bottomCenter,
-        ),
+      decoration: BoxDecoration(
+        color: bg,
+        image: isLight
+            ? null
+            : const DecorationImage(
+                image: AssetImage(ImageAssets.ticketBottomBg),
+                fit: BoxFit.cover,
+                alignment: Alignment.bottomCenter,
+              ),
       ),
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(18.w, 6.h, 18.w, 6.h),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 1.h),
-            // Passenger Info
-            Column(
+      child: Stack(
+        children: [
+          if (isLight)
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _BottomWavesPainter(waveColor: waveColor),
+              ),
+            ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(18.w, 6.h, 18.w, 6.h),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'PASSENGER',
-                  style: GoogleFonts.inter(
-                    fontSize: 8.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.65),
-                    letterSpacing: 0.8,
-                  ),
+                // Passenger Info
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'PASSENGER',
+                      style: GoogleFonts.inter(
+                        fontSize: 8.sp,
+                        fontWeight: FontWeight.w600,
+                        color: subtleTextColor,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                    Text(
+                      passengerName,
+                      style: GoogleFonts.inter(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w900,
+                        color: textColor,
+                        letterSpacing: 0.5,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-                SizedBox(height: 1.h),
-                Text(
-                  passengerName,
-                  style: GoogleFonts.inter(
-                    fontSize: 13.5.sp,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                    letterSpacing: 0.5,
-                  ),
+
+                // Divider line
+                Container(height: 1, color: dividerColor),
+
+                // Terminal, Gate, Seat, Luggage
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildColumnInfo(
+                        label: 'TERMINAL',
+                        value: terminal,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        isCompact: true,
+                        labelColor: subtleTextColor,
+                        valueColor: textColor,
+                      ),
+                    ),
+                    _buildVerticalDivider(height: 15.h, color: dividerColor),
+                    Expanded(
+                      child: _buildColumnInfo(
+                        label: 'GATE',
+                        value: gate,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        isCompact: true,
+                        labelColor: subtleTextColor,
+                        valueColor: textColor,
+                      ),
+                    ),
+                    _buildVerticalDivider(height: 15.h, color: dividerColor),
+                    Expanded(
+                      child: _buildColumnInfo(
+                        label: 'SEAT',
+                        value: seat,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        isCompact: true,
+                        labelColor: subtleTextColor,
+                        valueColor: textColor,
+                      ),
+                    ),
+                    _buildVerticalDivider(height: 15.h, color: dividerColor),
+                    Expanded(
+                      child: _buildColumnInfo(
+                        label: 'LUGGAGE',
+                        value: luggage,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        isCompact: true,
+                        labelColor: subtleTextColor,
+                        valueColor: textColor,
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Slogan & Airplane
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'GOOD TRAVELS A BRIGHTER TOMORROW',
+                      style: GoogleFonts.inter(
+                        fontSize: 7.5.sp,
+                        fontWeight: FontWeight.w600,
+                        color: subtleTextColor,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                    SizedBox(width: 5.w),
+                    Transform.rotate(
+                      angle: 0.785398,
+                      child: Icon(Icons.flight, color: planeColor, size: 13.sp),
+                    ),
+                  ],
                 ),
               ],
             ),
-
-            // Divider line
-            Container(height: 1, color: Colors.white.withValues(alpha: 0.18)),
-
-            // Terminal, Gate, Seat, Luggage
-            Row(
-              children: [
-                Expanded(
-                  child: _buildColumnInfo(
-                    label: 'TERMINAL',
-                    value: terminal,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    isCompact: true,
-                  ),
-                ),
-                _buildVerticalDivider(height: 18.h),
-                Expanded(
-                  child: _buildColumnInfo(
-                    label: 'GATE',
-                    value: gate,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    isCompact: true,
-                  ),
-                ),
-                _buildVerticalDivider(height: 18.h),
-                Expanded(
-                  child: _buildColumnInfo(
-                    label: 'SEAT',
-                    value: seat,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    isCompact: true,
-                  ),
-                ),
-                _buildVerticalDivider(height: 18.h),
-                Expanded(
-                  child: _buildColumnInfo(
-                    label: 'LUGGAGE',
-                    value: luggage,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    isCompact: true,
-                  ),
-                ),
-              ],
-            ),
-
-            // Slogan & Airplane
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'GOOD TRAVELS A BRIGHTER TOMORROW',
-                  style: GoogleFonts.inter(
-                    fontSize: 7.5.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.75),
-                    letterSpacing: 1,
-                  ),
-                ),
-                SizedBox(width: 6.w),
-                Transform.rotate(
-                  angle: 0.785398,
-                  child: Icon(Icons.flight, color: Colors.white, size: 14.sp),
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -416,6 +573,8 @@ class TicketBoardingPass extends StatelessWidget {
     required String code,
     required String city,
     bool isEnd = false,
+    required Color textColor,
+    required Color secondaryTextColor,
   }) {
     String displayCity = city;
     if (displayCity.toUpperCase() == 'AMSTERDAM, NETHERLANDS' ||
@@ -436,7 +595,7 @@ class TicketBoardingPass extends StatelessWidget {
           style: GoogleFonts.inter(
             fontSize: 24.sp,
             fontWeight: FontWeight.w900,
-            color: Colors.white,
+            color: textColor,
             height: 1.05,
           ),
         ),
@@ -447,7 +606,7 @@ class TicketBoardingPass extends StatelessWidget {
           style: GoogleFonts.inter(
             fontSize: 9.5.sp,
             fontWeight: FontWeight.w500,
-            color: const Color(0xffD3D3D3),
+            color: secondaryTextColor,
             letterSpacing: 0.4,
           ),
         ),
@@ -460,6 +619,8 @@ class TicketBoardingPass extends StatelessWidget {
     required String value,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
     bool isCompact = false,
+    required Color labelColor,
+    required Color valueColor,
   }) {
     return Column(
       crossAxisAlignment: crossAxisAlignment,
@@ -470,7 +631,7 @@ class TicketBoardingPass extends StatelessWidget {
           style: GoogleFonts.inter(
             fontSize: isCompact ? 8.sp : 8.5.sp,
             fontWeight: FontWeight.w600,
-            color: Colors.white.withValues(alpha: 0.65),
+            color: labelColor,
             letterSpacing: 0.7,
           ),
         ),
@@ -480,28 +641,64 @@ class TicketBoardingPass extends StatelessWidget {
           style: GoogleFonts.inter(
             fontSize: isCompact ? 12.sp : 12.5.sp,
             fontWeight: FontWeight.w800,
-            color: Colors.white,
+            color: valueColor,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildFlightLine() {
-    return Container(
-      width: 22.w,
-      height: 1.2,
-      color: Colors.white.withValues(alpha: 0.35),
-    );
+  Widget _buildFlightLine(Color color) {
+    return Container(width: 22.w, height: 1.2, color: color);
   }
 
-  Widget _buildVerticalDivider({double? height}) {
+  Widget _buildVerticalDivider({double? height, Color? color}) {
     return Container(
       width: 1,
       height: height ?? 22.h,
-      color: Colors.white.withValues(alpha: 0.2),
+      color: color ?? Colors.white.withValues(alpha: 0.2),
     );
   }
+}
+
+class _BottomWavesPainter extends CustomPainter {
+  final Color waveColor;
+
+  const _BottomWavesPainter({required this.waveColor});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = waveColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.4;
+
+    // Wave 1
+    final path1 = Path();
+    path1.moveTo(size.width * 0.45, size.height);
+    path1.quadraticBezierTo(
+      size.width * 0.72,
+      size.height * 0.70,
+      size.width,
+      size.height * 0.82,
+    );
+    canvas.drawPath(path1, paint);
+
+    // Wave 2
+    final path2 = Path();
+    path2.moveTo(size.width * 0.58, size.height);
+    path2.quadraticBezierTo(
+      size.width * 0.82,
+      size.height * 0.52,
+      size.width,
+      size.height * 0.65,
+    );
+    canvas.drawPath(path2, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _BottomWavesPainter oldDelegate) =>
+      oldDelegate.waveColor != waveColor;
 }
 
 Path _getTicketPath(
@@ -571,14 +768,14 @@ class _TicketClipper extends CustomClipper<Path> {
       oldClipper.cornerRadius != cornerRadius;
 }
 
-class _TicketCardPainter extends CustomPainter {
+class _TicketBorderPainter extends CustomPainter {
   final double notchY;
   final double notchRadius;
   final double cornerRadius;
   final Color borderColor;
   final double borderWidth;
 
-  const _TicketCardPainter({
+  const _TicketBorderPainter({
     required this.notchY,
     required this.notchRadius,
     required this.cornerRadius,
@@ -590,22 +787,16 @@ class _TicketCardPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final path = _getTicketPath(size, notchY, notchRadius, cornerRadius);
 
-    // 1. Drop shadow
-    final shadowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.10)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 14);
-    canvas.drawPath(path.shift(const Offset(0, 4)), shadowPaint);
-
-    // 2. Stroke border
     final borderPaint = Paint()
       ..color = borderColor
       ..strokeWidth = borderWidth
-      ..style = PaintingStyle.stroke;
+      ..style = PaintingStyle.stroke
+      ..strokeJoin = StrokeJoin.round;
     canvas.drawPath(path, borderPaint);
   }
 
   @override
-  bool shouldRepaint(covariant _TicketCardPainter oldDelegate) =>
+  bool shouldRepaint(covariant _TicketBorderPainter oldDelegate) =>
       oldDelegate.notchY != notchY ||
       oldDelegate.notchRadius != notchRadius ||
       oldDelegate.cornerRadius != cornerRadius ||

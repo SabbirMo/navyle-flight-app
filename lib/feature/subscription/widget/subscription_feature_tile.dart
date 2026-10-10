@@ -19,6 +19,7 @@ class SubscriptionFeatureTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Row(
@@ -27,8 +28,11 @@ class SubscriptionFeatureTile extends StatelessWidget {
             width: 38.w,
             height: 38.w,
             decoration: BoxDecoration(
-              color: iconBgColor,
+              color: isDark
+                  ? AppColors.lightGray.withValues(alpha: 0.4)
+                  : iconBgColor,
               borderRadius: BorderRadius.circular(12.r),
+              border: isDark ? Border.all(color: AppColors.lightGray) : null,
             ),
             child: Center(child: icon),
           ),
@@ -41,7 +45,7 @@ class SubscriptionFeatureTile extends StatelessWidget {
                 Text(
                   title,
                   style: StyleManager.interMedium12(
-                    AppColors.black,
+                    isDark ? AppColors.white : AppColors.black,
                   ).copyWith(fontWeight: FontWeight.w900),
                 ),
 

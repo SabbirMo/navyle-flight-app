@@ -7,7 +7,7 @@ import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
-import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
+import 'package:navyla_flight_app/feature/scan/verify_details/provider/verify_details_notifier.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class VerifyDetailsScreen extends ConsumerStatefulWidget {
@@ -65,6 +65,16 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
     _gateController = TextEditingController(
       text: isManual ? '' : (data['gate'] ?? 'B24'),
     );
+
+    // Initialize Riverpod state
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ref.read(verifyDetailsNotifierProvider.notifier).initialize(
+              isManual: isManual,
+              initialData: widget.initialData,
+            );
+      }
+    });
   }
 
   @override
@@ -80,44 +90,63 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
     super.dispose();
   }
 
+  void _syncControllersToNotifier() {
+    final notifier = ref.read(verifyDetailsNotifierProvider.notifier);
+    notifier.updateName(_nameController.text.trim());
+    notifier.updateFlightNumber(_flightNumberController.text.trim());
+    notifier.updateFrom(_fromController.text.trim());
+    notifier.updateTo(_toController.text.trim());
+    notifier.updateDate(_dateController.text.trim());
+    notifier.updateSeat(_seatController.text.trim());
+    notifier.updateTerminal(_terminalController.text.trim());
+    notifier.updateGate(_gateController.text.trim());
+  }
+
   void _handleConfirm() {
-    final flightNum = _flightNumberController.text.trim();
+    _syncControllersToNotifier();
+    final notifier = ref.read(verifyDetailsNotifierProvider.notifier);
+    final success = notifier.submit();
 
-    ref
-        .read(flightJourneyNotifierProvider.notifier)
-        .addBoardingPass(
-          flightNumber: flightNum.isNotEmpty ? flightNum : 'BA 0215',
-          originCode: _fromController.text.trim().isNotEmpty
-              ? _fromController.text.trim()
-              : 'AMS',
-          destinationCode: _toController.text.trim().isNotEmpty
-              ? _toController.text.trim()
-              : 'FRA',
-          seat: _seatController.text.trim().isNotEmpty
-              ? _seatController.text.trim()
-              : '14A',
-          gate: _gateController.text.trim().isNotEmpty
-              ? _gateController.text.trim()
-              : 'B24',
-          terminal: _terminalController.text.trim().isNotEmpty
-              ? _terminalController.text.trim()
-              : 'T5',
-          flightDate: _dateController.text.trim().isNotEmpty
-              ? _dateController.text.trim()
-              : '24 Sep',
-        );
+    if (!success) {
+      final formState = ref.read(verifyDetailsNotifierProvider);
+      final emptyFields = formState.emptyFields;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          flightNum.isNotEmpty
-              ? 'Boarding pass for $flightNum confirmed!'
-              : 'Boarding pass confirmed and added to your tickets!',
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(
+                Icons.error_outline_rounded,
+                color: Colors.white,
+                size: 20.sp,
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: Text(
+                  emptyFields.length == 1
+                      ? 'Please enter ${emptyFields.first}.'
+                      : 'Please fill in all required fields before continuing.',
+                  style: GoogleFonts.inter(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: const Color(0xFFEF4444),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14.r),
+          ),
+          duration: const Duration(seconds: 2),
         ),
-        backgroundColor: AppColors.primaryColor,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+      );
+      return;
+    }
+
     context.go(AppRouterName.navbarScreen);
   }
 
@@ -140,7 +169,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
       }
     }
 
-    final DateTime? picked = await showDatePicker(
+    final picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
       firstDate: DateTime(2020),
@@ -168,15 +197,19 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
       final dd = picked.day.toString().padLeft(2, '0');
       final mm = picked.month.toString().padLeft(2, '0');
       final yy = (picked.year % 100).toString().padLeft(2, '0');
-      setState(() {
-        _dateController.text = '$dd/$mm/$yy';
-      });
+      final formattedDate = '$dd/$mm/$yy';
+      _dateController.text = formattedDate;
+      ref
+          .read(verifyDetailsNotifierProvider.notifier)
+          .updateDate(formattedDate);
     }
   }
 
   Widget _buildCard({
     required String label,
     required TextEditingController controller,
+    required ValueChanged<String> onChanged,
+    required bool showError,
     String? hintText,
     IconData? icon,
     TextInputType? keyboardType,
@@ -186,6 +219,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
     required BuildContext context,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20.r),
@@ -196,14 +230,18 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
           color: isDark ? AppColors.darkBlack : Colors.white,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
-            color: isDark
-                ? AppColors.lightBlueGray.withValues(alpha: 0.4)
-                : const Color(0xFFF1F5F9),
-            width: 1.2,
+            color: showError
+                ? const Color(0xFFEF4444)
+                : (isDark
+                      ? AppColors.lightBlueGray.withValues(alpha: 0.4)
+                      : const Color(0xFFF1F5F9)),
+            width: showError ? 1.6 : 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
+              color: showError
+                  ? const Color(0xFFEF4444).withValues(alpha: 0.12)
+                  : Colors.black.withValues(alpha: 0.03),
               blurRadius: 10,
               offset: const Offset(0, 3),
             ),
@@ -213,20 +251,45 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              label,
-              style: GoogleFonts.inter(
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w500,
-                color: AppColors.lightGray,
-                letterSpacing: 1.1,
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    showError ? '$label *' : label,
+                    style: GoogleFonts.inter(
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.w600,
+                      color: showError
+                          ? const Color(0xFFEF4444)
+                          : AppColors.lightGray,
+                      letterSpacing: 1.1,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (showError)
+                  Text(
+                    'Required',
+                    style: GoogleFonts.inter(
+                      fontSize: 8.5.sp,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFFEF4444),
+                    ),
+                  ),
+              ],
             ),
             SizedBox(height: 6.h),
             Row(
               children: [
                 if (icon != null) ...[
-                  Icon(icon, size: 18.sp, color: const Color(0xFF94A3B8)),
+                  Icon(
+                    icon,
+                    size: 18.sp,
+                    color: showError
+                        ? const Color(0xFFEF4444)
+                        : const Color(0xFF94A3B8),
+                  ),
                   SizedBox(width: 8.w),
                 ],
                 Expanded(
@@ -236,6 +299,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                     onTap: onTap,
                     keyboardType: keyboardType,
                     textCapitalization: textCapitalization,
+                    onChanged: onChanged,
                     style: GoogleFonts.inter(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w800,
@@ -269,8 +333,11 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isManual = widget.isManual;
+    final formState = ref.watch(verifyDetailsNotifierProvider);
+    final notifier = ref.read(verifyDetailsNotifierProvider.notifier);
+    final isManual = formState.isManual || widget.isManual;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return CommonScreen(
       child: Column(
         children: [
@@ -363,6 +430,9 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                     context: context,
                     label: 'NAME',
                     controller: _nameController,
+                    showError: formState.hasAttemptedSubmit &&
+                        _nameController.text.trim().isEmpty,
+                    onChanged: (val) => notifier.updateName(val.trim()),
                     hintText: 'e.g. Alex Rivers',
                     icon: Icons.person_rounded,
                     textCapitalization: TextCapitalization.words,
@@ -375,6 +445,9 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                     context: context,
                     label: 'FLIGHT NUMBER',
                     controller: _flightNumberController,
+                    showError: formState.hasAttemptedSubmit &&
+                        _flightNumberController.text.trim().isEmpty,
+                    onChanged: (val) => notifier.updateFlightNumber(val.trim()),
                     hintText: 'e.g. BA 0215',
                     icon: Icons.flight_rounded,
                   ),
@@ -388,6 +461,9 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                           context: context,
                           label: 'FROM',
                           controller: _fromController,
+                          showError: formState.hasAttemptedSubmit &&
+                              _fromController.text.trim().isEmpty,
+                          onChanged: (val) => notifier.updateFrom(val.trim()),
                           hintText: 'e.g. AMS',
                         ),
                       ),
@@ -397,6 +473,9 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                           context: context,
                           label: 'TO',
                           controller: _toController,
+                          showError: formState.hasAttemptedSubmit &&
+                              _toController.text.trim().isEmpty,
+                          onChanged: (val) => notifier.updateTo(val.trim()),
                           hintText: 'e.g. FRA',
                         ),
                       ),
@@ -412,6 +491,9 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                           context: context,
                           label: 'DATE',
                           controller: _dateController,
+                          showError: formState.hasAttemptedSubmit &&
+                              _dateController.text.trim().isEmpty,
+                          onChanged: (val) => notifier.updateDate(val.trim()),
                           hintText: 'e.g. 24/09/26',
                           readOnly: true,
                           onTap: _selectDate,
@@ -423,6 +505,9 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                           context: context,
                           label: 'SEAT',
                           controller: _seatController,
+                          showError: formState.hasAttemptedSubmit &&
+                              _seatController.text.trim().isEmpty,
+                          onChanged: (val) => notifier.updateSeat(val.trim()),
                           hintText: 'e.g. 14A',
                         ),
                       ),
@@ -438,6 +523,10 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                           context: context,
                           label: 'TERMINAL',
                           controller: _terminalController,
+                          showError: formState.hasAttemptedSubmit &&
+                              _terminalController.text.trim().isEmpty,
+                          onChanged: (val) =>
+                              notifier.updateTerminal(val.trim()),
                           hintText: 'e.g. 5',
                         ),
                       ),
@@ -447,6 +536,9 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
                           context: context,
                           label: 'GATE',
                           controller: _gateController,
+                          showError: formState.hasAttemptedSubmit &&
+                              _gateController.text.trim().isEmpty,
+                          onChanged: (val) => notifier.updateGate(val.trim()),
                           hintText: 'e.g. B24',
                         ),
                       ),
