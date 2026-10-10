@@ -15,6 +15,7 @@ import 'package:navyla_flight_app/feature/auth/auth_selection/widget/auth_common
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
 import 'package:navyla_flight_app/feature/auth/login_account/provider/login_notifier.dart';
 import 'package:navyla_flight_app/feature/auth/login_account/widget/remember_me_switch.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -53,6 +54,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       await Future.delayed(const Duration(milliseconds: 600));
       notifier.setLoading(false);
       if (mounted) {
+        ref.read(navbarNotifierProvider.notifier).reset();
         context.go(AppRouterName.homeScreen);
       }
     }

@@ -8,10 +8,12 @@ import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/theme/theme_mode_provder.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/delete_account_dialog.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/profile_details_card.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/setting_item_tile.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/setting_toggle_switch.dart';
+import 'package:navyla_flight_app/feature/setting/setting/widget/sign_out_dialog.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/subscription_plan_card.dart';
 import 'package:navyla_flight_app/feature/setting/rate_navyla/widget/rate_navyla_bottom_sheet.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
@@ -270,7 +272,13 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                     SettingActionButton(
                       text: "SIGN OUT ACCOUNT",
                       onTap: () {
-                        context.pushReplacement(AppRouterName.loginScreen);
+                        SignOutDialog.show(
+                          context,
+                          onSignOut: () {
+                            ref.read(navbarNotifierProvider.notifier).reset();
+                            context.go(AppRouterName.loginScreen);
+                          },
+                        );
                       },
                     ),
                     SizedBox(height: 12.h),
@@ -282,7 +290,8 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                         DeleteAccountDialog.show(
                           context,
                           onDelete: () {
-                            // Handle delete account
+                            ref.read(navbarNotifierProvider.notifier).reset();
+                            context.go(AppRouterName.loginScreen);
                           },
                         );
                       },
