@@ -93,11 +93,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 colors: [
                                   (isDark
                                           ? AppColors.darkBlack
-                                          : const Color(0xFFF8FAFC))
-                                      .withValues(alpha: 0.0),
+                                          : const Color(0xFFE1D8CE))
+                                      .withValues(alpha: 0.8),
                                   (isDark
-                                      ? AppColors.darkBlack
-                                      : const Color(0xFFF8FAFC)),
+                                          ? AppColors.darkBlack
+                                          : const Color(0xFFE1D8CE))
+                                      .withValues(alpha: 0.2),
                                 ],
                               ),
                             ),
@@ -357,14 +358,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
                 child: Center(
-                  child: SvgPicture.asset(
-                    ImageAssets.notification,
-                    width: 20.w,
-                    height: 20.w,
-                    colorFilter: const ColorFilter.mode(
-                      Colors.white,
-                      BlendMode.srcIn,
-                    ),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      SvgPicture.asset(
+                        ImageAssets.notification,
+                        width: 20.w,
+                        height: 20.w,
+                        colorFilter: const ColorFilter.mode(
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+
+                      Positioned(
+                        right: 0,
+                        top: -2,
+                        child: Container(
+                          width: 8.w,
+                          height: 8.w,
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

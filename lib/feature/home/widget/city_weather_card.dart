@@ -35,18 +35,15 @@ class CityWeatherCard extends ConsumerWidget {
     final effectiveTime = localTime ?? weather.localTime ?? '';
     final effectiveDate = date ?? weather.date ?? '';
 
-    final primaryTextColor = isDark ? Colors.white : AppColors.black;
-    final secondaryTextColor = isDark
-        ? Colors.white.withValues(alpha: 0.75)
-        : AppColors.darkGrayColor;
+    final primaryTextColor = Colors.white;
+    final secondaryTextColor = Colors.white.withValues(alpha: 0.75);
 
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 7.h),
       decoration: BoxDecoration(
-        color: isDark
-            ? Colors.black.withValues(alpha: 0.4)
-            : Colors.white.withValues(alpha: 0.22),
+        color: Colors.black.withValues(alpha: 0.4),
+
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
           color: isDark
