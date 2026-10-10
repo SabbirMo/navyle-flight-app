@@ -6,8 +6,6 @@ export 'package:navyla_flight_app/feature/home/model/flight_journey_state.dart';
 class FlightJourneyNotifier extends Notifier<FlightJourneyState> {
   @override
   FlightJourneyState build() {
-    // When the user opens the app for the first time,
-    // boarding pass is not added yet and weather is hidden.
     return const FlightJourneyState(hasActiveFlight: false);
   }
 
@@ -23,18 +21,13 @@ class FlightJourneyNotifier extends Notifier<FlightJourneyState> {
     String? flightDate,
     String? departureCountdown,
     String? checkInTime,
-    String? weatherCity,
   }) {
     state = state.copyWith(
       hasActiveFlight: true,
       flightNumber: flightNumber ?? state.flightNumber,
-      originCode: (originCode == null || originCode == 'LHR')
-          ? 'AMS'
-          : originCode,
+      originCode: originCode ?? state.originCode,
       originCity: originCity ?? state.originCity,
-      destinationCode: (destinationCode == null || destinationCode == 'JFK')
-          ? 'FRA'
-          : destinationCode,
+      destinationCode: destinationCode ?? state.destinationCode,
       destinationCity: destinationCity ?? state.destinationCity,
       seat: seat ?? state.seat,
       gate: gate ?? state.gate,
@@ -42,7 +35,6 @@ class FlightJourneyNotifier extends Notifier<FlightJourneyState> {
       flightDate: flightDate ?? state.flightDate,
       departureCountdown: departureCountdown ?? state.departureCountdown,
       checkInTime: checkInTime ?? state.checkInTime,
-      weatherCity: weatherCity ?? state.weatherCity,
     );
   }
 

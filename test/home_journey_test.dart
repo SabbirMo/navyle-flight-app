@@ -39,8 +39,8 @@ void main() {
     await tester.pumpWidget(buildTestableHomeScreen(container: container));
     await tester.pump();
 
-    // Verify initial state: FlightWaveCard & CityWeatherCard are NOT present
-    expect(find.byType(FlightWaveCard), findsNothing);
+    // Verify initial state: FlightCardWidget & CityWeatherCard are NOT present
+    expect(find.byType(FlightCardWidget), findsNothing);
     expect(find.byType(CityWeatherCard), findsNothing);
 
     // Verify initial state: NoActiveJourneyCard & TravelOffersWidget ARE present
@@ -54,7 +54,7 @@ void main() {
   });
 
   testWidgets(
-      'HomeScreen dynamically switches to FlightWaveCard and CityWeatherCard when boarding pass is added',
+      'HomeScreen dynamically switches to FlightCardWidget and CityWeatherCard when boarding pass is added',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(1080, 2400);
     tester.view.devicePixelRatio = 2.0;
@@ -69,7 +69,7 @@ void main() {
 
     // Initially empty
     expect(find.byType(NoActiveJourneyCard), findsOneWidget);
-    expect(find.byType(FlightWaveCard), findsNothing);
+    expect(find.byType(FlightCardWidget), findsNothing);
 
     // User adds boarding pass
     container.read(flightJourneyNotifierProvider.notifier).addBoardingPass(
@@ -85,7 +85,7 @@ void main() {
     // Now NoActiveJourneyCard and TravelOffersWidget are replaced by Flight & Weather cards
     expect(find.byType(NoActiveJourneyCard), findsNothing);
     expect(find.byType(TravelOffersWidget), findsNothing);
-    expect(find.byType(FlightWaveCard), findsOneWidget);
+    expect(find.byType(FlightCardWidget), findsOneWidget);
     expect(find.byType(CityWeatherCard), findsOneWidget);
     expect(find.text('BA 0215'), findsOneWidget);
   });

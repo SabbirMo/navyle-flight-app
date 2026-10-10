@@ -1,1002 +1,353 @@
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
-import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
+import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 
-/// Scope that automatically provides the responsive scale factor to child widgets
-class FlightCardScope extends InheritedWidget {
-  final double scale;
+class FlightCardWidget extends ConsumerStatefulWidget {
+  const FlightCardWidget({super.key});
 
-  const FlightCardScope({super.key, required this.scale, required super.child});
+  @override
+  ConsumerState<FlightCardWidget> createState() => _FlightCardWidgetState();
+}
 
-  static double of(BuildContext context) {
-    return context
-            .dependOnInheritedWidgetOfExactType<FlightCardScope>()
-            ?.scale ??
-        1.0;
+class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _tiltAnimation;
+  double _dragOffset = 0.0;
+  bool _isDragging = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3200),
+    )..repeat(reverse: true);
+
+    _tiltAnimation = Tween<double>(begin: -1.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOutSine),
+    );
   }
 
   @override
-  bool updateShouldNotify(covariant FlightCardScope oldWidget) =>
-      scale != oldWidget.scale;
-}
-
-/// ============================================================================
-/// FLIGHT WAVE CARD CONTAINER (High Performance & Modular)
-/// ============================================================================
-/// Performance optimizations:
-/// 1. [RepaintBoundary]: Isolates GPU layer; stops repainting when parent scrolls.
-/// 2. [_PathCache]: Reuses cached [Path]; eliminates 14 Bezier/line allocations per frame.
-/// 3. [_WaveBorder]: Reuses persistent [Paint] instance.
-/// 4. [FilterQuality.low]: Optimizes GPU texture sampling for background image.
-/// 5. [FlightCardScope]: Provides O(1) responsive scale to child widgets.
-/// 6. Fully customizable: Pass custom [child] with [Row]/[Column], or edit values directly!
-class FlightWaveCard extends StatelessWidget {
-  final Widget? child;
-  final Widget? statusBadge;
-  final String status;
-  final String departureTitle;
-  final String departureTime;
-  final String flightNumber;
-  final String originCode;
-  final String originCity;
-  final String destinationCode;
-  final String destinationCity;
-  final String terminal;
-  final String checkInTime;
-  final String checkInSuffix;
-  final String gate;
-  final String seat;
-  final double? topPadding;
-  final EdgeInsetsGeometry? padding;
-
-  const FlightWaveCard({
-    super.key,
-    this.child,
-    this.statusBadge,
-    this.status = 'On Time',
-    this.topPadding,
-    this.departureTitle = 'DEPARTURE IN',
-    this.departureTime = '04:42:15',
-    this.flightNumber = 'BA 0215',
-    this.originCode = 'AMS',
-    this.originCity = 'AMSTERDAM',
-    this.destinationCode = 'FRA',
-    this.destinationCity = 'FRANKFURT',
-    this.terminal = 'T5',
-    this.checkInTime = '8:00',
-    this.checkInSuffix = 'am',
-    this.gate = 'B24',
-    this.seat = '14A',
-    this.padding,
-  });
-
-  static const double designWidth = 800;
-  static const double designHeight = 500;
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final palette = _CardPalette.of(context);
+    final journey = ref.watch(flightJourneyNotifierProvider);
 
-    return RepaintBoundary(
-      child: AspectRatio(
-        aspectRatio: designWidth / designHeight,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final scale = constraints.maxWidth / designWidth;
-            double s(double value) => value * scale;
+    final cardContent = ClipRRect(
+      borderRadius: BorderRadius.circular(22.r),
+      child: Stack(
+        children: [
+          // 1. Background Runway Airplane Image
+          Positioned.fill(
+            child: Image.asset(ImageAssets.airplane, fit: BoxFit.fill),
+          ),
 
-            return MediaQuery.withClampedTextScaling(
-              maxScaleFactor: 1.0,
-              child: FlightCardScope(
-                scale: scale,
-                child: Stack(
+          // 2. Card Content
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Top Row: Countdown & Status Badge
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 1. Top-right Tab behind the wave
-                    Positioned(
-                      left: s(468),
-                      top: s(16),
-                      width: s(318),
-                      height: s(146),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: palette.tab,
-                          border: Border.all(
-                            color: palette.stroke,
-                            width: s(3.5),
-                          ),
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(s(42)),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'DEPARTURE IN',
+                          style: GoogleFonts.inter(
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.black,
                           ),
                         ),
+                        Text(
+                          journey.departureCountdown?.isNotEmpty == true
+                              ? journey.departureCountdown!
+                              : '04:42:15',
+                          style: TextStyle(
+                            fontFamily: 'SF-Pro',
+                            fontSize: 26.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        Text(
+                          journey.flightNumber?.isNotEmpty == true
+                              ? journey.flightNumber!
+                              : 'BA 0215',
+                          style: TextStyle(
+                            fontFamily: 'SF-Pro',
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // "On Time" Badge
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 5.h,
                       ),
-                    ),
-
-                    // 2. Status Badge in the top-right tab area
-                    Positioned(
-                      left: s(604),
-                      top: s(43),
-                      child:
-                          statusBadge ??
-                          FlightStatusBadge(
-                            status: status,
-                            scale: scale,
-                            color: palette.lime,
-                          ),
-                    ),
-
-                    // 3. Clipped Wave Body (Background Image + Scrim Gradients + Content)
-                    Positioned.fill(
-                      child: ClipPath(
-                        clipper: const _WaveClipper(),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            Image.asset(
-                              ImageAssets.homeAir,
-                              fit: BoxFit.cover,
-                              alignment: Alignment.center,
-                              filterQuality: FilterQuality.low,
-                              color: palette.imageColor,
-                              colorBlendMode: palette.imageBlendMode,
-                            ),
-                            DecoratedBox(
-                              decoration: BoxDecoration(
-                                gradient: palette.scrim,
-                              ),
-                            ),
-                            if (palette.secondaryScrim != null)
-                              DecoratedBox(
-                                decoration: BoxDecoration(
-                                  gradient: palette.secondaryScrim,
-                                ),
-                              ),
-                            // Content slot (User's custom child or default Row/Column layout)
-                            Padding(
-                              padding:
-                                  padding ??
-                                  EdgeInsets.fromLTRB(
-                                    s(36),
-                                    s(28),
-                                    s(36),
-                                    s(18),
-                                  ),
-                              child:
-                                  child ??
-                                  FlightCardDefaultContent(
-                                    scale: scale,
-                                    departureTitle: departureTitle,
-                                    departureTime: departureTime,
-                                    flightNumber: flightNumber,
-                                    originCode: originCode,
-                                    originCity: originCity,
-                                    destinationCode: destinationCode,
-                                    destinationCity: destinationCity,
-                                    terminal: terminal,
-                                    checkInTime: checkInTime,
-                                    checkInSuffix: checkInSuffix,
-                                    gate: gate,
-                                    seat: seat,
-                                  ),
-                            ),
-                          ],
-                        ),
+                      decoration: BoxDecoration(
+                        color: AppColors.blackShadow.withValues(alpha: 0.86),
+                        borderRadius: BorderRadius.circular(10.r),
                       ),
-                    ),
-
-                    // 4. White Wave Border Stroke
-                    Positioned.fill(
-                      child: IgnorePointer(
-                        child: CustomPaint(
-                          painter: _WaveBorder(
-                            color: palette.stroke,
-                            strokeWidth: s(3.5),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 7.w,
+                            height: 7.w,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color(0xFF76FF03),
+                            ),
                           ),
-                        ),
+                          SizedBox(width: 6.w),
+                          Text(
+                            "On Time",
+                            style: GoogleFonts.inter(
+                              fontSize: 11.sp,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF91EE26),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
 
-/// ============================================================================
-/// MODULAR WIDGET 1: DEPARTURE COUNTDOWN WIDGET
-/// ============================================================================
-/// Renders the "DEPARTURE IN" heading and "04:42:15" countdown timer.
-class FlightCountdownWidget extends StatelessWidget {
-  final String title;
-  final String time;
-  final double? scale;
-  final Color? titleColor;
-  final Color? timeColor;
-  final TextStyle? titleStyle;
-  final TextStyle? timeStyle;
-  final CrossAxisAlignment crossAxisAlignment;
+                SizedBox(height: 6.h),
 
-  const FlightCountdownWidget({
-    super.key,
-    this.title = 'DEPARTURE IN',
-    this.time = '04:42:15',
-    this.scale,
-    this.titleColor,
-    this.timeColor,
-    this.titleStyle,
-    this.timeStyle,
-    this.crossAxisAlignment = CrossAxisAlignment.start,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final effectiveTimeColor = timeColor ?? AppColors.white;
-
-    return Column(
-      crossAxisAlignment: crossAxisAlignment,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: Alignment.centerLeft,
-          child: Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: titleStyle ?? StyleManager.interSemiBold14(AppColors.white),
-          ),
-        ),
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: Alignment.centerLeft,
-          child: Text(
-            time,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: StyleManager.sfProBold30(
-              effectiveTimeColor,
-            ).copyWith(fontSize: 28.sp),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// ============================================================================
-/// MODULAR WIDGET 2: FLIGHT NUMBER WIDGET
-/// ============================================================================
-/// Renders flight number like "BA 0215".
-class FlightNumberWidget extends StatelessWidget {
-  final String flightNumber;
-  final double? scale;
-  final Color? color;
-  final TextStyle? style;
-
-  const FlightNumberWidget({
-    super.key,
-    this.flightNumber = 'BA 0215',
-    this.scale,
-    this.color,
-    this.style,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      alignment: Alignment.centerLeft,
-      child: Text(
-        flightNumber,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: StyleManager.interRegular13(AppColors.white),
-      ),
-    );
-  }
-}
-
-/// ============================================================================
-/// MODULAR WIDGET 3: AIRPORT CODE & CITY WIDGET
-/// ============================================================================
-/// Renders airport code (e.g. "AMS" / "FRA") and city name (e.g. "AMSTERDAM").
-class FlightAirportWidget extends StatelessWidget {
-  final String code;
-  final String city;
-  final bool isDestination;
-  final double? scale;
-  final Color? codeColor;
-  final Color? cityColor;
-  final TextStyle? codeStyle;
-  final TextStyle? cityStyle;
-
-  const FlightAirportWidget({
-    super.key,
-    required this.code,
-    required this.city,
-    this.isDestination = false,
-    this.scale,
-    this.codeColor,
-    this.cityColor,
-    this.codeStyle,
-    this.cityStyle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: isDestination
-          ? CrossAxisAlignment.end
-          : CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            code,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: StyleManager.sfProBold24(
-              AppColors.white,
-            ).copyWith(fontSize: 28.sp),
-          ),
-        ),
-
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            city.toUpperCase(),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: StyleManager.interSemiBold12(
-              AppColors.white,
-            ).copyWith(fontSize: 8.sp),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// ============================================================================
-/// MODULAR WIDGET 4: FLIGHT PATH INDICATOR (Airplane icon + connecting lines)
-/// ============================================================================
-class FlightPathIndicator extends StatelessWidget {
-  final double? scale;
-  final Color? iconColor;
-  final Color? lineColor;
-  final IconData icon;
-
-  const FlightPathIndicator({
-    super.key,
-    this.scale,
-    this.iconColor,
-    this.lineColor,
-    this.icon = Icons.flight,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final s = scale ?? FlightCardScope.of(context);
-    final palette = _CardPalette.of(context);
-    final planeColor = iconColor ?? palette.primary;
-    final line = lineColor ?? palette.rule;
-
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.0 * s),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final showLines = constraints.maxWidth > (30.0 * s);
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (showLines)
-                Expanded(
-                  child: Container(height: 2.0 * s, color: line),
+                // Middle Row: Origin (AMS) -> Flight -> Destination (FRA)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _cityBlock(
+                      journey.originCode?.isNotEmpty == true
+                          ? journey.originCode!
+                          : 'AMS',
+                      journey.originCity?.isNotEmpty == true
+                          ? journey.originCity!
+                          : 'AMSTERDAM',
+                      CrossAxisAlignment.start,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 30.w,
+                          height: 1.5,
+                          color: const Color(0xFF334155),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 6.w),
+                          child: Transform.rotate(
+                            angle: 90 * math.pi / 180,
+                            child: const Icon(
+                              Icons.flight,
+                              size: 22,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 30.w,
+                          height: 1.5,
+                          color: const Color(0xFF334155),
+                        ),
+                      ],
+                    ),
+                    _cityBlock(
+                      journey.destinationCode?.isNotEmpty == true
+                          ? journey.destinationCode!
+                          : 'FRA',
+                      journey.destinationCity?.isNotEmpty == true
+                          ? journey.destinationCity!
+                          : 'FRANKFURT',
+                      CrossAxisAlignment.end,
+                    ),
+                  ],
                 ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.0 * s),
-                child: Transform.rotate(
-                  angle: math.pi / 2,
-                  child: Icon(icon, color: planeColor, size: 52.0 * s),
-                ),
-              ),
-              if (showLines)
-                Expanded(
-                  child: Container(height: 2.0 * s, color: line),
-                ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
 
-/// ============================================================================
-/// MODULAR WIDGET 5: FULL FLIGHT ROUTE WIDGET
-/// ============================================================================
-/// Combines flight number + origin airport + flight path + destination airport.
-class FlightRouteWidget extends StatelessWidget {
-  final String flightNumber;
-  final String originCode;
-  final String originCity;
-  final String destinationCode;
-  final String destinationCity;
-  final double? scale;
-  final Color? primaryColor;
-  final Color? secondaryColor;
-  final Color? lineColor;
+                SizedBox(height: 10.h),
 
-  const FlightRouteWidget({
-    super.key,
-    this.flightNumber = 'BA 0215',
-    this.originCode = 'AMS',
-    this.originCity = 'AMSTERDAM',
-    this.destinationCode = 'FRA',
-    this.destinationCity = 'FRANKFURT',
-    this.scale,
-    this.primaryColor,
-    this.secondaryColor,
-    this.lineColor,
-  });
+                // Orange Divider
+                Container(height: 1, color: const Color(0xFFFF9233)),
 
-  @override
-  Widget build(BuildContext context) {
-    final s = scale ?? FlightCardScope.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        FlightNumberWidget(
-          flightNumber: flightNumber,
-          scale: s,
-          color: primaryColor,
-        ),
+                SizedBox(height: 10.h),
 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              flex: 3,
-              child: FlightAirportWidget(
-                code: originCode,
-                city: originCity,
-                scale: s,
-                codeColor: primaryColor,
-                cityColor: secondaryColor,
-              ),
-            ),
-            Expanded(
-              flex: 4,
-              child: FlightPathIndicator(
-                scale: s,
-                iconColor: primaryColor,
-                lineColor: isDark ? AppColors.white : lineColor,
-              ),
-            ),
-            Flexible(
-              flex: 3,
-              child: FlightAirportWidget(
-                code: destinationCode,
-                city: destinationCity,
-                isDestination: true,
-                scale: s,
-                codeColor: primaryColor,
-                cityColor: secondaryColor,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-/// ============================================================================
-/// MODULAR WIDGET 6: HORIZONTAL DIVIDER
-/// ============================================================================
-class FlightHorizontalDivider extends StatelessWidget {
-  final double? scale;
-  final Color? color;
-  final double height;
-
-  const FlightHorizontalDivider({
-    super.key,
-    this.scale,
-    this.color,
-    this.height = 2.0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final s = scale ?? FlightCardScope.of(context);
-    final palette = _CardPalette.of(context);
-
-    return Container(height: height * s, color: color ?? palette.rule);
-  }
-}
-
-/// ============================================================================
-/// MODULAR WIDGET 7: VERTICAL DIVIDER
-/// ============================================================================
-class FlightVerticalDivider extends StatelessWidget {
-  final double? scale;
-  final Color? color;
-  final double width;
-  final double height;
-
-  const FlightVerticalDivider({
-    super.key,
-    this.scale,
-    this.color,
-    this.width = 1.5,
-    this.height = 50.0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final s = scale ?? FlightCardScope.of(context);
-    final palette = _CardPalette.of(context);
-
-    return Container(
-      width: width * s,
-      height: height * s,
-      color: color ?? palette.rule,
-    );
-  }
-}
-
-/// ============================================================================
-/// MODULAR WIDGET 8: FLIGHT INFO ITEM (TERMINAL, CHECK IN, GATE, SEAT)
-/// ============================================================================
-/// Renders heading (e.g. "TERMINAL"), value (e.g. "T5"), and optional suffix ("am").
-class FlightInfoItem extends StatelessWidget {
-  final String title;
-  final String value;
-  final String? suffix;
-  final double? scale;
-  final Color? titleColor;
-  final Color? valueColor;
-  final TextStyle? titleStyle;
-  final TextStyle? valueStyle;
-  final CrossAxisAlignment crossAxisAlignment;
-
-  const FlightInfoItem({
-    super.key,
-    required this.title,
-    required this.value,
-    this.suffix,
-    this.scale,
-    this.titleColor,
-    this.valueColor,
-    this.titleStyle,
-    this.valueStyle,
-    this.crossAxisAlignment = CrossAxisAlignment.center,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final s = scale ?? FlightCardScope.of(context);
-    final palette = _CardPalette.of(context);
-    final headingColor = titleColor ?? palette.secondary;
-    final contentColor = valueColor ?? palette.primary;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: crossAxisAlignment,
-      children: [
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style:
-                titleStyle ??
-                TextStyle(
-                  color: headingColor,
-                  fontSize: 23.0 * s,
-                  fontWeight: FontWeight.w600,
-                  height: 1.15,
-                ),
-          ),
-        ),
-        SizedBox(height: 8.0 * s),
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          child: RichText(
-            maxLines: 1,
-            text: TextSpan(
-              style:
-                  valueStyle ??
-                  TextStyle(
-                    color: contentColor,
-                    fontSize: 34.0 * s,
-                    fontWeight: FontWeight.w800,
-                    height: 1,
-                  ),
-              children: [
-                TextSpan(text: value),
-                if (suffix != null)
-                  TextSpan(
-                    text: suffix,
-                    style: TextStyle(fontSize: 16.0 * s),
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// ============================================================================
-/// MODULAR WIDGET 9: BOTTOM INFO ROW
-/// ============================================================================
-/// Horizontal Row displaying info items separated by vertical divider lines.
-class FlightBottomInfoRow extends StatelessWidget {
-  final List<Widget> items;
-  final double? scale;
-  final Color? dividerColor;
-  final double dividerHeight;
-
-  const FlightBottomInfoRow({
-    super.key,
-    required this.items,
-    this.scale,
-    this.dividerColor,
-    this.dividerHeight = 50.0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final s = scale ?? FlightCardScope.of(context);
-    final palette = _CardPalette.of(context);
-    final divColor = dividerColor ?? palette.rule;
-
-    final rowChildren = <Widget>[];
-    for (int i = 0; i < items.length; i++) {
-      rowChildren.add(Expanded(child: items[i]));
-      if (i < items.length - 1) {
-        rowChildren.add(
-          FlightVerticalDivider(
-            scale: s,
-            color: divColor,
-            height: dividerHeight,
-          ),
-        );
-      }
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: rowChildren,
-    );
-  }
-}
-
-/// ============================================================================
-/// MODULAR WIDGET 10: STATUS BADGE (Glowing lime dot + 'On Time')
-/// ============================================================================
-class FlightStatusBadge extends StatelessWidget {
-  final String status;
-  final double? scale;
-  final Color? color;
-  final double dotSize;
-  final double fontSize;
-
-  const FlightStatusBadge({
-    super.key,
-    this.status = 'On Time',
-    this.scale,
-    this.color,
-    this.dotSize = 16.0,
-    this.fontSize = 29.0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final s = scale ?? FlightCardScope.of(context);
-    final palette = _CardPalette.of(context);
-    final dotColor = color ?? palette.lime;
-    final dSize = dotSize * s;
-    final fSize = fontSize * s;
-
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: dSize,
-            height: dSize,
-            decoration: BoxDecoration(
-              color: dotColor,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: dotColor.withValues(alpha: 0.55),
-                  blurRadius: 15 * s,
-                  spreadRadius: 3 * s,
+                // Bottom Row: Terminal, Check-in, Gate, Seat
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _infoColumn(
+                      'TERMINAL',
+                      journey.terminal?.isNotEmpty == true
+                          ? journey.terminal!
+                          : 'T5',
+                    ),
+                    _divider(),
+                    _infoColumn(
+                      'CHECK IN',
+                      journey.checkInTime?.isNotEmpty == true
+                          ? journey.checkInTime!
+                          : '8:00am',
+                    ),
+                    _divider(),
+                    _infoColumn(
+                      'GATE',
+                      journey.gate?.isNotEmpty == true ? journey.gate! : 'B24',
+                    ),
+                    _divider(),
+                    _infoColumn(
+                      'SEAT',
+                      journey.seat?.isNotEmpty == true ? journey.seat! : '14A',
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ),
-          SizedBox(width: 12.0 * s),
-          Text(
-            status,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: fSize,
-              fontWeight: FontWeight.w800,
-              color: dotColor,
-              height: 1,
             ),
           ),
         ],
       ),
     );
-  }
-}
 
-/// ============================================================================
-/// OPTIONAL DEFAULT CONTENT PRESET (Clean Row and Column Composition)
-/// ============================================================================
-/// Pre-assembled layout built using pure Row and Column widgets.
-class FlightCardDefaultContent extends StatelessWidget {
-  final double? scale;
-  final String departureTitle;
-  final String departureTime;
-  final String flightNumber;
-  final String originCode;
-  final String originCity;
-  final String destinationCode;
-  final String destinationCity;
-  final String terminal;
-  final String checkInTime;
-  final String checkInSuffix;
-  final String gate;
-  final String seat;
+    return AnimatedBuilder(
+      animation: _tiltAnimation,
+      child: cardContent,
+      builder: (context, cachedCard) {
+        // Effective tilt between -1.0 (left tilt) and 1.0 (right tilt)
+        final effectiveTilt = _isDragging
+            ? _dragOffset.clamp(-1.0, 1.0)
+            : _tiltAnimation.value;
 
-  const FlightCardDefaultContent({
-    super.key,
-    this.scale,
-    this.departureTitle = 'DEPARTURE IN',
-    this.departureTime = '04:42:15',
-    this.flightNumber = 'BA 0215',
-    this.originCode = 'AMS',
-    this.originCity = 'AMSTERDAM',
-    this.destinationCode = 'FRA',
-    this.destinationCity = 'FRANKFURT',
-    this.terminal = 'T5',
-    this.checkInTime = '8:00',
-    this.checkInSuffix = 'am',
-    this.gate = 'B24',
-    this.seat = '14A',
-  });
+        // 3D tilt angle (18 degrees) for smooth dynamic left-right sway
+        final angleY = effectiveTilt * (18 * math.pi / 180);
+        final angleZ = effectiveTilt * 0.045;
+        final shadowX = -effectiveTilt * 20.w;
 
-  @override
-  Widget build(BuildContext context) {
-    final s = scale ?? FlightCardScope.of(context);
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final content = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Top: Countdown
-            FlightCountdownWidget(
-              scale: s,
-              title: departureTitle,
-              time: departureTime,
+        return GestureDetector(
+          onHorizontalDragStart: (_) {
+            setState(() {
+              _isDragging = true;
+              _controller.stop();
+            });
+          },
+          onHorizontalDragUpdate: (details) {
+            setState(() {
+              _dragOffset += details.primaryDelta! / 120.0;
+              _dragOffset = _dragOffset.clamp(-1.0, 1.0);
+            });
+          },
+          onHorizontalDragEnd: (_) {
+            setState(() {
+              _isDragging = false;
+              _dragOffset = 0.0;
+              _controller.repeat(reverse: true);
+            });
+          },
+          child: Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.0016) // 3D perspective
+              ..rotateY(angleY)
+              ..rotateZ(angleZ),
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(22.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFFF6D00).withValues(alpha: 0.42),
+                    blurRadius: 22,
+                    offset: Offset(shadowX, 8),
+                  ),
+                ],
+              ),
+              child: cachedCard,
             ),
-            SizedBox(height: 10.0 * s),
-
-            // Middle: Route Row
-            FlightRouteWidget(
-              scale: s,
-              flightNumber: flightNumber,
-              originCode: originCode,
-              originCity: originCity,
-              destinationCode: destinationCode,
-              destinationCity: destinationCity,
-            ),
-            SizedBox(height: 24.0 * s),
-
-            // Divider
-            FlightHorizontalDivider(scale: s),
-            SizedBox(height: 16.0 * s),
-
-            // Bottom: Info Row with 4 columns
-            FlightBottomInfoRow(
-              scale: s,
-              items: [
-                FlightInfoItem(title: 'TERMINAL', value: terminal),
-                FlightInfoItem(
-                  title: 'CHECK IN',
-                  value: checkInTime,
-                  suffix: checkInSuffix,
-                ),
-                FlightInfoItem(title: 'GATE', value: gate),
-                FlightInfoItem(title: 'SEAT', value: seat),
-              ],
-            ),
-          ],
-        );
-
-        return SizedBox(
-          width: constraints.maxWidth,
-          height: constraints.maxHeight,
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.topLeft,
-            child: SizedBox(width: constraints.maxWidth, child: content),
           ),
         );
       },
     );
   }
-}
 
-/// ============================================================================
-/// INTERNALS: PATH CACHING, CLIPPER, PAINTER, AND PALETTE
-/// ============================================================================
-class _PathCache {
-  static double _lastW = 0;
-  static double _lastH = 0;
-  static Path? _cachedWavePath;
-
-  static Path getWavePath(Size size) {
-    if (_cachedWavePath != null &&
-        _lastW == size.width &&
-        _lastH == size.height) {
-      return _cachedWavePath!;
-    }
-    _lastW = size.width;
-    _lastH = size.height;
-    _cachedWavePath = _generateWavePath(size);
-    return _cachedWavePath!;
-  }
-
-  static Path _generateWavePath(Size size) {
-    final w = size.width;
-    final h = size.height;
-    double x(double val) => val * w / 800;
-    double y(double val) => val * h / 493;
-
-    return Path()
-      ..moveTo(x(39), 0)
-      ..lineTo(x(428), 0)
-      ..cubicTo(x(480), 0, x(491), y(40), x(530), y(72))
-      ..cubicTo(x(568), y(100), x(630), y(105), x(678), y(105))
-      ..lineTo(x(740), y(105))
-      ..cubicTo(x(775), y(105), x(800), y(126), x(800), y(160))
-      ..lineTo(x(800), y(443))
-      ..cubicTo(x(800), y(473), x(776), y(493), x(747), y(493))
-      ..lineTo(x(31), y(493))
-      ..cubicTo(x(13), y(493), 0, y(480), 0, y(462))
-      ..lineTo(0, y(39))
-      ..cubicTo(0, y(17), x(17), 0, x(39), 0)
-      ..close();
-  }
-}
-
-class _WaveClipper extends CustomClipper<Path> {
-  const _WaveClipper();
-
-  @override
-  Path getClip(Size size) => _PathCache.getWavePath(size);
-
-  @override
-  bool shouldReclip(covariant _WaveClipper oldClipper) => false;
-}
-
-class _WaveBorder extends CustomPainter {
-  final Color color;
-  final double strokeWidth;
-  final Paint _paint;
-
-  _WaveBorder({required this.color, required this.strokeWidth})
-    : _paint = Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth
-        ..strokeJoin = StrokeJoin.round
-        ..color = color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.drawPath(_PathCache.getWavePath(size), _paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _WaveBorder oldDelegate) =>
-      color != oldDelegate.color || strokeWidth != oldDelegate.strokeWidth;
-}
-
-class _CardPalette {
-  const _CardPalette({
-    required this.tab,
-    required this.stroke,
-    required this.primary,
-    required this.secondary,
-    required this.rule,
-    required this.lime,
-    required this.scrim,
-    this.secondaryScrim,
-    this.imageColor,
-    this.imageBlendMode,
-  });
-
-  final Gradient tab;
-  final Color stroke;
-  final Color primary;
-  final Color secondary;
-  final Color rule;
-  final Color lime;
-  final Gradient scrim;
-  final Gradient? secondaryScrim;
-  final Color? imageColor;
-  final BlendMode? imageBlendMode;
-
-  static _CardPalette of(BuildContext context) {
-    if (Theme.of(context).brightness == Brightness.dark) {
-      return const _CardPalette(
-        tab: LinearGradient(colors: [Color(0xFF422F26), Color(0xFF422F26)]),
-        stroke: Color(0xFFF4F7FB),
-        primary: Color(0xFFFFFFFF),
-        secondary: Color(0xFFF2CEAE),
-        rule: Color(0x66FFFFFF),
-        lime: Color(0xFFA3E635),
-        imageColor: Color(0xFFE56012),
-        imageBlendMode: BlendMode.color,
-        scrim: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color.fromARGB(0, 109, 36, 5),
-            Color.fromARGB(0, 109, 36, 5),
-            Color.fromARGB(150, 109, 36, 5),
-            Color(0xF26D2405),
-          ],
-          stops: [0.0, 0.46, 0.70, 0.88],
+  Widget _cityBlock(String code, String city, CrossAxisAlignment align) {
+    return Column(
+      crossAxisAlignment: align,
+      children: [
+        Text(
+          code,
+          style: TextStyle(
+            fontFamily: 'SF-Pro',
+            fontSize: 26.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
         ),
-        secondaryScrim: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [
-            Color.fromARGB(230, 165, 74, 25),
-            Color.fromARGB(210, 165, 74, 25),
-            Color.fromARGB(120, 165, 74, 25),
-            Color.fromARGB(0, 165, 74, 25),
-          ],
-          stops: [0.0, 0.28, 0.42, 0.54],
+        Text(
+          city.toUpperCase(),
+          style: GoogleFonts.inter(
+            fontSize: 10.sp,
+            fontWeight: FontWeight.w600,
+            color: const Color(0xFF1E293B),
+          ),
         ),
-      );
-    }
-    return const _CardPalette(
-      tab: AppColors.bedgeGradient,
-      stroke: Color(0xFFF4F7FB),
-      primary: Color(0xFFFFFFFF),
-      secondary: Color(0xFFDAE1ED),
-      rule: Color(0xB4FFFFFF),
-      lime: Color(0xFFD0FF2D),
-      scrim: AppColors.homeAirBottomGradient,
-      secondaryScrim: AppColors.homeAirLeftGradient,
+      ],
+    );
+  }
+
+  Widget _infoColumn(String label, String value) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: 9.sp,
+            fontWeight: FontWeight.w700,
+            color: AppColors.blackShadow,
+          ),
+        ),
+        SizedBox(height: 2.h),
+        Text(
+          value,
+          style: TextStyle(
+            fontFamily: 'SF-Pro',
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _divider() {
+    return Container(
+      width: 1,
+      height: 24.h,
+      color: Colors.grey.withValues(alpha: 0.4),
     );
   }
 }

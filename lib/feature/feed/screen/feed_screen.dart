@@ -157,21 +157,22 @@ class FeedScreen extends ConsumerWidget {
                         if (hasBoardingPass &&
                             feedState.selectedTab == FeedTab.feed) ...[
                           FeedActiveFlightCardWidget(
-                            flightNumber: journeyState.flightNumber,
-                            originCode:
-                                (journeyState.originCode == 'LHR' ||
-                                    journeyState.originCode.isEmpty)
+                            flightNumber: journeyState.flightNumber ?? '',
+                            originCode: (journeyState.originCode == null ||
+                                    journeyState.originCode == 'LHR' ||
+                                    journeyState.originCode!.isEmpty)
                                 ? 'AMS'
-                                : journeyState.originCode,
-                            destinationCode:
-                                (journeyState.destinationCode == 'JFK' ||
-                                    journeyState.destinationCode.isEmpty)
+                                : journeyState.originCode!,
+                            destinationCode: (journeyState.destinationCode ==
+                                        null ||
+                                    journeyState.destinationCode == 'JFK' ||
+                                    journeyState.destinationCode!.isEmpty)
                                 ? 'FRA'
-                                : journeyState.destinationCode,
-                            flightDate: journeyState.flightDate,
-                            terminal: journeyState.terminal,
-                            gate: journeyState.gate,
-                            status: journeyState.status,
+                                : journeyState.destinationCode!,
+                            flightDate: journeyState.flightDate ?? '',
+                            terminal: journeyState.terminal ?? '',
+                            gate: journeyState.gate ?? '',
+                            status: journeyState.status ?? '',
                             onTap: () {
                               ref
                                   .read(navbarNotifierProvider.notifier)
