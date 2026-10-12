@@ -39,6 +39,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
         themeMode == ThemeMode.dark ||
         (themeMode == ThemeMode.system &&
             Theme.of(context).brightness == Brightness.dark);
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return Scaffold(
       body: CommonScreen(
@@ -119,7 +120,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                             ).withValues(alpha: 0.4),
                           ),
                           title: "Smartwatch",
-                          subtitle: "Apple Watch / Wear OS",
+                          subtitle: isIOS ? "Apple Watch" : "Wear OS",
                           trailing: Icon(
                             Icons.arrow_forward_ios_rounded,
                             size: 14.sp,

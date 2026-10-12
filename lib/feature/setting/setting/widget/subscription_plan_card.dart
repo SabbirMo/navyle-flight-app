@@ -37,17 +37,22 @@ class SubscriptionPlanCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  SvgPicture.asset(ImageAssets.king, width: 24.w, height: 20.h),
-                  SizedBox(width: 8.w),
-                  Text(
-                    "NAVYLA PLUS",
-                    style: StyleManager.interBold16(
-                      AppColors.white,
-                    ).copyWith(fontWeight: FontWeight.w900, letterSpacing: 1),
-                  ),
-                ],
+              Expanded(
+                child: Row(
+                  children: [
+                    SvgPicture.asset(ImageAssets.king, width: 24.w, height: 20.h),
+                    SizedBox(width: 8.w),
+                    Flexible(
+                      child: Text(
+                        "NAVYLA PLUS",
+                        style: StyleManager.interBold16(
+                          AppColors.white,
+                        ).copyWith(fontWeight: FontWeight.w900, letterSpacing: 1),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 5.h),
@@ -85,26 +90,29 @@ class SubscriptionPlanCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "NEXT RENEWAL",
-                    style: StyleManager.interBold10(
-                      AppColors.subscribeHighlightBg,
-                    ).copyWith(fontWeight: FontWeight.w900, letterSpacing: 1.5),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    "24 Oct 2026",
-                    style: StyleManager.interBold16(AppColors.white).copyWith(
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -0.5,
-                      fontSize: 14.sp,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "NEXT RENEWAL",
+                      style: StyleManager.interBold10(
+                        AppColors.subscribeHighlightBg,
+                      ).copyWith(fontWeight: FontWeight.w900, letterSpacing: 1.5),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 4.h),
+                    Text(
+                      "24 Oct 2026",
+                      style: StyleManager.interBold16(AppColors.white).copyWith(
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.5,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              SizedBox(width: 8.w),
               GestureDetector(
                 onTap: onManagePlanTap,
                 child: Container(

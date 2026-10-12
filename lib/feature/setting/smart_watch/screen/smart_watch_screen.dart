@@ -1,4 +1,4 @@
-import 'dart:math' as math;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +13,7 @@ import 'package:navyla_flight_app/feature/setting/smart_watch/widget/smart_watch
 import 'package:navyla_flight_app/feature/setting/smart_watch/widget/smart_watch_feature_card.dart';
 import 'package:navyla_flight_app/feature/setting/smart_watch/widget/smart_watch_icon_box.dart';
 import 'package:navyla_flight_app/feature/setting/smart_watch/widget/smart_watch_radar_painter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SmartWatchScreen extends StatefulWidget {
   final bool? isIOSOverride;
@@ -37,26 +38,20 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
   late AnimationController _badgeFloatController;
   late Animation<double> _badgeFadeAnimation;
   late Animation<Offset> _badgeSlideAnimation;
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    // 1. Pick randomly between iPhone and Wear OS (or use override/device platform if specified)
-    if (widget.initialWatchType != null) {
-      _watchType = widget.initialWatchType!;
-    } else if (widget.isIOSOverride != null) {
-      _watchType = widget.isIOSOverride!
-          ? SmartWatchType.appleWatch
-          : SmartWatchType.wearOs;
-    } else {
-      // Randomly pick either iPhone or Wear OS on launch
-      _watchType = math.Random().nextBool()
-          ? SmartWatchType.appleWatch
-          : SmartWatchType.wearOs;
-    }
+    // 1. Open appropriate approved platform directly (Apple Watch on iOS, Wear OS on Android)
+    final isIOS =
+        widget.isIOSOverride ?? (defaultTargetPlatform == TargetPlatform.iOS);
+    _watchType =
+        widget.initialWatchType ??
+        (isIOS ? SmartWatchType.appleWatch : SmartWatchType.wearOs);
 
-    // 2. Starts on First Screen (Screen 1: notPaired)
-    _syncState = widget.initialState ?? SmartWatchSyncState.notPaired;
+    // 2. Open directly in the approved device state (simulated ready & connected)
+    _syncState = widget.initialState ?? SmartWatchSyncState.ready;
 
     // 3. Floating entrance animation for the device badge over the radar
     _badgeFloatController = AnimationController(
@@ -86,6 +81,18 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isInitialized) {
+      if (widget.initialWatchType == null && widget.isIOSOverride == null) {
+        final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+        _watchType = isIOS ? SmartWatchType.appleWatch : SmartWatchType.wearOs;
+      }
+      _isInitialized = true;
+    }
+  }
+
+  @override
   void dispose() {
     _badgeFloatController.dispose();
     super.dispose();
@@ -103,23 +110,31 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
 
   bool get _isAppleWatch => _watchType == SmartWatchType.appleWatch;
 
-  // Flow: Screen 1 -> Screen 2 -> Screen 3 -> Continue (Pop)
+  Future<void> _openWatchApp() async {
+    final url = _isAppleWatch
+        ? "itms-watch://"
+        : "https://play.google.com/store/apps/details?id=com.google.android.wearable.app";
+    try {
+      final uri = Uri.parse(url);
+      final launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched) {
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
+      }
+    } catch (e) {
+      debugPrint("Could not open watch companion app: $e");
+    }
+  }
+
   void _onActionButtonPressed() {
     switch (_syncState) {
       case SmartWatchSyncState.notPaired:
-        // Transition from Screen 1 to Screen 2
-        setState(() {
-          _syncState = SmartWatchSyncState.appNotInstalled;
-        });
-        break;
       case SmartWatchSyncState.appNotInstalled:
-        // Transition from Screen 2 to Screen 3
-        setState(() {
-          _syncState = SmartWatchSyncState.ready;
-        });
+        _openWatchApp();
         break;
       case SmartWatchSyncState.ready:
-        // Screen 3 Done -> Continue/pop
         if (Navigator.of(context).canPop()) {
           Navigator.of(context).pop();
         }
