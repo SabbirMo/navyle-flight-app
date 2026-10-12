@@ -67,6 +67,7 @@ class AddBoardingPassView extends ConsumerWidget {
     final ticketsState = ref.watch(savedTicketsProvider);
     final tickets = ticketsState.tickets;
     final bottomInset = MediaQuery.viewPaddingOf(context).bottom;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -89,7 +90,7 @@ class AddBoardingPassView extends ConsumerWidget {
                       style: GoogleFonts.inter(
                         fontSize: 17.5.sp,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: isDark ? Colors.white : const Color(0xFF0F172A),
                         letterSpacing: 0.8,
                       ),
                     ),
@@ -104,16 +105,33 @@ class AddBoardingPassView extends ConsumerWidget {
                           height: 38.w,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color(0xFF0F1A30),
+                            color: isDark
+                                ? const Color(0xFF0F1A30)
+                                : Colors.white,
                             border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.15),
+                              color: isDark
+                                  ? Colors.white.withValues(alpha: 0.15)
+                                  : const Color(0xFFE2E8F0),
                               width: 1.1,
                             ),
+                            boxShadow: isDark
+                                ? null
+                                : [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.05,
+                                      ),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
                           ),
                           child: Center(
                             child: Icon(
                               Icons.arrow_back_ios_new_rounded,
-                              color: Colors.white,
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xFF0F172A),
                               size: 16.sp,
                             ),
                           ),
@@ -124,7 +142,9 @@ class AddBoardingPassView extends ConsumerWidget {
                     alignment: Alignment.centerRight,
                     child: Theme(
                       data: Theme.of(context).copyWith(
-                        cardColor: const Color(0xFF0F1A30),
+                        cardColor: isDark
+                            ? const Color(0xFF0F1A30)
+                            : Colors.white,
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                       ),
@@ -132,18 +152,56 @@ class AddBoardingPassView extends ConsumerWidget {
                         tooltip: '',
                         position: PopupMenuPosition.under,
                         offset: Offset(0, 6.h),
-                        color: const Color(0xFF0B1428),
+                        color: isDark ? const Color(0xFF0B1428) : Colors.white,
                         elevation: 10,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16.r),
                           side: BorderSide(
-                            color: Colors.white.withValues(alpha: 0.15),
+                            color: isDark
+                                ? Colors.white.withValues(alpha: 0.15)
+                                : const Color(0xFFE2E8F0),
                             width: 1.1,
                           ),
                         ),
                         padding: EdgeInsets.zero,
                         onSelected: (value) {
-                          if (value == 'clear') {
+                          if (value == 'demo') {
+                            ref
+                                .read(savedTicketsProvider.notifier)
+                                .loadDemoTickets();
+                            final first = SavedTicketModel.defaultTickets.first;
+                            ref
+                                .read(flightJourneyNotifierProvider.notifier)
+                                .addBoardingPass(
+                                  flightNumber: first.flightNumber,
+                                  originCode: first.originCode,
+                                  originCity: first.originCity,
+                                  destinationCode: first.destinationCode,
+                                  destinationCity: first.destinationCity,
+                                  terminal: first.terminal,
+                                  gate: first.gate,
+                                  seat: first.seat,
+                                  flightDate: first.displayDate,
+                                );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Loaded 3 sample tickets for demonstration',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                backgroundColor: const Color(0xFF0B1428),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          } else if (value == 'clear') {
                             ref.read(savedTicketsProvider.notifier).removeAll();
                             ref
                                 .read(flightJourneyNotifierProvider.notifier)
@@ -169,6 +227,35 @@ class AddBoardingPassView extends ConsumerWidget {
                           }
                         },
                         itemBuilder: (context) => [
+                          PopupMenuItem<String>(
+                            value: 'demo',
+                            height: 44.h,
+                            padding: EdgeInsets.symmetric(horizontal: 14.w),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.airplane_ticket_outlined,
+                                  color: const Color(0xFF38BDF8),
+                                  size: 19.sp,
+                                ),
+                                SizedBox(width: 8.w),
+                                Expanded(
+                                  child: Text(
+                                    'Load Demo Tickets (3)',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: isDark
+                                          ? Colors.white
+                                          : const Color(0xFF0F172A),
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           PopupMenuItem<String>(
                             value: 'clear',
                             height: 44.h,
@@ -202,16 +289,33 @@ class AddBoardingPassView extends ConsumerWidget {
                           height: 38.w,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color(0xFF0F1A30),
+                            color: isDark
+                                ? const Color(0xFF0F1A30)
+                                : Colors.white,
                             border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.15),
+                              color: isDark
+                                  ? Colors.white.withValues(alpha: 0.15)
+                                  : const Color(0xFFE2E8F0),
                               width: 1.1,
                             ),
+                            boxShadow: isDark
+                                ? null
+                                : [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.05,
+                                      ),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
                           ),
                           child: Center(
                             child: Icon(
                               Icons.more_vert,
-                              color: Colors.white,
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xFF0F172A),
                               size: 20.sp,
                             ),
                           ),
@@ -228,7 +332,9 @@ class AddBoardingPassView extends ConsumerWidget {
             // Dashed Scanner Card: SCAN YOUR BOARDING PASS
             CustomPaint(
               painter: DashedRoundedBorderPainter(
-                color: Colors.white.withValues(alpha: 0.28),
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.28)
+                    : const Color(0xFFCBD5E1),
                 strokeWidth: 1.2,
                 radius: 20.r,
                 dashLength: 5.5,
@@ -238,8 +344,17 @@ class AddBoardingPassView extends ConsumerWidget {
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF041028),
+                  color: isDark ? const Color(0xFF041028) : Colors.white,
                   borderRadius: BorderRadius.circular(20.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(
+                        alpha: isDark ? 0.35 : 0.05,
+                      ),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Column(
                   children: [
@@ -248,7 +363,7 @@ class AddBoardingPassView extends ConsumerWidget {
                     ScannerReticleIcon(
                       width: 44.w,
                       height: 34.h,
-                      color: Colors.white,
+                      color: isDark ? Colors.white : const Color(0xFF0F172A),
                     ),
                     SizedBox(height: 14.h),
                     Text(
@@ -256,7 +371,7 @@ class AddBoardingPassView extends ConsumerWidget {
                       style: GoogleFonts.inter(
                         fontSize: 14.5.sp,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: isDark ? Colors.white : const Color(0xFF0F172A),
                         letterSpacing: 0.4,
                       ),
                     ),
@@ -266,7 +381,9 @@ class AddBoardingPassView extends ConsumerWidget {
                       style: GoogleFonts.inter(
                         fontSize: 10.sp,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xFF94A3B8),
+                        color: isDark
+                            ? const Color(0xFF94A3B8)
+                            : const Color(0xFF64748B),
                         letterSpacing: 0.3,
                       ),
                     ),
@@ -325,22 +442,24 @@ class AddBoardingPassView extends ConsumerWidget {
             ),
 
             // OR divider
-            _buildOrDivider(),
+            _buildOrDivider(isDark),
 
             // 'Upload from Gallery' button
             _buildOutlinedButton(
               icon: Icons.photo_outlined,
               text: 'Upload from Gallery',
+              isDark: isDark,
               onTap: () => _handleGalleryUpload(context, ref),
             ),
 
             // OR divider
-            _buildOrDivider(),
+            _buildOrDivider(isDark),
 
             // 'Enter Details Manually' button
             _buildOutlinedButton(
               icon: Icons.keyboard_alt_outlined,
               text: 'Enter Details Manually',
+              isDark: isDark,
               onTap: () => _handleManualEntry(context, ref),
             ),
 
@@ -354,7 +473,7 @@ class AddBoardingPassView extends ConsumerWidget {
                 style: GoogleFonts.inter(
                   fontSize: 13.5.sp,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: isDark ? Colors.white : const Color(0xFF0F172A),
                   letterSpacing: 0.2,
                 ),
               ),
@@ -362,23 +481,63 @@ class AddBoardingPassView extends ConsumerWidget {
 
             SizedBox(height: 10.h),
 
-            // White Card with list of saved tickets
+            // Card with list of saved tickets
             if (tickets.isEmpty)
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: 24.h),
+                padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 16.w),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isDark ? const Color(0xFF041028) : Colors.white,
                   borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.18)
+                        : const Color(0xFFE2E8F0),
+                    width: 1.2,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(
+                        alpha: isDark ? 0.35 : 0.06,
+                      ),
+                      blurRadius: 14,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Center(
-                  child: Text(
-                    'No saved tickets',
-                    style: GoogleFonts.inter(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w500,
-                      color: const Color(0xFF64748B),
-                    ),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.airplane_ticket_outlined,
+                        size: 36.sp,
+                        color: isDark
+                            ? Colors.white.withValues(alpha: 0.45)
+                            : const Color(0xFF94A3B8),
+                      ),
+                      SizedBox(height: 8.h),
+                      Text(
+                        'No saved tickets yet',
+                        style: GoogleFonts.inter(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w700,
+                          color: isDark
+                              ? Colors.white
+                              : const Color(0xFF1E293B),
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        'Scan or enter details to add your first flight',
+                        style: GoogleFonts.inter(
+                          fontSize: 11.5.sp,
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.6)
+                              : const Color(0xFF64748B),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
               )
@@ -386,11 +545,19 @@ class AddBoardingPassView extends ConsumerWidget {
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isDark ? const Color(0xFF041028) : Colors.white,
                   borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.18)
+                        : const Color(0xFFE2E8F0),
+                    width: 1.2,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.15),
+                      color: Colors.black.withValues(
+                        alpha: isDark ? 0.35 : 0.08,
+                      ),
                       blurRadius: 16,
                       offset: const Offset(0, 4),
                     ),
@@ -404,6 +571,7 @@ class AddBoardingPassView extends ConsumerWidget {
                       children: [
                         _buildTicketTile(
                           ticket: ticket,
+                          isDark: isDark,
                           onTap: () =>
                               _selectTicket(context, ref, index, ticket),
                         ),
@@ -411,7 +579,9 @@ class AddBoardingPassView extends ConsumerWidget {
                           Divider(
                             height: 1,
                             thickness: 1,
-                            color: const Color(0xFFF1F5F9),
+                            color: isDark
+                                ? Colors.white.withValues(alpha: 0.1)
+                                : const Color(0xFFF1F5F9),
                             indent: 14.w,
                             endIndent: 14.w,
                           ),
@@ -430,6 +600,7 @@ class AddBoardingPassView extends ConsumerWidget {
 
   Widget _buildTicketTile({
     required SavedTicketModel ticket,
+    required bool isDark,
     required VoidCallback onTap,
   }) {
     return Material(
@@ -464,7 +635,9 @@ class AddBoardingPassView extends ConsumerWidget {
                           style: GoogleFonts.inter(
                             fontSize: 13.5.sp,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF0F172A),
+                            color: isDark
+                                ? Colors.white
+                                : const Color(0xFF0F172A),
                           ),
                         ),
                         SizedBox(width: 8.w),
@@ -474,7 +647,9 @@ class AddBoardingPassView extends ConsumerWidget {
                             style: GoogleFonts.inter(
                               fontSize: 11.5.sp,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF64748B),
+                              color: isDark
+                                  ? Colors.white.withValues(alpha: 0.75)
+                                  : const Color(0xFF64748B),
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -487,7 +662,9 @@ class AddBoardingPassView extends ConsumerWidget {
                       style: GoogleFonts.inter(
                         fontSize: 11.5.sp,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xFF64748B),
+                        color: isDark
+                            ? Colors.white.withValues(alpha: 0.55)
+                            : const Color(0xFF64748B),
                       ),
                     ),
                   ],
@@ -496,7 +673,9 @@ class AddBoardingPassView extends ConsumerWidget {
               // Chevron icon
               Icon(
                 Icons.chevron_right_rounded,
-                color: const Color(0xFF94A3B8),
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.5)
+                    : const Color(0xFF94A3B8),
                 size: 22.sp,
               ),
             ],
@@ -528,7 +707,7 @@ class AddBoardingPassView extends ConsumerWidget {
     return Icon(Icons.flight, color: Colors.white, size: 20.sp);
   }
 
-  Widget _buildOrDivider() {
+  Widget _buildOrDivider(bool isDark) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 11.h),
       child: Row(
@@ -536,7 +715,9 @@ class AddBoardingPassView extends ConsumerWidget {
           Expanded(
             child: Container(
               height: 1,
-              color: Colors.white.withValues(alpha: 0.15),
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.15)
+                  : const Color(0xFFCBD5E1),
             ),
           ),
           Padding(
@@ -546,7 +727,9 @@ class AddBoardingPassView extends ConsumerWidget {
               style: GoogleFonts.inter(
                 fontSize: 11.sp,
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFF64748B),
+                color: isDark
+                    ? const Color(0xFF64748B)
+                    : const Color(0xFF94A3B8),
                 letterSpacing: 1.0,
               ),
             ),
@@ -554,7 +737,9 @@ class AddBoardingPassView extends ConsumerWidget {
           Expanded(
             child: Container(
               height: 1,
-              color: Colors.white.withValues(alpha: 0.15),
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.15)
+                  : const Color(0xFFCBD5E1),
             ),
           ),
         ],
@@ -565,6 +750,7 @@ class AddBoardingPassView extends ConsumerWidget {
   Widget _buildOutlinedButton({
     required IconData icon,
     required String text,
+    required bool isDark,
     required VoidCallback onTap,
   }) {
     return Material(
@@ -576,12 +762,23 @@ class AddBoardingPassView extends ConsumerWidget {
           width: double.infinity,
           height: 48.h,
           decoration: BoxDecoration(
-            color: const Color(0xFF041028),
+            color: isDark ? const Color(0xFF041028) : Colors.white,
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.28),
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.28)
+                  : const Color(0xFFCBD5E1),
               width: 1.2,
             ),
+            boxShadow: isDark
+                ? null
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.04),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -589,7 +786,11 @@ class AddBoardingPassView extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, color: Colors.white, size: 18.sp),
+                Icon(
+                  icon,
+                  color: isDark ? Colors.white : const Color(0xFF0F172A),
+                  size: 18.sp,
+                ),
                 SizedBox(width: 8.w),
                 Flexible(
                   child: Text(
@@ -597,7 +798,7 @@ class AddBoardingPassView extends ConsumerWidget {
                     style: GoogleFonts.inter(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: isDark ? Colors.white : const Color(0xFF0F172A),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

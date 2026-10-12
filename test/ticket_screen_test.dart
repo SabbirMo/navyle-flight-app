@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 import 'package:navyla_flight_app/feature/ticket/provider/saved_tickets_provider.dart';
 import 'package:navyla_flight_app/feature/ticket/screen/ticket_screen.dart';
@@ -9,6 +10,9 @@ import 'package:navyla_flight_app/feature/ticket/widget/delete_ticket_bottom_she
 import 'package:navyla_flight_app/feature/ticket/widget/ticket_boarding_pass.dart';
 
 void main() {
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
   testWidgets('DeleteTicketBottomSheet renders correctly and triggers callbacks', (WidgetTester tester) async {
     tester.view.physicalSize = const Size(1179, 2556);
     tester.view.devicePixelRatio = 3.0;
@@ -72,6 +76,8 @@ void main() {
 
     final container = ProviderContainer();
     addTearDown(container.dispose);
+    container.read(savedTicketsProvider.notifier).loadDemoTickets();
+    container.read(savedTicketsProvider.notifier).hideAddPass();
     container.read(flightJourneyNotifierProvider.notifier).addBoardingPass(
           flightNumber: 'BA 0215',
           originCode: 'LHR',
@@ -136,7 +142,7 @@ void main() {
     expect(find.text('Open Camera'), findsOneWidget);
     expect(find.text('Upload from Gallery'), findsOneWidget);
     expect(find.text('Enter Details Manually'), findsOneWidget);
-    expect(find.text('Your saved tickets (3)'), findsOneWidget);
+    expect(find.text('No saved tickets yet'), findsOneWidget);
     expect(find.byType(TicketBoardingPass), findsNothing);
     expect(tester.takeException(), isNull);
   });
@@ -149,6 +155,7 @@ void main() {
 
     final container = ProviderContainer();
     addTearDown(container.dispose);
+    container.read(savedTicketsProvider.notifier).loadDemoTickets();
 
     await tester.pumpWidget(
       UncontrolledProviderScope(
@@ -189,7 +196,8 @@ void main() {
 
     final container = ProviderContainer();
     addTearDown(container.dispose);
-
+    container.read(savedTicketsProvider.notifier).loadDemoTickets();
+    container.read(savedTicketsProvider.notifier).hideAddPass();
 
     // Make flight active with BA 0215
     container.read(flightJourneyNotifierProvider.notifier).addBoardingPass(
@@ -262,6 +270,8 @@ void main() {
 
     final container = ProviderContainer();
     addTearDown(container.dispose);
+    container.read(savedTicketsProvider.notifier).loadDemoTickets();
+    container.read(savedTicketsProvider.notifier).hideAddPass();
 
     // Make flight active
     container.read(flightJourneyNotifierProvider.notifier).addBoardingPass(
@@ -342,6 +352,8 @@ void main() {
 
     final container = ProviderContainer();
     addTearDown(container.dispose);
+    container.read(savedTicketsProvider.notifier).loadDemoTickets();
+    container.read(savedTicketsProvider.notifier).hideAddPass();
 
     container.read(flightJourneyNotifierProvider.notifier).addBoardingPass(
           flightNumber: 'BA 0215',
@@ -387,6 +399,7 @@ void main() {
 
     final container = ProviderContainer();
     addTearDown(container.dispose);
+    container.read(savedTicketsProvider.notifier).loadDemoTickets();
 
     await tester.pumpWidget(
       UncontrolledProviderScope(
@@ -412,9 +425,8 @@ void main() {
     await tester.tap(find.byIcon(Icons.more_vert));
     await tester.pumpAndSettle();
 
-    // Verify popup menu displays ONLY 'Clear Saved Tickets' (no bottom sheet)
+    // Verify popup menu displays 'Clear Saved Tickets'
     expect(find.text('Clear Saved Tickets'), findsOneWidget);
-    expect(find.text('Reset Demo Tickets'), findsNothing);
 
     // Tap 'Clear Saved Tickets'
     await tester.tap(find.text('Clear Saved Tickets'));
@@ -422,8 +434,15 @@ void main() {
 
     // Verify saved tickets are cleared
     expect(container.read(savedTicketsProvider).tickets.isEmpty, isTrue);
-    expect(find.text('No saved tickets'), findsOneWidget);
+    expect(find.text('No saved tickets yet'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Normal user starts with empty saved tickets list and demo tickets are excluded', (WidgetTester tester) async {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    expect(container.read(savedTicketsProvider).tickets.isEmpty, isTrue);
+    expect(container.read(flightJourneyNotifierProvider).hasActiveFlight, isFalse);
   });
 }
 

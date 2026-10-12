@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/theme/theme_mode_provder.dart';
+import 'package:navyla_flight_app/core/services/app_preference_service.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -105,7 +106,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     Future.delayed(const Duration(milliseconds: 3000), () {
       if (mounted) {
-        context.pushReplacement(AppRouterName.onBoardingScreen);
+        if (AppPreferenceService.isLoggedIn) {
+          context.go(AppRouterName.homeScreen);
+        } else {
+          context.pushReplacement(AppRouterName.onBoardingScreen);
+        }
       }
     });
   }

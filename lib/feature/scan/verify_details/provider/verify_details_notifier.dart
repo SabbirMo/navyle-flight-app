@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 import 'package:navyla_flight_app/feature/scan/verify_details/model/verify_details_state.dart';
@@ -13,12 +12,17 @@ class VerifyDetailsNotifier extends Notifier<VerifyDetailsState> {
     return const VerifyDetailsState();
   }
 
-  void initialize({bool isManual = false, Map<String, String>? initialData}) {
+  void initialize({
+    bool isManual = false,
+    Map<String, String>? initialData,
+    String? imagePath,
+  }) {
     final data = initialData ?? {};
     if (isManual) {
-      state = const VerifyDetailsState(
+      state = VerifyDetailsState(
         isManual: true,
         hasAttemptedSubmit: false,
+        imagePath: imagePath,
       );
     } else {
       state = VerifyDetailsState(
@@ -32,6 +36,7 @@ class VerifyDetailsNotifier extends Notifier<VerifyDetailsState> {
         terminal: data['terminal'] ?? '5',
         gate: data['gate'] ?? 'B24',
         hasAttemptedSubmit: false,
+        imagePath: imagePath,
       );
     }
   }
@@ -98,10 +103,28 @@ class VerifyDetailsNotifier extends Notifier<VerifyDetailsState> {
           flightDate: date,
         );
 
-    // 2. Update Saved Tickets list
+    // 2. Determine distinct consistent color preset for this ticket
+    final existingCount = ref.read(savedTicketsProvider).tickets.length;
+    final palette = TicketColorPalette.getPresetForIndex(existingCount);
+
+    String airlineName = 'BRITISH AIRWAYS';
+    final upper = finalFlightNum.toUpperCase();
+    if (upper.startsWith('LH')) {
+      airlineName = 'LUFTHANSA';
+    } else if (upper.startsWith('W6')) {
+      airlineName = 'WIZZ AIR';
+    } else if (upper.startsWith('EK')) {
+      airlineName = 'EMIRATES';
+    } else if (upper.startsWith('QR')) {
+      airlineName = 'QATAR AIRWAYS';
+    } else if (upper.startsWith('AF')) {
+      airlineName = 'AIR FRANCE';
+    }
+
+    // 3. Update Saved Tickets list with distinct colors and original scan image
     final newSavedTicket = SavedTicketModel(
       id: 'ticket_${DateTime.now().millisecondsSinceEpoch}',
-      airlineName: 'BRITISH AIRWAYS',
+      airlineName: airlineName,
       flightClass: 'ECONOMY',
       flightNumber: finalFlightNum,
       originCode: from,
@@ -117,10 +140,15 @@ class VerifyDetailsNotifier extends Notifier<VerifyDetailsState> {
       gate: gate,
       seat: seat,
       luggage: '02',
-      primaryColor: const Color(0xFF0453BC),
-      secondaryColor: const Color(0xFF024699),
-      badgeColor: const Color(0xFF0066FF),
-      badgeType: 'flight',
+      primaryColor: palette.primaryColor,
+      secondaryColor: palette.secondaryColor,
+      badgeColor: palette.badgeColor,
+      badgeType: palette.badgeType,
+      planeIconColor: palette.planeIconColor,
+      airlineLogoColor: palette.airlineLogoColor,
+      economyBgColor: palette.economyBgColor,
+      economyTextColor: palette.economyTextColor,
+      originalScanPath: state.imagePath,
     );
     ref.read(savedTicketsProvider.notifier).addTicket(newSavedTicket);
 

@@ -11,6 +11,8 @@ import 'package:navyla_flight_app/feature/ticket/widget/add_boarding_pass_view.d
 import 'package:navyla_flight_app/feature/ticket/widget/delete_ticket_bottom_sheet.dart';
 import 'package:navyla_flight_app/feature/ticket/widget/ticket_boarding_pass.dart';
 import 'package:navyla_flight_app/feature/ticket/widget/ticket_options_dialog.dart';
+import 'package:navyla_flight_app/feature/ticket/widget/original_ticket_viewer_dialog.dart';
+import 'package:navyla_flight_app/feature/ticket/widget/download_ticket_dialog.dart';
 
 class TicketScreen extends ConsumerStatefulWidget {
   const TicketScreen({super.key});
@@ -94,14 +96,7 @@ class _TicketScreenState extends ConsumerState<TicketScreen> {
       ticket: selectedTicket,
       onViewOriginal: () {
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Opening original ticket for ${selectedTicket.flightNumber}...',
-            ),
-            duration: const Duration(seconds: 2),
-          ),
-        );
+        OriginalTicketViewerDialog.show(context, selectedTicket);
       },
       onShare: () {
         Navigator.of(context).pop();
@@ -120,14 +115,7 @@ class _TicketScreenState extends ConsumerState<TicketScreen> {
       },
       onDownload: () {
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Boarding pass for ${selectedTicket.flightNumber} saved to device.',
-            ),
-            duration: const Duration(seconds: 2),
-          ),
-        );
+        DownloadTicketDialog.show(context, selectedTicket);
       },
       onDelete: () {
         Navigator.of(context).pop();

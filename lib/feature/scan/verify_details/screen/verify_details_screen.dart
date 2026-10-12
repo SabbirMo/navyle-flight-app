@@ -13,11 +13,13 @@ import 'package:navyla_flight_app/router/app_router_name.dart';
 class VerifyDetailsScreen extends ConsumerStatefulWidget {
   final bool isManual;
   final Map<String, String>? initialData;
+  final String? imagePath;
 
   const VerifyDetailsScreen({
     super.key,
     this.isManual = false,
     this.initialData,
+    this.imagePath,
   });
 
   @override
@@ -72,6 +74,7 @@ class _VerifyDetailsScreenState extends ConsumerState<VerifyDetailsScreen> {
         ref.read(verifyDetailsNotifierProvider.notifier).initialize(
               isManual: isManual,
               initialData: widget.initialData,
+              imagePath: widget.imagePath,
             );
       }
     });

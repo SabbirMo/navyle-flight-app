@@ -172,7 +172,10 @@ class FeedScreen extends ConsumerWidget {
                             flightDate: journeyState.flightDate ?? '',
                             terminal: journeyState.terminal ?? '',
                             gate: journeyState.gate ?? '',
-                            status: journeyState.status ?? '',
+                            status: (journeyState.status != null &&
+                                    journeyState.status!.isNotEmpty)
+                                ? journeyState.status!
+                                : 'On Time',
                             onTap: () {
                               ref
                                   .read(navbarNotifierProvider.notifier)

@@ -114,7 +114,7 @@ class TicketOptionsDialog extends StatelessWidget {
               context: context,
               icon: Icons.confirmation_number_outlined,
               title: 'View Original Ticket',
-              subtitle: 'Open the original file',
+              subtitle: 'Open scanned document preview',
               onTap: onViewOriginal,
             ),
 
@@ -136,7 +136,7 @@ class TicketOptionsDialog extends StatelessWidget {
               context: context,
               icon: Icons.download_outlined,
               title: 'Download',
-              subtitle: 'Save to device',
+              subtitle: 'Save PDF to device (Simulation)',
               onTap: onDownload,
             ),
 

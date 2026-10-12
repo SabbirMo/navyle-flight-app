@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -50,211 +49,242 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final journeyState = ref.watch(flightJourneyNotifierProvider);
     final hasBoardingPass = journeyState.hasActiveFlight;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isStressFree = journeyState.isStressFreeActive;
+
+    final scaffoldBg = isDark ? AppColors.darkBlack : const Color(0xFFF8FAFC);
 
     // When boarding pass is added (Active flight state from user design)
     if (hasBoardingPass) {
       return Scaffold(
-        backgroundColor: isDark ? AppColors.darkBlack : const Color(0xFFF8FAFC),
-        body: Stack(
-          children: [
-            // 1. Scrollable Page Content
-            Positioned.fill(
-              child: SingleChildScrollView(
-                controller: _activeScrollController,
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    // Hero Section with darkBg / lightBg Airport Window Image
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        // Airport Window Background (darkBg.png for dark, lightBg.png for light)
-                        SizedBox(
-                          width: double.infinity,
-                          height: 340.h,
-                          child: Image.asset(
-                            isDark ? ImageAssets.darkBg : ImageAssets.lightBg,
-                            fit: BoxFit.cover,
-                            alignment: Alignment.topCenter,
-                          ),
-                        ),
-
-                        // Bottom gradient overlay to blend into scaffold background
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          height: 80.h,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  (isDark
-                                          ? AppColors.darkBlack
-                                          : const Color(0xFFE1D8CE))
-                                      .withValues(alpha: 0.8),
-                                  (isDark
-                                          ? AppColors.darkBlack
-                                          : const Color(0xFFE1D8CE))
-                                      .withValues(alpha: 0.2),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // Hero content inside scrollable view
-                        SafeArea(
-                          bottom: false,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.w),
-                            child: Column(
-                              children: [
-                                // Clearance for fixed sticky top header
-                                SizedBox(height: 60.h),
-                                // Weather / City / Local Time Strip
-                                const CityWeatherCard(),
-                                SizedBox(height: 36.h),
-                                // Flight Card
-                                const FlightCardWidget(),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+        backgroundColor: scaffoldBg,
+        body: SingleChildScrollView(
+          controller: _activeScrollController,
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              // Hero Section with darkBg / lightBg Airport Window Image
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  // 1. Airport Window Background - Dynamically fills entire hero area
+                  Positioned.fill(
+                    child: Image.asset(
+                      isDark ? ImageAssets.darkBg : ImageAssets.lightBg,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
                     ),
+                  ),
 
-                    SizedBox(height: 26.h),
+                  // 2. Bottom gradient overlay to blend into scaffold background seamlessly
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    height: 220.h,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: const [0.0, 0.45, 0.8, 1.0],
+                          colors: [
+                            scaffoldBg.withValues(alpha: 0.0),
+                            scaffoldBg.withValues(alpha: 0.25),
+                            scaffoldBg.withValues(alpha: 0.75),
+                            scaffoldBg,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
 
-                    // 2. Bottom Section below Hero
-                    Padding(
+                  // 3. Hero content inside scrollable view (Header scrolls upward with page)
+                  SafeArea(
+                    bottom: false,
+                    child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Column(
                         children: [
-                          const TitleRowClick(title: "Quick access tools"),
+                          SizedBox(height: 6.h),
+                          // 1. Top Header Bar (Alex + Logo + Notification) - scrolls up with content
+                          _buildActiveHeroHeader(context, isDark),
                           SizedBox(height: 12.h),
 
-                          QuickAccessToolsWidget(
-                            onBoardingPassTap: () {
-                              ref
-                                  .read(navbarNotifierProvider.notifier)
-                                  .setIndex(1);
-                            },
-                          ),
+                          // 2. 60-Minute Stress-Free Mode Banner (When active)
+                          if (isStressFree) ...[
+                            _buildStressFreeActiveBanner(context, isDark),
+                            SizedBox(height: 10.h),
+                          ],
+
+                          // 3. Weather / City / Local Time Strip
+                          const CityWeatherCard(),
                           SizedBox(height: 16.h),
 
-                          TitleRowClick(
-                            title: "NAVYLA Feed",
-                            subTitle: "See all",
-                            isEnable: true,
-                            onTap: () {
-                              ref
-                                  .read(navbarNotifierProvider.notifier)
-                                  .setIndex(3);
-                            },
-                          ),
-                          SizedBox(height: 12.h),
+                          // 4. Flight Card
+                          const FlightCardWidget(),
 
-                          HomeFeedCard(
-                            post: homePost,
-                            onTap: () {
-                              ref
-                                  .read(navbarNotifierProvider.notifier)
-                                  .setIndex(3);
-                            },
-                          ),
-                          // Bottom clearance for floating CustomBottomNavBar
-                          SizedBox(height: 110.h),
+                          // Bottom clearance so background image and gradient extend gracefully past the card
+                          SizedBox(height: 24.h),
                         ],
                       ),
                     ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 6.h),
+
+              // 2. Bottom Section below Hero
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Column(
+                  children: [
+                    const TitleRowClick(title: "Quick access tools"),
+                    SizedBox(height: 12.h),
+
+                    QuickAccessToolsWidget(
+                      onBoardingPassTap: () {
+                        ref.read(navbarNotifierProvider.notifier).setIndex(1);
+                      },
+                    ),
+                    SizedBox(height: 16.h),
+
+                    TitleRowClick(
+                      title: "NAVYLA Feed",
+                      subTitle: "See all",
+                      isEnable: true,
+                      onTap: () {
+                        ref.read(navbarNotifierProvider.notifier).setIndex(3);
+                      },
+                    ),
+                    SizedBox(height: 12.h),
+
+                    HomeFeedCard(
+                      post: homePost,
+                      onTap: () {
+                        ref.read(navbarNotifierProvider.notifier).setIndex(3);
+                      },
+                    ),
+                    // Bottom clearance for floating CustomBottomNavBar
+                    SizedBox(height: 110.h),
                   ],
                 ),
               ),
-            ),
-
-            // 2. Fixed Sticky Top Header
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: SafeArea(
-                bottom: false,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 4.h,
-                  ),
-                  child: _buildActiveHeroHeader(context, isDark),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
 
     // Initial state when user hasn't added a boarding pass yet
     return CommonScreen(
-      child: Column(
-        children: [
-          HomeHeaderWidget(
-            greeting: AppString.goodMorning,
-            userName: AppString.defaultUserName,
-            onSettingsTap: () => context.push(AppRouterName.settingScreen),
-            onNotificationTap: () =>
-                context.push(AppRouterName.notificationScreen),
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            // Home Header inside scroll view so it scrolls upward naturally
+            HomeHeaderWidget(
+              greeting: AppString.goodMorning,
+              userName: AppString.defaultUserName,
+              onSettingsTap: () => context.push(AppRouterName.settingScreen),
+              onNotificationTap: () =>
+                  context.push(AppRouterName.notificationScreen),
+            ),
+            SizedBox(height: 12.h),
+            NoActiveJourneyCard(
+              onScanTap: () => context.push(AppRouterName.scanScreen),
+              onViewOfferTap: () => context.push(
+                AppRouterName.moreDetailsScreen,
+                extra: moreItem.first,
+              ),
+            ),
+            SizedBox(height: 16.h),
+            TravelOffersWidget(
+              onSeeAllTap: () => context.push(
+                AppRouterName.moreDetailsScreen,
+                extra: moreItem.first,
+              ),
+            ),
+            SizedBox(height: 16.h),
+            const TitleRowClick(title: "Quick access tools"),
+            SizedBox(height: 12.h),
+            QuickAccessToolsWidget(
+              onBoardingPassTap: () {
+                ref.read(navbarNotifierProvider.notifier).setIndex(1);
+              },
+            ),
+            SizedBox(height: 110.h),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 60-Minute Stress-Free Mode Banner (Tappable to open dedicated page)
+  Widget _buildStressFreeActiveBanner(BuildContext context, bool isDark) {
+    return GestureDetector(
+      onTap: () => context.push(AppRouterName.boardingPassScreen),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 9.h),
+        decoration: BoxDecoration(
+          color: const Color(0xFFEAB308).withValues(alpha: 0.18),
+          borderRadius: BorderRadius.circular(14.r),
+          border: Border.all(
+            color: const Color(0xFFEAB308).withValues(alpha: 0.6),
+            width: 1.2,
           ),
-          SizedBox(height: 12.h),
-          Expanded(
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFFEAB308).withValues(alpha: 0.15),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(5.w),
+              decoration: const BoxDecoration(
+                color: Color(0xFFEAB308),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.bolt_rounded, color: Colors.black, size: 14.sp),
+            ),
+            SizedBox(width: 10.w),
+            Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  NoActiveJourneyCard(
-                    onScanTap: () => context.push(AppRouterName.scanScreen),
-                    onViewOfferTap: () => context.push(
-                      AppRouterName.moreDetailsScreen,
-                      extra: moreItem.first,
+                  Text(
+                    '60-MIN STRESS-FREE MODE ACTIVE',
+                    style: GoogleFonts.inter(
+                      fontSize: 11.sp,
+                      fontWeight: FontWeight.w800,
+                      color: isDark ? Colors.white : const Color(0xFF854D0E),
+                      letterSpacing: 0.6,
                     ),
                   ),
-                  SizedBox(height: 16.h),
-                  TravelOffersWidget(
-                    onSeeAllTap: () =>
-                        ref.read(navbarNotifierProvider.notifier).setIndex(4),
-                    onEsimTap: () => context.push(
-                      AppRouterName.moreDetailsScreen,
-                      extra: moreItem.firstWhere(
-                        (m) => m.id == 4,
-                        orElse: () => moreItem.first,
-                      ),
-                    ),
-                    onLoungeTap: () => context.push(
-                      AppRouterName.moreDetailsScreen,
-                      extra: moreItem.firstWhere(
-                        (m) => m.id == 3,
-                        orElse: () => moreItem.first,
-                      ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    'Critical journey details prioritized • Tap for full hub',
+                    style: GoogleFonts.inter(
+                      fontSize: 9.5.sp,
+                      fontWeight: FontWeight.w500,
+                      color: isDark ? Colors.white70 : const Color(0xFF713F12),
                     ),
                   ),
-                  SizedBox(height: 16.h),
-
-                  const TitleRowClick(title: "Quick access tools"),
-                  SizedBox(height: 12.h),
-
-                  QuickAccessToolsWidget(
-                    onBoardingPassTap: () {
-                      ref.read(navbarNotifierProvider.notifier).setIndex(1);
-                    },
-                  ),
-                  SizedBox(height: 110.h),
                 ],
               ),
             ),
-          ),
-        ],
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 12.sp,
+              color: isDark ? Colors.white : const Color(0xFF854D0E),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -370,16 +400,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           BlendMode.srcIn,
                         ),
                       ),
-
+                      // Notification dot indicator
                       Positioned(
-                        right: 0,
-                        top: -2,
+                        top: -1,
+                        right: -1,
                         child: Container(
                           width: 8.w,
                           height: 8.w,
                           decoration: BoxDecoration(
-                            color: Colors.red,
+                            color: const Color(0xFFFF5252),
                             shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 1.5),
                           ),
                         ),
                       ),

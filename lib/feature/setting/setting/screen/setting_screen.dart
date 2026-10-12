@@ -16,6 +16,9 @@ import 'package:navyla_flight_app/feature/setting/setting/widget/setting_toggle_
 import 'package:navyla_flight_app/feature/setting/setting/widget/sign_out_dialog.dart';
 import 'package:navyla_flight_app/feature/setting/setting/widget/subscription_plan_card.dart';
 import 'package:navyla_flight_app/feature/setting/rate_navyla/widget/rate_navyla_bottom_sheet.dart';
+import 'package:navyla_flight_app/core/services/app_preference_service.dart';
+import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
+import 'package:navyla_flight_app/feature/ticket/provider/saved_tickets_provider.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class SettingScreen extends ConsumerStatefulWidget {
@@ -83,7 +86,9 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                             borderColor: Color(0xff6366F1),
                           ),
                           title: "Dark Mode",
-                          subtitle: "Enjoy a darker view",
+                          subtitle: isDarkMode
+                              ? "Dark mode is active"
+                              : "Enjoy a darker view",
                           trailing: SettingToggleSwitch(
                             value: isDarkMode,
                             onChanged: (val) {
@@ -274,9 +279,16 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                       onTap: () {
                         SignOutDialog.show(
                           context,
-                          onSignOut: () {
+                          onSignOut: () async {
+                            await AppPreferenceService.clearUserSession();
+                            ref
+                                .read(flightJourneyNotifierProvider.notifier)
+                                .removeBoardingPass();
+                            ref.read(savedTicketsProvider.notifier).removeAll();
                             ref.read(navbarNotifierProvider.notifier).reset();
-                            context.go(AppRouterName.loginScreen);
+                            if (context.mounted) {
+                              context.go(AppRouterName.loginScreen);
+                            }
                           },
                         );
                       },
@@ -289,9 +301,16 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                       onTap: () {
                         DeleteAccountDialog.show(
                           context,
-                          onDelete: () {
+                          onDelete: () async {
+                            await AppPreferenceService.clearUserSession();
+                            ref
+                                .read(flightJourneyNotifierProvider.notifier)
+                                .removeBoardingPass();
+                            ref.read(savedTicketsProvider.notifier).removeAll();
                             ref.read(navbarNotifierProvider.notifier).reset();
-                            context.go(AppRouterName.loginScreen);
+                            if (context.mounted) {
+                              context.go(AppRouterName.loginScreen);
+                            }
                           },
                         );
                       },

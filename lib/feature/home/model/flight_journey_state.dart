@@ -12,6 +12,7 @@ class FlightJourneyState {
   final String? seat;
   final String? status;
   final String? flightDate;
+  final bool isStressFreeActive;
 
   const FlightJourneyState({
     this.hasActiveFlight = false,
@@ -27,6 +28,7 @@ class FlightJourneyState {
     this.seat,
     this.status,
     this.flightDate,
+    this.isStressFreeActive = true,
   });
 
   FlightJourneyState copyWith({
@@ -43,6 +45,7 @@ class FlightJourneyState {
     String? seat,
     String? status,
     String? flightDate,
+    bool? isStressFreeActive,
   }) {
     return FlightJourneyState(
       hasActiveFlight: hasActiveFlight ?? this.hasActiveFlight,
@@ -58,6 +61,45 @@ class FlightJourneyState {
       seat: seat ?? this.seat,
       status: status ?? this.status,
       flightDate: flightDate ?? this.flightDate,
+      isStressFreeActive: isStressFreeActive ?? this.isStressFreeActive,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'hasActiveFlight': hasActiveFlight,
+      'flightNumber': flightNumber,
+      'originCode': originCode,
+      'originCity': originCity,
+      'destinationCode': destinationCode,
+      'destinationCity': destinationCity,
+      'departureCountdown': departureCountdown,
+      'checkInTime': checkInTime,
+      'terminal': terminal,
+      'gate': gate,
+      'seat': seat,
+      'status': status,
+      'flightDate': flightDate,
+      'isStressFreeActive': isStressFreeActive,
+    };
+  }
+
+  factory FlightJourneyState.fromJson(Map<String, dynamic> json) {
+    return FlightJourneyState(
+      hasActiveFlight: json['hasActiveFlight'] as bool? ?? false,
+      flightNumber: json['flightNumber'] as String?,
+      originCode: json['originCode'] as String?,
+      originCity: json['originCity'] as String?,
+      destinationCode: json['destinationCode'] as String?,
+      destinationCity: json['destinationCity'] as String?,
+      departureCountdown: json['departureCountdown'] as String?,
+      checkInTime: json['checkInTime'] as String?,
+      terminal: json['terminal'] as String?,
+      gate: json['gate'] as String?,
+      seat: json['seat'] as String?,
+      status: json['status'] as String?,
+      flightDate: json['flightDate'] as String?,
+      isStressFreeActive: json['isStressFreeActive'] as bool? ?? true,
     );
   }
 }

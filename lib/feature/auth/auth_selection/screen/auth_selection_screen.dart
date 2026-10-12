@@ -10,6 +10,7 @@ import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/start_animation.dart';
 import 'package:navyla_flight_app/feature/auth/auth_selection/widget/dashed_line.dart';
 import 'package:navyla_flight_app/feature/auth/auth_selection/widget/social_auth_button.dart';
+import 'package:navyla_flight_app/core/services/app_preference_service.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class AuthSelectionScreen extends ConsumerStatefulWidget {
@@ -122,7 +123,12 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                         width: 20.w,
                         height: 20.w,
                       ),
-                      onTap: () {},
+                      onTap: () async {
+                        await AppPreferenceService.setLoggedIn(true);
+                        if (context.mounted) {
+                          context.go(AppRouterName.homeScreen);
+                        }
+                      },
                     ),
                     SizedBox(height: 16.h),
                     SocialAuthButton(
@@ -136,7 +142,12 @@ class _AuthSelectionScreenState extends ConsumerState<AuthSelectionScreen>
                           BlendMode.srcIn,
                         ),
                       ),
-                      onTap: () {},
+                      onTap: () async {
+                        await AppPreferenceService.setLoggedIn(true);
+                        if (context.mounted) {
+                          context.go(AppRouterName.homeScreen);
+                        }
+                      },
                     ),
 
                     SizedBox(height: 24.h),

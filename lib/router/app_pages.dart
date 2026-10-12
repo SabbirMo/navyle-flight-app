@@ -262,17 +262,24 @@ final appPages = Provider<GoRouter>(
           final extra = state.extra;
           bool isManual = false;
           Map<String, String>? initialData;
+          String? imagePath;
           if (extra is Map) {
             isManual = extra['isManual'] == true;
+            if (extra['imagePath'] is String) {
+              imagePath = extra['imagePath'] as String;
+            }
             if (extra['data'] is Map<String, String>) {
               initialData = extra['data'] as Map<String, String>;
             }
+          } else if (extra is String) {
+            imagePath = extra;
           }
           return CupertinoPage(
             key: state.pageKey,
             child: VerifyDetailsScreen(
               isManual: isManual,
               initialData: initialData,
+              imagePath: imagePath,
             ),
           );
         },

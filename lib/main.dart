@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:navyla_flight_app/core/services/app_preference_service.dart';
 import 'package:navyla_flight_app/core/theme/app_theme.dart';
 import 'package:navyla_flight_app/core/theme/theme_mode_provder.dart';
 import 'package:navyla_flight_app/router/app_pages.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AppPreferenceService.init();
   runApp(const ProviderScope(child: MyApp()));
 }
 

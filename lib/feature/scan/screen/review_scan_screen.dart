@@ -19,8 +19,14 @@ class ReviewScanScreen extends ConsumerWidget {
 
   const ReviewScanScreen({super.key, this.imagePath});
 
-  void _handleUseScan(BuildContext context) {
-    context.push(AppRouterName.verifyDetailsScreen);
+  void _handleUseScan(BuildContext context, String? currentImagePath) {
+    context.push(
+      AppRouterName.verifyDetailsScreen,
+      extra: {
+        'isManual': false,
+        'imagePath': currentImagePath,
+      },
+    );
   }
 
   void _handleRetake(BuildContext context, WidgetRef ref) {
@@ -214,7 +220,7 @@ class ReviewScanScreen extends ConsumerWidget {
                   // Use This Scan primary button
                   CustomButton(
                     text: 'Use This Scan',
-                    onTap: () => _handleUseScan(context),
+                    onTap: () => _handleUseScan(context, currentImagePath),
                   ),
                   SizedBox(height: 12.h),
 

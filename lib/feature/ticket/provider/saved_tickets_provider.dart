@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:navyla_flight_app/core/services/app_preference_service.dart';
 import 'package:navyla_flight_app/feature/ticket/model/saved_ticket_model.dart';
 
 class SavedTicketsState {
@@ -33,10 +34,11 @@ class SavedTicketsState {
 class SavedTicketsNotifier extends Notifier<SavedTicketsState> {
   @override
   SavedTicketsState build() {
+    final persisted = AppPreferenceService.getSavedTickets();
     return SavedTicketsState(
-      tickets: List.from(SavedTicketModel.defaultTickets),
+      tickets: persisted,
       selectedIndex: 0,
-      isViewingAddPass: false,
+      isViewingAddPass: persisted.isEmpty,
     );
   }
 
@@ -51,7 +53,9 @@ class SavedTicketsNotifier extends Notifier<SavedTicketsState> {
   }
 
   void hideAddPass() {
-    state = state.copyWith(isViewingAddPass: false);
+    if (state.tickets.isNotEmpty) {
+      state = state.copyWith(isViewingAddPass: false);
+    }
   }
 
   void addTicket(SavedTicketModel ticket) {
@@ -61,6 +65,7 @@ class SavedTicketsNotifier extends Notifier<SavedTicketsState> {
       selectedIndex: updated.length - 1,
       isViewingAddPass: false,
     );
+    AppPreferenceService.setSavedTickets(updated);
   }
 
   void removeTicket(int index) {
@@ -76,11 +81,23 @@ class SavedTicketsNotifier extends Notifier<SavedTicketsState> {
         selectedIndex: newIndex,
         isViewingAddPass: updated.isEmpty,
       );
+      AppPreferenceService.setSavedTickets(updated);
     }
+  }
+
+  void loadDemoTickets() {
+    final demos = List<SavedTicketModel>.from(SavedTicketModel.defaultTickets);
+    state = state.copyWith(
+      tickets: demos,
+      selectedIndex: 0,
+      isViewingAddPass: false,
+    );
+    AppPreferenceService.setSavedTickets(demos);
   }
 
   void removeAll() {
     state = state.copyWith(tickets: [], selectedIndex: 0, isViewingAddPass: true);
+    AppPreferenceService.setSavedTickets([]);
   }
 }
 

@@ -9,6 +9,7 @@ class VerifyDetailsState {
   final String gate;
   final bool hasAttemptedSubmit;
   final bool isManual;
+  final String? imagePath;
 
   const VerifyDetailsState({
     this.name = '',
@@ -21,6 +22,7 @@ class VerifyDetailsState {
     this.gate = '',
     this.hasAttemptedSubmit = false,
     this.isManual = false,
+    this.imagePath,
   });
 
   bool get isValid =>
@@ -57,6 +59,7 @@ class VerifyDetailsState {
     String? gate,
     bool? hasAttemptedSubmit,
     bool? isManual,
+    String? imagePath,
   }) {
     return VerifyDetailsState(
       name: name ?? this.name,
@@ -69,6 +72,7 @@ class VerifyDetailsState {
       gate: gate ?? this.gate,
       hasAttemptedSubmit: hasAttemptedSubmit ?? this.hasAttemptedSubmit,
       isManual: isManual ?? this.isManual,
+      imagePath: imagePath ?? this.imagePath,
     );
   }
 }

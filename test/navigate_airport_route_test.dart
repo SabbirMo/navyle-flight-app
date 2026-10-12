@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/screen/navigate_airport_route.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/widget/route_category_chips.dart';
 import 'package:navyla_flight_app/feature/navigate_airport/widget/route_floating_controls.dart';
@@ -9,6 +11,10 @@ import 'package:navyla_flight_app/feature/navigate_airport/widget/route_top_head
 import 'package:navyla_flight_app/feature/navigate_airport/widget/terminal_bottom_sheet.dart';
 
 void main() {
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
   testWidgets('NavigateAirportRoute renders all UI elements from design', (
     WidgetTester tester,
   ) async {
@@ -17,8 +23,19 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    container.read(flightJourneyNotifierProvider.notifier).addBoardingPass(
+          flightNumber: 'BA 0215',
+          originCode: 'LHR',
+          originCity: 'London Heathrow',
+          destinationCode: 'JFK',
+          terminal: 'Main Terminal 5',
+        );
+
     await tester.pumpWidget(
-      ProviderScope(
+      UncontrolledProviderScope(
+        container: container,
         child: ScreenUtilInit(
           designSize: const Size(393, 852),
           minTextAdapt: true,

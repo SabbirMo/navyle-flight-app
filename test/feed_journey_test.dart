@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/feature/feed/screen/feed_screen.dart';
 import 'package:navyla_flight_app/feature/feed/widget/feed_active_flight_card_widget.dart';
@@ -11,6 +12,10 @@ import 'package:navyla_flight_app/feature/feed/widget/feed_no_active_journey_wid
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 
 void main() {
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
   Widget buildTestableFeedScreen({ProviderContainer? container}) {
     return UncontrolledProviderScope(
       container: container ?? ProviderContainer(),
@@ -111,6 +116,13 @@ void main() {
 
     final container = ProviderContainer();
     addTearDown(container.dispose);
+
+    // Active flight journey required to display the Create Your First Post CTA
+    container.read(flightJourneyNotifierProvider.notifier).addBoardingPass(
+          flightNumber: 'LH215',
+          originCode: 'AMS',
+          destinationCode: 'FRA',
+        );
 
     await tester.pumpWidget(buildTestableFeedScreen(container: container));
     await tester.pump();
