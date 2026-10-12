@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,16 +6,28 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
-import 'package:navyla_flight_app/feature/manage_plan/provider/manage_plan_notifier.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PlanOptionsCard extends ConsumerWidget {
   const PlanOptionsCard({super.key});
 
   void _showFeedback(BuildContext context, String message) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(
+          message,
+          style: GoogleFonts.inter(
+            color: Colors.white,
+            fontSize: 13.sp,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: isDark
+            ? const Color(0xFF1E293B)
+            : const Color(0xFF0F172A),
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
@@ -27,16 +37,147 @@ class PlanOptionsCard extends ConsumerWidget {
     );
   }
 
+  Future<void> _openSubscriptionSettings(
+    BuildContext context,
+    bool isIOS,
+  ) async {
+    final storeName = isIOS ? "App Store" : "Google Play";
+    final url = isIOS
+        ? "https://apps.apple.com/account/subscriptions"
+        : "https://play.google.com/store/account/subscriptions";
+
+    try {
+      final uri = Uri.parse(url);
+      final launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched) {
+        final fallback = await launchUrl(uri, mode: LaunchMode.platformDefault);
+        if (!fallback && context.mounted) {
+          _showFeedback(
+            context,
+            "Could not open $storeName subscription settings.",
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint("Could not launch $storeName subscription URL: $e");
+      if (context.mounted) {
+        _showFeedback(
+          context,
+          "Could not open $storeName subscription settings.",
+        );
+      }
+    }
+  }
+
+  void _showAutoRenewalInfo(BuildContext context, bool isIOS) {
+    final storeName = isIOS ? "App Store" : "Google Play";
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: isDark ? AppColors.darkBlack : Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+      ),
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Auto-renewal",
+                      style: GoogleFonts.inter(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w700,
+                        color: isDark
+                            ? AppColors.white
+                            : const Color(0xFF111827),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 4.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE8F7ED),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: Text(
+                        "Active",
+                        style: GoogleFonts.inter(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF22C55E),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12.h),
+                Text(
+                  "Your subscription renews automatically via $storeName. To turn off auto-renewal, cancel, or modify your plan, please manage it in your $storeName account.",
+                  style: GoogleFonts.inter(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w400,
+                    color: isDark
+                        ? AppColors.grayD3D3D3
+                        : const Color(0xFF6B7280),
+                    height: 1.45,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48.h,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(sheetContext);
+                      _openSubscriptionSettings(context, isIOS);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.subscribeBg,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14.r),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      "Manage in $storeName",
+                      style: GoogleFonts.inter(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isAutoRenew = ref.watch(
-      managePlanNotifierProvider.select((state) => state.isAutoRenew),
-    );
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    final storeName = isIOS ? "App Store" : "Google Play";
 
     return Column(
       children: [
-        // 1. Billing Card (Managed by App Store)
-        _buildBillingCard(context),
+        // 1. Billing Card (Managed by Google Play / App Store)
+        _buildBillingCard(context, isIOS),
         SizedBox(height: 10.h),
 
         // 2. Manage Subscription
@@ -44,16 +185,13 @@ class PlanOptionsCard extends ConsumerWidget {
           context: context,
           icon: Icons.settings_outlined,
           title: "Manage Subscription",
-          subtitle: "Open App Store subscription settings",
-          onTap: () => _showFeedback(
-            context,
-            "Opening App Store subscription settings...",
-          ),
+          subtitle: "Open $storeName subscription settings",
+          onTap: () => _openSubscriptionSettings(context, isIOS),
         ),
         SizedBox(height: 10.h),
 
-        // 3. Restore Purchases
-        if (Platform.isIOS)
+        // 3. Restore Purchases (App Store specific)
+        if (isIOS) ...[
           _buildOptionTile(
             context: context,
             icon: Icons.refresh_rounded,
@@ -61,33 +199,22 @@ class PlanOptionsCard extends ConsumerWidget {
             subtitle: "Re-sync your premium access",
             onTap: () => _showFeedback(context, "Restoring purchases..."),
           ),
-        SizedBox(height: 10.h),
+          SizedBox(height: 10.h),
+        ],
 
-        // 4. Auto-renewal
+        // 4. Auto-renewal (Store-managed status, NOT a NAVYLA billing switch)
         _buildOptionTile(
           context: context,
-          icon: isAutoRenew
-              ? Icons.toggle_on_rounded
-              : Icons.toggle_off_rounded,
-          iconSize: 26.sp,
-          iconColor: isAutoRenew
-              ? const Color(0xFFF58A38)
-              : const Color(0xFF94A3B8),
-          iconBoxColor: isAutoRenew
-              ? const Color(0xFFFFF3E8)
-              : const Color(0xFFF1F5F9),
+          icon: Icons.autorenew_rounded,
+          iconSize: 20.sp,
+          iconColor: const Color(0xFFF58A38),
+          iconBoxColor: const Color(0xFFFFF3E8),
           title: "Auto-renewal",
-          subtitle: "Automatically renew your plan",
-          trailingBadge: isAutoRenew ? "Active" : "Deactive",
-          trailingBadgeBgColor: isAutoRenew
-              ? const Color(0xFFE8F7ED)
-              : const Color(0xFFFEE2E2),
-          trailingBadgeTextColor: isAutoRenew
-              ? const Color(0xFF22C55E)
-              : const Color(0xFFEF4444),
-          onTap: () {
-            ref.read(managePlanNotifierProvider.notifier).toggleAutoRenew();
-          },
+          subtitle: "Renews automatically via $storeName",
+          trailingBadge: "Active",
+          trailingBadgeBgColor: const Color(0xFFE8F7ED),
+          trailingBadgeTextColor: const Color(0xFF22C55E),
+          onTap: () => _showAutoRenewalInfo(context, isIOS),
         ),
         SizedBox(height: 10.h),
 
@@ -134,12 +261,12 @@ class PlanOptionsCard extends ConsumerWidget {
         SizedBox(height: 14.h),
 
         // 8. Bottom Notice Pill
-        _buildNoticeCard(context: context),
+        _buildNoticeCard(context: context, isIOS: isIOS),
       ],
     );
   }
 
-  Widget _buildBillingCard(BuildContext context) {
+  Widget _buildBillingCard(BuildContext context, bool isIOS) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
@@ -176,7 +303,7 @@ class PlanOptionsCard extends ConsumerWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Platform.isIOS
+              isIOS
                   ? Icon(
                       Icons.apple,
                       size: 28.sp,
@@ -193,9 +320,7 @@ class PlanOptionsCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      Platform.isIOS
-                          ? "Managed by App Store"
-                          : "Managed by Google Play",
+                      isIOS ? "Managed by App Store" : "Managed by Google Play",
                       style: GoogleFonts.inter(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w700,
@@ -206,7 +331,7 @@ class PlanOptionsCard extends ConsumerWidget {
                     ),
                     SizedBox(height: 2.h),
                     Text(
-                      Platform.isIOS
+                      isIOS
                           ? "Your subscription and billing are handled by Apple. You can manage your subscription directly in the App Store."
                           : "Your subscription and billing are handled by Google. You can manage your subscription directly in the Google Play Store.",
                       style: GoogleFonts.inter(
@@ -347,7 +472,10 @@ class PlanOptionsCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildNoticeCard({required BuildContext context}) {
+  Widget _buildNoticeCard({
+    required BuildContext context,
+    required bool isIOS,
+  }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
@@ -367,7 +495,7 @@ class PlanOptionsCard extends ConsumerWidget {
           SizedBox(width: 10.w),
           Expanded(
             child: Text(
-              Platform.isIOS
+              isIOS
                   ? "Subscription management and billing are handled by Apple App Store, not directly by NAVYLA."
                   : "Subscription management and billing are handled by Google Play, not directly by NAVYLA.",
               style: GoogleFonts.inter(

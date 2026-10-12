@@ -89,9 +89,11 @@ class CurrentPlanCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8.w),
-              Text(
-                "All premium features unlocked",
-                style: StyleManager.interRegular14(const Color(0xffFFFCF3)),
+              Expanded(
+                child: Text(
+                  "All premium features unlocked",
+                  style: StyleManager.interRegular14(const Color(0xffFFFCF3)),
+                ),
               ),
             ],
           ),
