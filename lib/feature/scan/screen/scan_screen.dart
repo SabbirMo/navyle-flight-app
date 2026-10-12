@@ -17,7 +17,11 @@ class ScanScreen extends StatelessWidget {
     context.push(AppRouterName.scanCameraScreen);
   }
 
+  static bool _isPickingImage = false;
+
   Future<void> _handleGalleryPick(BuildContext context) async {
+    if (_isPickingImage) return;
+    _isPickingImage = true;
     try {
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -25,15 +29,9 @@ class ScanScreen extends StatelessWidget {
         context.push(AppRouterName.reviewScanScreen, extra: pickedFile.path);
       }
     } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Gallery pick failed: $e'),
-            backgroundColor: AppColors.errorRed,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      debugPrint('Gallery pick error: $e');
+    } finally {
+      _isPickingImage = false;
     }
   }
 

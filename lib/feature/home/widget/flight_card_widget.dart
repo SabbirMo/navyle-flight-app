@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
+import 'package:navyla_flight_app/router/app_pages.dart';
 
 class FlightCardWidget extends ConsumerStatefulWidget {
   const FlightCardWidget({super.key});
@@ -15,13 +17,9 @@ class FlightCardWidget extends ConsumerStatefulWidget {
 }
 
 class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
-    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin, RouteAware {
   /// Static position matching the client's picture (~15 degrees perspective tilt)
   static const double _settledTilt = 0.85;
-
-  /// Global session flag so intro animation plays once on initial launch;
-  /// returning from another tab or another page will never replay the animation!
-  static bool _hasPlayedIntro = false;
 
   late AnimationController _controller;
   late Animation<double> _tiltAnimation;
@@ -41,13 +39,15 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
     );
 
     _setupAnimation();
+    _controller.forward();
+  }
 
-    if (!_hasPlayedIntro) {
-      _hasPlayedIntro = true;
-      _controller.forward();
-    } else {
-      // Already played in this session: remain statically in the exact position of the client image
-      _controller.value = 1.0;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final modalRoute = ModalRoute.of(context);
+    if (modalRoute != null) {
+      appRouteObserver.subscribe(this, modalRoute);
     }
   }
 
@@ -120,14 +120,39 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
 
   @override
   void dispose() {
+    appRouteObserver.unsubscribe(this);
     _controller.dispose();
     _springController?.dispose();
     super.dispose();
   }
 
   @override
+  void didPopNext() {
+    // Replay animation when user returns to Home from another pushed route
+    final currentTab = ref.read(navbarNotifierProvider);
+    if (currentTab == 0) {
+      _replayIntro();
+    }
+  }
+
+  void _replayIntro() {
+    if (!mounted) return;
+    _springController?.stop();
+    _isDragging = false;
+    _dragOffset = 0.0;
+    _controller.forward(from: 0.0);
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    // Replay animation when user returns to Home from another tab
+    ref.listen<int>(navbarNotifierProvider, (previous, next) {
+      if (next == 0 && previous != 0) {
+        _replayIntro();
+      }
+    });
 
     final journey = ref.watch(flightJourneyNotifierProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;

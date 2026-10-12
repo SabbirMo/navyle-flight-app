@@ -42,7 +42,11 @@ class AddBoardingPassView extends ConsumerWidget {
     context.push(AppRouterName.verifyDetailsScreen, extra: {'isManual': true});
   }
 
+  static bool _isPickingImage = false;
+
   Future<void> _handleGalleryUpload(BuildContext context, WidgetRef ref) async {
+    if (_isPickingImage) return;
+    _isPickingImage = true;
     try {
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -50,15 +54,9 @@ class AddBoardingPassView extends ConsumerWidget {
         context.push(AppRouterName.reviewScanScreen, extra: pickedFile.path);
       }
     } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Gallery pick failed: $e'),
-            backgroundColor: const Color(0xFFEF4444),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      debugPrint('Gallery pick error: $e');
+    } finally {
+      _isPickingImage = false;
     }
   }
 

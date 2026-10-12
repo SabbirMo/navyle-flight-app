@@ -8,6 +8,7 @@ import 'package:navyla_flight_app/feature/home/widget/city_weather_card.dart';
 import 'package:navyla_flight_app/feature/home/widget/flight_card_widget.dart';
 import 'package:navyla_flight_app/feature/home/widget/no_active_journey_card.dart';
 import 'package:navyla_flight_app/feature/home/widget/travel_offers_widget.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
 
 void main() {
   Widget buildTestableHomeScreen({ProviderContainer? container}) {
@@ -88,5 +89,35 @@ void main() {
     expect(find.byType(FlightCardWidget), findsOneWidget);
     expect(find.byType(CityWeatherCard), findsOneWidget);
     expect(find.text('BA 0215'), findsOneWidget);
+  });
+
+  testWidgets(
+      'Tapping See all in TravelOffersWidget switches navbar to Travel Extras hub (index 4)',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
+    await tester.pumpWidget(buildTestableHomeScreen(container: container));
+    await tester.pump();
+
+    // Verify initial navbar index is 0 (Home)
+    expect(container.read(navbarNotifierProvider), 0);
+
+    // Tap 'See all' in Travel Offers
+    final seeAllFinder = find.descendant(
+      of: find.byType(TravelOffersWidget),
+      matching: find.text('See all'),
+    );
+    expect(seeAllFinder, findsOneWidget);
+    await tester.tap(seeAllFinder);
+    await tester.pumpAndSettle();
+
+    // Should switch to tab 4 (Travel Extras hub)
+    expect(container.read(navbarNotifierProvider), 4);
   });
 }

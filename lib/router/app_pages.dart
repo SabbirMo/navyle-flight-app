@@ -42,8 +42,12 @@ import 'package:navyla_flight_app/feature/splash/splash_screen.dart';
 import 'package:navyla_flight_app/feature/subscription/screen/subscription_screen.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
+final RouteObserver<ModalRoute<void>> appRouteObserver =
+    RouteObserver<ModalRoute<void>>();
+
 final appPages = Provider<GoRouter>(
   (ref) => GoRouter(
+    observers: [appRouteObserver],
     initialLocation: AppRouterName.splashScreen,
     routes: [
       GoRoute(

@@ -200,9 +200,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             SizedBox(height: 16.h),
             TravelOffersWidget(
-              onSeeAllTap: () => context.push(
+              onSeeAllTap: () =>
+                  ref.read(navbarNotifierProvider.notifier).setIndex(4),
+              onEsimTap: () => context.push(
                 AppRouterName.moreDetailsScreen,
-                extra: moreItem.first,
+                extra: moreItem.firstWhere(
+                  (m) => m.id == 4,
+                  orElse: () => moreItem.first,
+                ),
+              ),
+              onLoungeTap: () => context.push(
+                AppRouterName.moreDetailsScreen,
+                extra: moreItem.firstWhere(
+                  (m) => m.id == 3,
+                  orElse: () => moreItem.first,
+                ),
               ),
             ),
             SizedBox(height: 16.h),
