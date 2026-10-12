@@ -41,20 +41,20 @@ class LiveLocationNotifier extends StreamNotifier<Position?> {
         locationSettings: locationSettings,
       );
       debugPrint('====================================================');
-      debugPrint('📍 [NAVAYLA Location] SUCCESS! Initial Location:');
+      debugPrint('📍 [NAVYLA Location] SUCCESS! Initial Location:');
       debugPrint('📍 Latitude  : ${initialPosition.latitude}');
       debugPrint('📍 Longitude : ${initialPosition.longitude}');
       debugPrint('====================================================');
       yield initialPosition;
     } catch (e) {
-      debugPrint('⚠️ [NAVAYLA Location] Error getting initial position: $e');
+      debugPrint('⚠️ [NAVYLA Location] Error getting initial position: $e');
     }
 
     // Stream continuous live position updates
     yield* Geolocator.getPositionStream(locationSettings: locationSettings).map(
       (position) {
         debugPrint('====================================================');
-        debugPrint('📍 [NAVAYLA Live Stream] Position Updated:');
+        debugPrint('📍 [NAVYLA Live Stream] Position Updated:');
         debugPrint('📍 Latitude  : ${position.latitude}');
         debugPrint('📍 Longitude : ${position.longitude}');
         debugPrint('====================================================');
@@ -69,7 +69,7 @@ class LiveLocationNotifier extends StreamNotifier<Position?> {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       debugPrint(
-        '⚠️ [NAVAYLA Location] Location services are disabled on device.',
+        '⚠️ [NAVYLA Location] Location services are disabled on device.',
       );
       if (context != null && context.mounted) {
         await showEnableLocationDialog(context);
@@ -82,7 +82,7 @@ class LiveLocationNotifier extends StreamNotifier<Position?> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         debugPrint(
-          '❌ [NAVAYLA Location] Location permissions are denied by user.',
+          '❌ [NAVYLA Location] Location permissions are denied by user.',
         );
         return false;
       }
@@ -90,7 +90,7 @@ class LiveLocationNotifier extends StreamNotifier<Position?> {
 
     if (permission == LocationPermission.deniedForever) {
       debugPrint(
-        '❌ [NAVAYLA Location] Location permissions are permanently denied.',
+        '❌ [NAVYLA Location] Location permissions are permanently denied.',
       );
       if (context != null && context.mounted) {
         await showPermissionSettingsDialog(context);

@@ -96,7 +96,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
                     // Title & Subtitle
                     Text(
-                      "NAVAYLA PLUS",
+                      "NAVYLA PLUS",
                       style: StyleManager.sfProBold24(
                         isDark ? AppColors.white : AppColors.black,
                       ).copyWith(fontSize: 25.sp, fontWeight: FontWeight.w900),
@@ -207,7 +207,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Text(
-                        "By continuing, you agree to NAVAYLA's Terms of Service and Privacy Policy. Subscription renews automatically.",
+                        "By continuing, you agree to NAVYLA's Terms of Service and Privacy Policy. Subscription renews automatically.",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 10.sp,

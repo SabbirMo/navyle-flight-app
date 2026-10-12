@@ -132,7 +132,7 @@ class _LiveNavigationBottomSheetState
         widget.onAllow?.call();
       }
     } catch (e) {
-      debugPrint('⚠️ [NAVAYLA Location] Error requesting location: $e');
+      debugPrint('⚠️ [NAVYLA Location] Error requesting location: $e');
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);

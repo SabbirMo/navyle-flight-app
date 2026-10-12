@@ -67,10 +67,10 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>NAVAYLA needs your location to guide you through the terminal and send proximity alerts for your gate.</string>
+	<string>NAVYLA needs your location to guide you through the terminal and send proximity alerts for your gate.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>NAVAYLA needs camera access to scan your boarding pass.</string>
+	<string>NAVYLA needs camera access to scan your boarding pass.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>NAVAYLA needs photo library access to upload your boarding pass.</string>
+	<string>NAVYLA needs photo library access to upload your boarding pass.</string>
 </dict>
 </plist>

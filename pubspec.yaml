@@ -27,6 +27,7 @@ dependencies:
   camera: ^0.12.1
   share_plus: ^13.3.1
   shared_preferences: ^2.5.6
+  url_launcher: ^6.3.3
 
 dev_dependencies:
   flutter_test:

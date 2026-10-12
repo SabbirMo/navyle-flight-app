@@ -7,7 +7,7 @@ class AppShareHelper {
   const AppShareHelper._();
 
   static const String defaultShareText =
-      "Check out NAVYLA! The ultimate airport and flight companion app. From Home to Gate. Download now: https://navyla.com";
+      "Check out NAVYLA! The ultimate airport and flight companion app. From Home to Gate. Download now: https://navyla.app";
   static const String defaultSubject = "NAVYLA - Made for Travelers";
 
   /// Opens the native platform share sheet via [SharePlus].
@@ -65,7 +65,7 @@ class AppShareHelper {
     if (details.isNotEmpty) {
       buffer.writeln('🎫 ${details.join(' | ')}');
     }
-    buffer.writeln('\nShared via NAVYLA - From Home to Gate: https://navyla.com');
+    buffer.writeln('\nShared via NAVYLA - From Home to Gate: https://navyla.app');
 
     await shareWithSystem(
       context,
