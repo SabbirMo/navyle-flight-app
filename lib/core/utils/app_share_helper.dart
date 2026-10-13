@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Reusable helper for sharing text, links, and invoking system share sheets.
 class AppShareHelper {
@@ -65,38 +65,115 @@ class AppShareHelper {
     if (details.isNotEmpty) {
       buffer.writeln('🎫 ${details.join(' | ')}');
     }
-    buffer.writeln('\nShared via NAVYLA - From Home to Gate: https://navyla.app');
+    buffer.writeln(
+      '\nShared via NAVYLA - From Home to Gate: https://navyla.app',
+    );
 
     await shareWithSystem(
       context,
       text: buffer.toString(),
-      subject: 'Boarding Pass - $flightNumber ($originCode to $destinationCode)',
+      subject:
+          'Boarding Pass - $flightNumber ($originCode to $destinationCode)',
     );
   }
 
   /// Handles sharing for a specific channel.
-  /// If [channel] is "More", opens the native system share sheet.
-  /// Otherwise displays a feedback toast/snackbar.
-  static void onSocialShare(
+  /// Launches WhatsApp, Messages (SMS), or Email directly via [url_launcher].
+  /// If the target app cannot be launched directly (e.g., app not installed or running on simulator),
+  /// or if [channel] is "More", it seamlessly opens the native system share sheet.
+  static Future<void> onSocialShare(
     BuildContext context,
     String channel, {
     String text = defaultShareText,
     String subject = defaultSubject,
-  }) {
-    if (channel.toLowerCase() == "more") {
-      shareWithSystem(context, text: text, subject: subject);
+  }) async {
+    final lower = channel.toLowerCase().trim();
+
+    if (lower == "more") {
+      await shareWithSystem(context, text: text, subject: subject);
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Sharing via $channel..."),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.r),
-        ),
-      ),
-    );
+    if (lower == "whatsapp") {
+      final appUri = Uri.parse(
+        "whatsapp://send?text=${Uri.encodeComponent(text)}",
+      );
+      final webUri = Uri.parse(
+        "https://wa.me/?text=${Uri.encodeComponent(text)}",
+      );
+      try {
+        if (await canLaunchUrl(appUri)) {
+          final launched = await launchUrl(
+            appUri,
+            mode: LaunchMode.externalApplication,
+          );
+          if (launched) return;
+        }
+      } catch (e) {
+        debugPrint('WhatsApp app launch error: $e');
+      }
+
+      try {
+        if (await canLaunchUrl(webUri)) {
+          final launched = await launchUrl(
+            webUri,
+            mode: LaunchMode.externalApplication,
+          );
+          if (launched) return;
+        }
+      } catch (e) {
+        debugPrint('WhatsApp web launch error: $e');
+      }
+
+      if (context.mounted) {
+        await shareWithSystem(context, text: text, subject: subject);
+      }
+      return;
+    }
+
+    if (lower == "messages" || lower == "sms") {
+      final smsUri = Uri(
+        scheme: 'sms',
+        queryParameters: <String, String>{'body': text},
+      );
+      try {
+        final launched = await launchUrl(
+          smsUri,
+          mode: LaunchMode.externalApplication,
+        );
+        if (launched) return;
+      } catch (e) {
+        debugPrint('Messages SMS launch error: $e');
+      }
+      if (context.mounted) {
+        await shareWithSystem(context, text: text, subject: subject);
+      }
+      return;
+    }
+
+    if (lower == "email" || lower == "mail") {
+      final mailUri = Uri(
+        scheme: 'mailto',
+        queryParameters: <String, String>{'subject': subject, 'body': text},
+      );
+      try {
+        final launched = await launchUrl(
+          mailUri,
+          mode: LaunchMode.externalApplication,
+        );
+        if (launched) return;
+      } catch (e) {
+        debugPrint('Email launch error: $e');
+      }
+      if (context.mounted) {
+        await shareWithSystem(context, text: text, subject: subject);
+      }
+      return;
+    }
+
+    // Default fallback
+    if (context.mounted) {
+      await shareWithSystem(context, text: text, subject: subject);
+    }
   }
 }

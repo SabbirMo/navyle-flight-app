@@ -26,20 +26,12 @@ class SocialShareOptionsCard extends StatelessWidget {
       return;
     }
 
-    if (channel.toLowerCase() == "more") {
-      AppShareHelper.shareWithSystem(
-        context,
-        text: shareText,
-        subject: shareSubject,
-      );
-    } else {
-      AppShareHelper.onSocialShare(
-        context,
-        channel,
-        text: shareText,
-        subject: shareSubject,
-      );
-    }
+    AppShareHelper.onSocialShare(
+      context,
+      channel,
+      text: shareText,
+      subject: shareSubject,
+    );
   }
 
   @override

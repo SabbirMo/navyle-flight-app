@@ -476,10 +476,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                                           height: 44.w,
                                         ),
                                         label: "More",
-                                        onTap: () =>
-                                            AppShareHelper.shareWithSystem(
-                                              context,
-                                            ),
+                                        onTap: () => _onSocialShare("More"),
                                       ),
                                     ],
                                   ),
