@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/feature/explore_nearby/model/explore_nearby_state.dart';
+import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class ExploreHubDetailsScreen extends StatefulWidget {
   final AirportHubItem? hub;
@@ -623,7 +625,10 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Badge row: NAVYLA Partner & Fast Track
-                    Row(
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 8.w,
+                      runSpacing: 4.h,
                       children: [
                         Container(
                           padding: EdgeInsets.symmetric(
@@ -660,7 +665,6 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(width: 8.w),
                         Text(
                           'Fast Track',
                           style: GoogleFonts.inter(
@@ -849,7 +853,21 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
           // Action Button: Take Me There
           GestureDetector(
             onTap: () {
-              //context.push(AppRouterName.liveNavigationScreen);
+              HapticFeedback.lightImpact();
+              final terminalName =
+                  _currentHub.code.toUpperCase() == 'LHR'
+                      ? 'Terminal 5'
+                      : 'Terminal 1';
+              context.push(
+                AppRouterName.liveNavigationScreen,
+                extra: {
+                  'destinationName': 'Gordon Ramsay Plane Food',
+                  'destinationInstruction':
+                      'Follow $terminalName North concourse toward Gate A10',
+                  'durationMinutes': '4',
+                  'distanceEta': '320 m • 4 min walk',
+                },
+              );
             },
             child: Container(
               width: double.infinity,

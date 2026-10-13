@@ -101,4 +101,47 @@ void main() {
     expect(find.byType(LiveNavigationScreen), findsOneWidget);
     expect(find.text('Square RD'), findsOneWidget);
   });
+
+  testWidgets(
+    'Clicking Take Me There on POI card in ExploreHubDetailsScreen navigates to LiveNavigationScreen with Gordon Ramsay destination',
+    (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      final container = ProviderContainer();
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: ScreenUtilInit(
+            designSize: const Size(393, 852),
+            minTextAdapt: true,
+            builder: (context, child) {
+              final router = container.read(appPages);
+              router.go(AppRouterName.exploreHubDetailsScreen);
+              return MaterialApp.router(
+                routerConfig: router,
+              );
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final takeMeThereBtn = find.text('Take Me There');
+      expect(takeMeThereBtn, findsOneWidget);
+
+      await tester.tap(takeMeThereBtn);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(LiveNavigationScreen), findsOneWidget);
+      expect(find.text('Gordon Ramsay Plane Food'), findsOneWidget);
+      expect(find.text('4'), findsOneWidget);
+      expect(find.text('320 m • 4 min walk'), findsOneWidget);
+    },
+  );
 }
+

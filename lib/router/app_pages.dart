@@ -299,10 +299,22 @@ final appPages = Provider<GoRouter>(
       ),
       GoRoute(
         path: AppRouterName.liveNavigationScreen,
-        pageBuilder: (context, state) => CupertinoPage(
-          key: state.pageKey,
-          child: const LiveNavigationScreen(),
-        ),
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return CupertinoPage(
+            key: state.pageKey,
+            child: LiveNavigationScreen(
+              destinationName:
+                  extra?['destinationName'] as String? ?? 'Square RD',
+              destinationInstruction:
+                  extra?['destinationInstruction'] as String? ??
+                  'Continue straight',
+              durationMinutes: extra?['durationMinutes'] as String? ?? '40',
+              distanceEta:
+                  extra?['distanceEta'] as String? ?? '2.9 km • 9:35 AM',
+            ),
+          );
+        },
       ),
       GoRoute(
         path: AppRouterName.exploreNearbyScreen,

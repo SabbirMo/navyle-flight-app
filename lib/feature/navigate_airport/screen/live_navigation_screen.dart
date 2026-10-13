@@ -9,7 +9,18 @@ import 'package:navyla_flight_app/feature/navigate_airport/widget/live_nav_map_c
 import 'package:navyla_flight_app/feature/navigate_airport/widget/live_nav_top_banner.dart';
 
 class LiveNavigationScreen extends StatefulWidget {
-  const LiveNavigationScreen({super.key});
+  final String destinationName;
+  final String destinationInstruction;
+  final String durationMinutes;
+  final String distanceEta;
+
+  const LiveNavigationScreen({
+    super.key,
+    this.destinationName = 'Square RD',
+    this.destinationInstruction = 'Continue straight',
+    this.durationMinutes = '40',
+    this.distanceEta = '2.9 km • 9:35 AM',
+  });
 
   @override
   State<LiveNavigationScreen> createState() => _LiveNavigationScreenState();
@@ -81,6 +92,7 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
 
   void _showRoutesModal() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isPoiDestination = widget.destinationName != 'Square RD';
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -118,21 +130,41 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
               ),
               SizedBox(height: 12.h),
               _buildRouteTile(
-                title: 'Via Square RD (Fastest)',
-                duration: '40 min',
-                distance: '2.9 km',
+                title: isPoiDestination
+                    ? 'Main Concourse (Fastest)'
+                    : 'Via Square RD (Fastest)',
+                duration: isPoiDestination
+                    ? '${widget.durationMinutes} min'
+                    : '40 min',
+                distance: isPoiDestination
+                    ? widget.distanceEta.split('•').first.trim()
+                    : '2.9 km',
                 isSelected: true,
                 isDark: isDark,
                 onTap: () => Navigator.of(ctx).pop(),
               ),
               _buildRouteTile(
-                title: 'Via Airport Link Road',
-                duration: '43 min',
-                distance: '3.2 km',
+                title: isPoiDestination
+                    ? 'Via Duty Free Walkway'
+                    : 'Via Airport Link Road',
+                duration: isPoiDestination
+                    ? '${(int.tryParse(widget.durationMinutes) ?? 4) + 2} min'
+                    : '43 min',
+                distance: isPoiDestination ? '410 m' : '3.2 km',
                 isSelected: false,
                 isDark: isDark,
                 onTap: () => Navigator.of(ctx).pop(),
               ),
+              if (isPoiDestination)
+                _buildRouteTile(
+                  title: 'Elevator & Concourse Bridge',
+                  duration:
+                      '${(int.tryParse(widget.durationMinutes) ?? 4) + 4} min',
+                  distance: '480 m',
+                  isSelected: false,
+                  isDark: isDark,
+                  onTap: () => Navigator.of(ctx).pop(),
+                ),
             ],
           ),
         );
@@ -153,16 +185,16 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
       decoration: BoxDecoration(
         color: isSelected
             ? (isDark
-                ? AppColors.primaryColor.withValues(alpha: 0.2)
-                : const Color(0xFFFFF7ED))
+                  ? AppColors.primaryColor.withValues(alpha: 0.2)
+                  : const Color(0xFFFFF7ED))
             : (isDark ? AppColors.darkBlack : const Color(0xFFF8FAFC)),
         borderRadius: BorderRadius.circular(14.r),
         border: Border.all(
           color: isSelected
               ? AppColors.primaryColor
               : (isDark
-                  ? AppColors.lightBlueGray.withValues(alpha: 0.3)
-                  : const Color(0xFFE2E8F0)),
+                    ? AppColors.lightBlueGray.withValues(alpha: 0.3)
+                    : const Color(0xFFE2E8F0)),
           width: isSelected ? 1.4 : 1.0,
         ),
       ),
@@ -219,13 +251,16 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
             left: 0,
             right: 0,
             child: LiveNavTopBanner(
-              streetName: 'Square RD',
-              instruction: 'Continue straight',
+              streetName: widget.destinationName,
+              instruction: widget.destinationInstruction,
               onThenTap: () {
+                final isPoiDestination = widget.destinationName != 'Square RD';
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Next step: Turn right after Kaderia Tower',
+                      isPoiDestination
+                          ? 'Next step: Turn right toward ${widget.destinationName}'
+                          : 'Next step: Turn right after Kaderia Tower',
                       style: GoogleFonts.inter(
                         fontSize: 12.5.sp,
                         color: Colors.white,
@@ -277,8 +312,8 @@ class _LiveNavigationScreenState extends State<LiveNavigationScreen>
             right: 0,
             bottom: 0,
             child: LiveNavBottomPanel(
-              duration: '40',
-              distanceEta: '2.9 km • 9:35 AM',
+              duration: widget.durationMinutes,
+              distanceEta: widget.distanceEta,
               onClose: () => Navigator.of(context).maybePop(),
               onRoutesTap: _showRoutesModal,
             ),
