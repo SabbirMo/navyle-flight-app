@@ -112,7 +112,7 @@ class FeedNotifier extends Notifier<FeedState> {
 
   List<FeedPostModel> _generateRelevantPosts(FlightJourneyState journey) {
     if (!journey.hasActiveFlight) {
-      return FeedPostModel.initialPosts;
+      return const [];
     }
 
     final flightNumber =
