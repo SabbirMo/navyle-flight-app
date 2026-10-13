@@ -13,6 +13,7 @@ import 'package:navyla_flight_app/core/widgets/custom_button.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
 import 'package:navyla_flight_app/feature/feed/model/feed_post_model.dart';
 import 'package:navyla_flight_app/feature/feed/provider/feed_notifier.dart';
+import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 
 class PostLiveUpdateScreen extends ConsumerStatefulWidget {
   final FeedPostModel? postToEdit;
@@ -130,6 +131,7 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final journeyState = ref.watch(flightJourneyNotifierProvider);
     return CommonScreen(
       child: Column(
         children: [
@@ -182,7 +184,9 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
                           ),
 
                           Text(
-                            'POSTING TO NAVYLA FEED',
+                            journeyState.hasActiveFlight
+                                ? 'POSTING TO ${journeyState.originCode ?? 'AMS'} • FLIGHT ${journeyState.flightNumber ?? ''}'
+                                : 'POSTING TO NAVYLA FEED',
                             style: StyleManager.interBold10(
                               AppColors.primaryColor,
                             ),
@@ -239,8 +243,9 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         contentPadding: EdgeInsets.zero,
-                        hintText:
-                            'Tell other travelers about gate status, queues, or facility updates...',
+                        hintText: journeyState.hasActiveFlight
+                            ? 'Report gate status, security lines, or updates near Gate ${journeyState.gate ?? ''}...'
+                            : 'Tell other travelers about gate status, queues, or facility updates...',
                         hintStyle: GoogleFonts.inter(
                           fontSize: 11.5.sp,
                           height: 1.45,

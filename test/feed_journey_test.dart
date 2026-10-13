@@ -137,4 +137,38 @@ void main() {
     expect(find.text('No posts yet'), findsOneWidget);
     expect(find.text('Create Your First Post'), findsOneWidget);
   });
+
+  testWidgets(
+      'Feed posts dynamically adapt to passenger active journey details (terminal, gate, flight)',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1179, 2556);
+    tester.view.devicePixelRatio = 3.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
+    container.read(flightJourneyNotifierProvider.notifier).addBoardingPass(
+          flightNumber: 'LH215',
+          originCode: 'AMS',
+          destinationCode: 'FRA',
+          terminal: 'Terminal 1',
+          gate: 'B24',
+        );
+
+    await tester.pumpWidget(buildTestableFeedScreen(container: container));
+    await tester.pump();
+
+    // Verify community posts mention Terminal 1, Gate B24, and LH215
+    expect(
+      find.textContaining('Security checkpoint at Terminal 1 is moving steadily'),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining('Gate B24 is confirmed for flight LH215'),
+      findsOneWidget,
+    );
+  });
 }
+

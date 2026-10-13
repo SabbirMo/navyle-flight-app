@@ -164,11 +164,13 @@ class FeedActiveFlightCardWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Flight number • Origin → Destination
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: Text(
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
                           flightNumber,
                           style: GoogleFonts.inter(
                             fontSize: 14.sp,
@@ -178,10 +180,7 @@ class FeedActiveFlightCardWidget extends StatelessWidget {
                                 : const Color(0xFF0F172A),
                             letterSpacing: -0.2,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
                       SizedBox(width: 5.w),
                       Text(
                         '•',
@@ -221,6 +220,7 @@ class FeedActiveFlightCardWidget extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
                   SizedBox(height: 3.h),
 
                   // Date · Terminal

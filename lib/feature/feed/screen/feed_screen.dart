@@ -158,17 +158,15 @@ class FeedScreen extends ConsumerWidget {
                             feedState.selectedTab == FeedTab.feed) ...[
                           FeedActiveFlightCardWidget(
                             flightNumber: journeyState.flightNumber ?? '',
-                            originCode: (journeyState.originCode == null ||
-                                    journeyState.originCode == 'LHR' ||
-                                    journeyState.originCode!.isEmpty)
-                                ? 'AMS'
-                                : journeyState.originCode!,
-                            destinationCode: (journeyState.destinationCode ==
-                                        null ||
-                                    journeyState.destinationCode == 'JFK' ||
-                                    journeyState.destinationCode!.isEmpty)
-                                ? 'FRA'
-                                : journeyState.destinationCode!,
+                            originCode: (journeyState.originCode != null &&
+                                    journeyState.originCode!.isNotEmpty)
+                                ? journeyState.originCode!
+                                : 'AMS',
+                            destinationCode:
+                                (journeyState.destinationCode != null &&
+                                        journeyState.destinationCode!.isNotEmpty)
+                                    ? journeyState.destinationCode!
+                                    : 'FRA',
                             flightDate: journeyState.flightDate ?? '',
                             terminal: journeyState.terminal ?? '',
                             gate: journeyState.gate ?? '',
