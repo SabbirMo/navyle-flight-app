@@ -18,6 +18,8 @@ class BoardingStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(24.r),
       child: BackdropFilter(
@@ -25,16 +27,22 @@ class BoardingStatusCard extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 10.w),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.88),
+            color: isDark
+                ? const Color(0xFF141116).withValues(alpha: 0.90)
+                : Colors.white.withValues(alpha: 0.88),
             borderRadius: BorderRadius.circular(24.r),
             border: Border.all(
-              color: const Color(0xFFFDBA74).withValues(alpha: 0.80),
+              color: isDark
+                  ? const Color(0xFFEA580C).withValues(alpha: 0.45)
+                  : const Color(0xFFFDBA74).withValues(alpha: 0.80),
               width: 1.8,
             ),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFF97316).withValues(alpha: 0.20),
-                blurRadius: 18,
+                color: isDark
+                    ? const Color(0xFFEA580C).withValues(alpha: 0.35)
+                    : const Color(0xFFF97316).withValues(alpha: 0.20),
+                blurRadius: 20,
                 offset: const Offset(0, 4),
               ),
             ],
@@ -48,7 +56,7 @@ class BoardingStatusCard extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 10.5.sp,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.black,
+                  color: isDark ? const Color(0xFF94A3B8) : AppColors.black,
                   letterSpacing: 0.8,
                 ),
               ),
@@ -62,9 +70,13 @@ class BoardingStatusCard extends StatelessWidget {
                     height: 30.w,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: const Color(0xFFFFF7ED),
+                      color: isDark
+                          ? const Color(0xFF2E1C12)
+                          : const Color(0xFFFFF7ED),
                       border: Border.all(
-                        color: const Color(0xFFFB923C),
+                        color: isDark
+                            ? const Color(0xFFEA580C)
+                            : const Color(0xFFFB923C),
                         width: 1.5,
                       ),
                     ),
@@ -74,7 +86,7 @@ class BoardingStatusCard extends StatelessWidget {
                         width: 13.w,
                         height: 13.w,
                         colorFilter: const ColorFilter.mode(
-                          AppColors.primaryColor,
+                          Color(0xFFFB923C),
                           BlendMode.srcIn,
                         ),
                       ),
@@ -102,7 +114,7 @@ class BoardingStatusCard extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.black,
+                  color: isDark ? const Color(0xFF94A3B8) : AppColors.black,
                 ),
               ),
             ],

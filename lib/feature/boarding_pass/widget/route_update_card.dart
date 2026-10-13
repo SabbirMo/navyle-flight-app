@@ -14,13 +14,22 @@ class RouteUpdateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: Color(0xffF97316).withValues(alpha: 0.46),
+        color: isDark
+            ? const Color(0xFF1B1108).withValues(alpha: 0.76)
+            : const Color(0xffF97316).withValues(alpha: 0.46),
         borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(color: Color(0xffF97316), width: 1),
+        border: Border.all(
+          color: isDark
+              ? const Color(0xFFEA580C).withValues(alpha: 0.4)
+              : const Color(0xffF97316),
+          width: 1.2,
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -28,7 +37,7 @@ class RouteUpdateCard extends StatelessWidget {
           Container(
             width: 40.w,
             height: 40.w,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: Color(0xffF97316),
             ),
@@ -55,13 +64,15 @@ class RouteUpdateCard extends StatelessWidget {
                     letterSpacing: 0.6,
                   ),
                 ),
-                SizedBox(height: 1.h),
+                SizedBox(height: 2.h),
                 Text(
                   message,
                   style: GoogleFonts.inter(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white.withValues(alpha: 0.95),
+                    color: isDark
+                        ? const Color(0xFFCBD5E1)
+                        : Colors.white.withValues(alpha: 0.95),
                     height: 1.35,
                   ),
                 ),

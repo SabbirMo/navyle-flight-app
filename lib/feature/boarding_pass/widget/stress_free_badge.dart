@@ -16,16 +16,27 @@ class StressFreeBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 7.h),
         decoration: BoxDecoration(
-          color: isActive
-              ? Color(0xff548EEF)
-              : Colors.black.withValues(alpha: 0.45),
+          color: isDark
+              ? (isActive
+                    ? const Color(0xFF071426).withValues(alpha: 0.88)
+                    : Colors.black.withValues(alpha: 0.65))
+              : (isActive
+                    ? const Color(0xff548EEF)
+                    : Colors.black.withValues(alpha: 0.45)),
           borderRadius: BorderRadius.circular(24.r),
+          border: Border.all(
+            color: isDark
+                ? const Color(0xFF1D4ED8).withValues(alpha: 0.6)
+                : Colors.white.withValues(alpha: 0.25),
+            width: 1.0,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

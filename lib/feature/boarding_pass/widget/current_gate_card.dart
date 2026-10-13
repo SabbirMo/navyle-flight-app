@@ -18,6 +18,8 @@ class CurrentGateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(24.r),
       child: BackdropFilter(
@@ -25,16 +27,22 @@ class CurrentGateCard extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 12.w),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.88),
+            color: isDark
+                ? const Color(0xFF071224).withValues(alpha: 0.90)
+                : Colors.white.withValues(alpha: 0.88),
             borderRadius: BorderRadius.circular(24.r),
             border: Border.all(
-              color: const Color(0xFF60A5FA).withValues(alpha: 0.80),
+              color: isDark
+                  ? const Color(0xFF2563EB).withValues(alpha: 0.65)
+                  : const Color(0xFF60A5FA).withValues(alpha: 0.80),
               width: 1.8,
             ),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF3B82F6).withValues(alpha: 0.22),
-                blurRadius: 18,
+                color: isDark
+                    ? const Color(0xFF1D4ED8).withValues(alpha: 0.45)
+                    : const Color(0xFF3B82F6).withValues(alpha: 0.22),
+                blurRadius: 20,
                 offset: const Offset(0, 4),
               ),
             ],
@@ -48,7 +56,9 @@ class CurrentGateCard extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 10.5.sp,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1E293B),
+                  color: isDark
+                      ? const Color(0xFF94A3B8)
+                      : const Color(0xFF1E293B),
                   letterSpacing: 0.8,
                 ),
               ),
@@ -62,9 +72,13 @@ class CurrentGateCard extends StatelessWidget {
                     height: 32.w,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: const Color(0xFFEFF6FF),
+                      color: isDark
+                          ? const Color(0xFF0B2240)
+                          : const Color(0xFFEFF6FF),
                       border: Border.all(
-                        color: const Color(0xFF2563EB),
+                        color: isDark
+                            ? const Color(0xFF1D4ED8)
+                            : const Color(0xFF2563EB),
                         width: 1.5,
                       ),
                     ),
@@ -73,8 +87,10 @@ class CurrentGateCard extends StatelessWidget {
                         ImageAssets.gate,
                         width: 14.w,
                         height: 14.w,
-                        colorFilter: const ColorFilter.mode(
-                          AppColors.boardingPassBg,
+                        colorFilter: ColorFilter.mode(
+                          isDark
+                              ? const Color(0xFF38BDF8)
+                              : AppColors.boardingPassBg,
                           BlendMode.srcIn,
                         ),
                       ),
@@ -86,7 +102,7 @@ class CurrentGateCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 32.sp,
                       fontWeight: FontWeight.w900,
-                      color: AppColors.boardingPassBg,
+                      color: isDark ? Colors.white : AppColors.boardingPassBg,
                       height: 1.0,
                     ),
                   ),
@@ -99,7 +115,9 @@ class CurrentGateCard extends StatelessWidget {
                   Icon(
                     Icons.directions_walk_rounded,
                     size: 15.sp,
-                    color: AppColors.boardingPassBg,
+                    color: isDark
+                        ? const Color(0xFF38BDF8)
+                        : AppColors.boardingPassBg,
                   ),
                   SizedBox(width: 4.w),
                   Text(
@@ -107,7 +125,9 @@ class CurrentGateCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.boardingPassBg,
+                      color: isDark
+                          ? const Color(0xFF38BDF8)
+                          : AppColors.boardingPassBg,
                     ),
                   ),
                 ],

@@ -8,31 +8,26 @@ import 'package:navyla_flight_app/feature/boarding_pass/widget/boarding_pass_bot
 class ShowBoardingPassButton extends StatelessWidget {
   final VoidCallback? onTap;
 
-  const ShowBoardingPassButton({
-    super.key,
-    this.onTap,
-  });
+  const ShowBoardingPassButton({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 56.h,
+      height: 48.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28.r),
         gradient: const LinearGradient(
-          colors: [
-            Color(0xFF007DFE),
-            Color(0xFF005CEE),
-          ],
+          colors: [Color(0xFF0084FF), Color(0xFF005CEE)],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0066FF).withValues(alpha: 0.50),
-            blurRadius: 24,
-            offset: const Offset(0, 10),
+            color: const Color(0xFF0070F3).withValues(alpha: 0.55),
+            blurRadius: 10,
+            spreadRadius: 1,
+            offset: const Offset(0, 8),
           ),
         ],
       ),

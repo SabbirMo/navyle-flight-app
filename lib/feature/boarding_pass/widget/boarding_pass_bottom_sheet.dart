@@ -85,9 +85,7 @@ class BoardingPassBottomSheet extends StatelessWidget {
               // Ticket pass card
               const SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
-                child: TicketBoardingPass(
-                  gate: 'B24',
-                ),
+                child: TicketBoardingPass(gate: 'B24'),
               ),
             ],
           ),

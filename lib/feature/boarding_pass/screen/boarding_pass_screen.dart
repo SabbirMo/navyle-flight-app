@@ -22,128 +22,161 @@ class BoardingPassScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(boardingPassNotifierProvider);
     final notifier = ref.read(boardingPassNotifierProvider.notifier);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(ImageAssets.showing),
-            fit: BoxFit.cover,
+      backgroundColor: isDark ? const Color(0xFF020611) : Colors.white,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Background runway image with dark tint
+          Positioned.fill(
+            child: Image.asset(
+              ImageAssets.showing,
+              fit: BoxFit.cover,
+              color: isDark
+                  ? const Color(0xFF071326).withValues(alpha: 0.89)
+                  : null,
+              colorBlendMode: isDark ? BlendMode.srcOver : null,
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                  child: IntrinsicHeight(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(height: 12.h),
 
-                          // Top Logo: NAVYLA
-                          Image.asset(
-                            ImageAssets.navylaWhite,
-                            width: 140.w,
-                            fit: BoxFit.contain,
-                          ),
+          // Soft night vignette gradient: gives contrast without hiding the runway & plane
+          if (isDark)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: const [0.0, 0.25, 0.55, 0.80, 1.0],
+                    colors: [
+                      const Color(0xFF020611).withValues(alpha: 0.45),
+                      Colors.transparent,
+                      Colors.transparent,
+                      const Color(0xFF020611).withValues(alpha: 0.35),
+                      const Color(0xFF020611).withValues(alpha: 0.65),
+                    ],
+                  ),
+                ),
+              ),
+            ),
 
-                          SizedBox(height: 18.h),
+          // Foreground Content
+          SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 8.h),
 
-                          // 60-Minute Stress-Free Mode Active Pill Badge
-                          StressFreeBadge(
-                            title: state.stressFreeTitle,
-                            isActive: state.isStressFreeModeActive,
-                            onTap: notifier.toggleStressFreeMode,
-                          ),
+                            // Top Logo: NAVYLA
+                            Image.asset(
+                              ImageAssets.navylaWhite,
+                              width: 140.w,
+                              fit: BoxFit.contain,
+                            ),
 
-                          SizedBox(height: 20.h),
+                            SizedBox(height: 14.h),
 
-                          // Glassmorphic Countdown Card: BOARDING BEGINS IN 18:42
-                          BoardingTimerCard(
-                            formattedTime: state.formattedCountdown,
-                          ),
+                            // 60-Minute Stress-Free Mode Active Pill Badge
+                            StressFreeBadge(
+                              title: state.stressFreeTitle,
+                              isActive: state.isStressFreeModeActive,
+                              onTap: notifier.toggleStressFreeMode,
+                            ),
 
-                          SizedBox(height: 16.h),
+                            SizedBox(height: 20.h),
 
-                          // Two Side-by-Side Cards: Current Gate & Boarding Status
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CurrentGateCard(
-                                  gate: state.gate,
-                                  walkTimeMinutes: state.walkTimeMinutes,
+                            // Glassmorphic Countdown Card: BOARDING BEGINS IN 18:42
+                            BoardingTimerCard(
+                              formattedTime: state.formattedCountdown,
+                            ),
+
+                            SizedBox(height: 16.h),
+
+                            // Two Side-by-Side Cards: Current Gate & Boarding Status
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CurrentGateCard(
+                                    gate: state.gate,
+                                    walkTimeMinutes: state.walkTimeMinutes,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 14.w),
-                              Expanded(
-                                child: BoardingStatusCard(
-                                  status: state.boardingStatus,
-                                  subtitle: state.statusSubtitle,
+                                SizedBox(width: 14.w),
+                                Expanded(
+                                  child: BoardingStatusCard(
+                                    status: state.boardingStatus,
+                                    subtitle: state.statusSubtitle,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
 
-                          SizedBox(height: 16.h),
+                            SizedBox(height: 16.h),
 
-                          // Route Update Alert Card
-                          RouteUpdateCard(
-                            title: state.routeUpdateTitle,
-                            message: state.routeUpdateMessage,
-                          ),
+                            // Route Update Alert Card
+                            RouteUpdateCard(
+                              title: state.routeUpdateTitle,
+                              message: state.routeUpdateMessage,
+                            ),
 
-                          SizedBox(height: 36.h),
+                            SizedBox(height: 28.h),
 
-                          // Show Boarding Pass Button -> Navigates directly to Ticket tab
-                          ShowBoardingPassButton(
-                            onTap: () {
-                              ref
-                                  .read(navbarNotifierProvider.notifier)
-                                  .setIndex(1);
-                              context.go(AppRouterName.navbarScreen);
-                            },
-                          ),
-
-                          SizedBox(height: 18.h),
-
-                          // Exit Stress-Free Mode Button
-                          GestureDetector(
-                            onTap: () {
-                              if (context.canPop()) {
-                                context.pop();
-                              } else {
+                            // Show Boarding Pass Button -> Navigates directly to Ticket tab
+                            ShowBoardingPassButton(
+                              onTap: () {
+                                ref
+                                    .read(navbarNotifierProvider.notifier)
+                                    .setIndex(1);
                                 context.go(AppRouterName.navbarScreen);
-                              }
-                            },
-                            child: Text(
-                              'EXIT STRESS-FREE MODE',
-                              style: GoogleFonts.inter(
-                                fontSize: 11.5.sp,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.white,
-                                letterSpacing: 1.5,
+                              },
+                            ),
+
+                            SizedBox(height: 18.h),
+
+                            // Exit Stress-Free Mode Button
+                            GestureDetector(
+                              onTap: () {
+                                if (context.canPop()) {
+                                  context.pop();
+                                } else {
+                                  context.go(AppRouterName.navbarScreen);
+                                }
+                              },
+                              child: Text(
+                                'EXIT STRESS-FREE MODE',
+                                style: GoogleFonts.inter(
+                                  fontSize: 11.5.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.white,
+                                  letterSpacing: 1.5,
+                                ),
                               ),
                             ),
-                          ),
 
-                          SizedBox(height: 10.h),
-                        ],
+                            SizedBox(height: 10.h),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

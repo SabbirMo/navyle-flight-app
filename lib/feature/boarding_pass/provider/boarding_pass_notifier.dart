@@ -58,5 +58,5 @@ class BoardingPassNotifier extends Notifier<BoardingPassState> {
 
 final boardingPassNotifierProvider =
     NotifierProvider.autoDispose<BoardingPassNotifier, BoardingPassState>(
-  BoardingPassNotifier.new,
-);
+      BoardingPassNotifier.new,
+    );
