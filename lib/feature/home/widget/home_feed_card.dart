@@ -58,9 +58,9 @@ class HomeFeedCard extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.028),
-              blurRadius: 14,
-              offset: const Offset(0, 4),
+              color: AppColors.lightGray.withValues(alpha: 0.4),
+              blurRadius: 6,
+              offset: const Offset(0, -1),
             ),
           ],
         ),

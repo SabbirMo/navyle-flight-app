@@ -127,12 +127,17 @@ class _QuickAccessCard extends StatelessWidget {
                   color: const Color(0xFFC07028).withValues(alpha: 0.75),
                   width: 1.2,
                 )
-              : null,
+              : Border.all(
+                  color: AppColors.lightGray.withValues(alpha: 0.5),
+                  width: 1.2,
+                ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.04),
-              blurRadius: isDark ? 12 : 10,
-              offset: const Offset(0, 4),
+              color: isDark
+                  ? AppColors.primaryColor.withValues(alpha: 0.5)
+                  : AppColors.lightGray.withValues(alpha: 0.9),
+              blurRadius: isDark ? 6 : 10,
+              offset: const Offset(4, 4),
             ),
           ],
           image: DecorationImage(
