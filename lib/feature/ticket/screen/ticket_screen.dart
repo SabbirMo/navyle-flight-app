@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/utils/app_share_helper.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
 import 'package:navyla_flight_app/feature/ticket/model/saved_ticket_model.dart';
 import 'package:navyla_flight_app/feature/ticket/provider/saved_tickets_provider.dart';
 import 'package:navyla_flight_app/feature/ticket/widget/add_boarding_pass_view.dart';
@@ -159,7 +160,9 @@ class _TicketScreenState extends ConsumerState<TicketScreen> {
                       ? () => ref
                             .read(savedTicketsProvider.notifier)
                             .hideAddPass()
-                      : null,
+                      : () => ref
+                            .read(navbarNotifierProvider.notifier)
+                            .setIndex(0),
                 )
               : _buildTicketCarouselView(
                   context,
@@ -186,55 +189,97 @@ class _TicketScreenState extends ConsumerState<TicketScreen> {
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Column(
         children: [
-          // Top Bar: '1 OF 3' on left, 'TICKET' in center, 3-dots on right (NO back button)
+          // Top Bar: Back button on left, 'TICKET' + '1 OF 2' in center, 3-dots on right
           Padding(
             padding: EdgeInsets.symmetric(vertical: 4.h),
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // Center Title
-                Center(
-                  child: Text(
-                    'TICKET',
-                    style: GoogleFonts.inter(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w800,
-                      color: isDark ? Colors.white : AppColors.black,
-                      letterSpacing: 1.2,
+                // Top Left: Back button to Home
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    key: const Key('ticket_back_button'),
+                    onTap: () {
+                      ref.read(navbarNotifierProvider.notifier).setIndex(0);
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      width: 38.w,
+                      height: 38.w,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isDark
+                            ? AppColors.lightGray.withValues(alpha: 0.2)
+                            : Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          color: isDark
+                              ? AppColors.white
+                              : AppColors.blackShadow,
+                          size: 18.sp,
+                        ),
+                      ),
                     ),
                   ),
                 ),
 
-                // Top Left: '1 OF 3' Capsule Badge
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    onTap: () {
-                      ref.read(savedTicketsProvider.notifier).showAddPass();
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10.w,
-                        vertical: 4.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(16.r),
-                        border: Border.all(
-                          color: const Color(0xFFFA7E23).withValues(alpha: 0.5),
-                          width: 1.2,
-                        ),
-                      ),
-                      child: Text(
-                        '$displayIndex OF $totalCount',
+                // Center Title & Page Counter under TICKET
+                Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'TICKET',
                         style: GoogleFonts.inter(
-                          fontSize: 10.5.sp,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.w800,
                           color: isDark ? Colors.white : AppColors.black,
-                          letterSpacing: 0.5,
+                          letterSpacing: 1.2,
                         ),
                       ),
-                    ),
+                      SizedBox(height: 4.h),
+                      GestureDetector(
+                        onTap: () {
+                          ref.read(savedTicketsProvider.notifier).showAddPass();
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.w,
+                            vertical: 3.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(16.r),
+                            border: Border.all(
+                              color: const Color(
+                                0xFFFA7E23,
+                              ).withValues(alpha: 0.5),
+                              width: 1.2,
+                            ),
+                          ),
+                          child: Text(
+                            '$displayIndex OF $totalCount',
+                            style: GoogleFonts.inter(
+                              fontSize: 10.5.sp,
+                              fontWeight: FontWeight.w800,
+                              color: isDark ? Colors.white : AppColors.black,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
@@ -243,12 +288,22 @@ class _TicketScreenState extends ConsumerState<TicketScreen> {
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
                     onTap: () => _showTicketOptionsMenu(context),
+                    behavior: HitTestBehavior.opaque,
                     child: Container(
                       width: 38.w,
                       height: 38.w,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.lightGray.withValues(alpha: 0.2),
+                        color: isDark
+                            ? AppColors.lightGray.withValues(alpha: 0.2)
+                            : AppColors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
                       child: Center(
                         child: Icon(
@@ -336,7 +391,7 @@ class _TicketScreenState extends ConsumerState<TicketScreen> {
 
                 SizedBox(height: 10.h),
 
-                // Page Indicator Dots (closely under card, exactly like Image 2)
+                // Page Indicator Dots
                 if (tickets.length > 1)
                   _buildDotsIndicator(tickets.length, selectedIndex),
               ],

@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
+import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
 import 'package:navyla_flight_app/feature/more/model/more_model.dart';
 import 'package:navyla_flight_app/feature/more/screen/more_details_screen.dart';
 import 'package:navyla_flight_app/feature/more/screen/partner_website_screen.dart';
@@ -53,11 +55,11 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 }
 
-class MoreContentScreen extends StatelessWidget {
+class MoreContentScreen extends ConsumerWidget {
   const MoreContentScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
@@ -65,6 +67,41 @@ class MoreContentScreen extends StatelessWidget {
         scrolledUnderElevation: 0,
         backgroundColor: isDark ? AppColors.darkBlack : null,
         centerTitle: true,
+        leadingWidth: 54.w,
+        leading: Center(
+          child: GestureDetector(
+            key: const Key('more_back_button'),
+            onTap: () {
+              ref.read(navbarNotifierProvider.notifier).setIndex(0);
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              margin: EdgeInsets.only(left: 16.w),
+              width: 38.w,
+              height: 38.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isDark
+                    ? AppColors.lightGray.withValues(alpha: 0.2)
+                    : Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: isDark ? AppColors.white : AppColors.blackShadow,
+                  size: 18.sp,
+                ),
+              ),
+            ),
+          ),
+        ),
         title: Image.asset(
           isDark ? ImageAssets.navylaWhite : ImageAssets.navyla,
           width: 100.w,
