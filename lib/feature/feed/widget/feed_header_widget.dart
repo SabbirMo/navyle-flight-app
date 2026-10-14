@@ -6,11 +6,13 @@ import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 
 class FeedHeaderWidget extends StatelessWidget {
   final VoidCallback onAddPostTap;
+  final VoidCallback? onBackTap;
   final bool showAddButton;
 
   const FeedHeaderWidget({
     super.key,
     required this.onAddPostTap,
+    this.onBackTap,
     this.showAddButton = true,
   });
 
@@ -25,11 +27,43 @@ class FeedHeaderWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // NAVYLA FEED Brand Header
+            // Back Button + NAVYLA FEED Brand Header
             Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                if (onBackTap != null) ...[
+                  GestureDetector(
+                    key: const Key('feed_back_button'),
+                    onTap: onBackTap,
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      width: 38.w,
+                      height: 38.w,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isDark
+                            ? AppColors.lightGray.withValues(alpha: 0.2)
+                            : Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          color: isDark ? AppColors.white : AppColors.blackShadow,
+                          size: 18.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                ],
                 SizedBox(
                   width: 100.w,
                   child: Image.asset(

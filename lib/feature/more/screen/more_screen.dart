@@ -25,13 +25,24 @@ class _MoreScreenState extends State<MoreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        if (_navigatorKey.currentState?.canPop() ?? false) {
-          _navigatorKey.currentState?.pop();
-        }
+    return Consumer(
+      builder: (context, ref, child) {
+        final currentIndex = ref.watch(navbarNotifierProvider);
+        final isMoreActive = currentIndex == 4;
+
+        return PopScope(
+          canPop: !isMoreActive,
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop) return;
+            if (!isMoreActive) return;
+            if (_navigatorKey.currentState?.canPop() ?? false) {
+              _navigatorKey.currentState?.pop();
+            } else {
+              ref.read(navbarNotifierProvider.notifier).setIndex(0);
+            }
+          },
+          child: child!,
+        );
       },
       child: Navigator(
         key: _navigatorKey,

@@ -97,6 +97,7 @@ class AddBoardingPassView extends ConsumerWidget {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: GestureDetector(
+                        key: const Key('add_pass_back_button'),
                         onTap: onBackToTicket,
                         child: Container(
                           width: 38.w,

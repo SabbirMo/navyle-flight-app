@@ -145,31 +145,47 @@ class _TicketScreenState extends ConsumerState<TicketScreen> {
         _pageController.jumpToPage(next.selectedIndex);
       }
     });
+    final currentNavIndex = ref.watch(navbarNotifierProvider);
+    final isTicketActive = currentNavIndex == 1;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.blackShadow : null,
-          gradient: isDark ? null : AppColors.splashGradient,
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: isViewingAddPass
-              ? AddBoardingPassView(
-                  onBackToTicket: hasPass
-                      ? () => ref
-                            .read(savedTicketsProvider.notifier)
-                            .hideAddPass()
-                      : () => ref
-                            .read(navbarNotifierProvider.notifier)
-                            .setIndex(0),
-                )
-              : _buildTicketCarouselView(
-                  context,
-                  tickets,
-                  selectedIndex,
-                  bottomInset,
-                ),
+
+    return PopScope(
+      canPop: !isTicketActive,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (!isTicketActive) return;
+
+        if (hasPass && ticketsState.isViewingAddPass) {
+          ref.read(savedTicketsProvider.notifier).hideAddPass();
+        } else {
+          ref.read(navbarNotifierProvider.notifier).setIndex(0);
+        }
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.blackShadow : null,
+            gradient: isDark ? null : AppColors.splashGradient,
+          ),
+          child: SafeArea(
+            bottom: false,
+            child: isViewingAddPass
+                ? AddBoardingPassView(
+                    onBackToTicket: hasPass
+                        ? () => ref
+                              .read(savedTicketsProvider.notifier)
+                              .hideAddPass()
+                        : () => ref
+                              .read(navbarNotifierProvider.notifier)
+                              .setIndex(0),
+                  )
+                : _buildTicketCarouselView(
+                    context,
+                    tickets,
+                    selectedIndex,
+                    bottomInset,
+                  ),
+          ),
         ),
       ),
     );

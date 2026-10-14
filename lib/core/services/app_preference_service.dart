@@ -31,14 +31,11 @@ class AppPreferenceService {
   static ThemeMode get themeMode {
     final modeStr = _prefs?.getString(_keyThemeMode);
     if (modeStr == 'dark') return ThemeMode.dark;
-    if (modeStr == 'light') return ThemeMode.light;
-    return ThemeMode.system;
+    return ThemeMode.light;
   }
 
   static Future<void> setThemeMode(ThemeMode mode) async {
-    final modeStr = mode == ThemeMode.dark
-        ? 'dark'
-        : (mode == ThemeMode.light ? 'light' : 'system');
+    final modeStr = mode == ThemeMode.dark ? 'dark' : 'light';
     await _prefs?.setString(_keyThemeMode, modeStr);
   }
 

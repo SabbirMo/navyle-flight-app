@@ -35,10 +35,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeModeProvider);
-    final isDarkMode =
-        themeMode == ThemeMode.dark ||
-        (themeMode == ThemeMode.system &&
-            Theme.of(context).brightness == Brightness.dark);
+    final isDarkMode = themeMode == ThemeMode.dark;
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return Scaffold(

@@ -98,116 +98,133 @@ class FeedScreen extends ConsumerWidget {
     final hasBoardingPass = journeyState.hasActiveFlight;
     final filteredPosts = feedState.filteredPosts;
 
+    final currentIndex = ref.watch(navbarNotifierProvider);
+    final isFeedActive = currentIndex == 3;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
-      backgroundColor: isDark ? AppColors.blackShadow : const Color(0xFFFAFBFC),
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
-            // 1. Top Header (Logo + Orange Add Button)
-            FeedHeaderWidget(
-              showAddButton: hasBoardingPass,
-              onAddPostTap: () => _openCreatePost(context),
-            ),
-            SizedBox(height: 8.h),
+    return PopScope(
+      canPop: !isFeedActive,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (!isFeedActive) return;
+        ref.read(navbarNotifierProvider.notifier).setIndex(0);
+      },
+      child: Scaffold(
+        backgroundColor: isDark
+            ? AppColors.blackShadow
+            : const Color(0xFFFAFBFC),
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              // 1. Top Header (Back Button + Logo + Orange Add Button)
+              FeedHeaderWidget(
+                showAddButton: hasBoardingPass,
+                onBackTap: () =>
+                    ref.read(navbarNotifierProvider.notifier).setIndex(0),
+                onAddPostTap: () => _openCreatePost(context),
+              ),
+              SizedBox(height: 8.h),
 
-            // 2. Horizontal Filter Categories
-            FeedCategoryFilterWidget(
-              categories: feedState.categories,
-              selectedCategory: feedState.selectedCategory,
-              onSelectCategory: (category) {
-                feedNotifier.selectCategory(category);
-              },
-            ),
-            SizedBox(height: 12.h),
+              // 2. Horizontal Filter Categories
+              FeedCategoryFilterWidget(
+                categories: feedState.categories,
+                selectedCategory: feedState.selectedCategory,
+                onSelectCategory: (category) {
+                  feedNotifier.selectCategory(category);
+                },
+              ),
+              SizedBox(height: 12.h),
 
-            // 3. Sub-tabs (Feed vs My post)
-            FeedTabsWidget(
-              selectedTab: feedState.selectedTab,
-              onTabChanged: (tab) {
-                feedNotifier.selectTab(tab);
-              },
-            ),
-            SizedBox(height: 12.h),
+              // 3. Sub-tabs (Feed vs My post)
+              FeedTabsWidget(
+                selectedTab: feedState.selectedTab,
+                onTabChanged: (tab) {
+                  feedNotifier.selectTab(tab);
+                },
+              ),
+              SizedBox(height: 12.h),
 
-            // 4. Feed Post List / No Active Journey / Empty State
-            Expanded(
-              child: (!hasBoardingPass && feedState.selectedTab == FeedTab.feed)
-                  ? FeedNoActiveJourneyWidget(
-                      onScanTap: () => context.push(AppRouterName.scanScreen),
-                      onManualTap: () => context.push(
-                        AppRouterName.verifyDetailsScreen,
-                        extra: {'isManual': true},
-                      ),
-                    )
-                  : (feedState.selectedTab == FeedTab.myPost &&
-                        filteredPosts.isEmpty)
-                  ? _buildEmptyState(
-                      context,
-                      feedState.selectedTab,
-                      hasBoardingPass: hasBoardingPass,
-                    )
-                  : ListView(
-                      physics: const BouncingScrollPhysics(),
-                      padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 100.h),
-                      children: [
-                        // Active Journey Flight Card (displayed when boarding pass is added)
-                        if (hasBoardingPass &&
-                            feedState.selectedTab == FeedTab.feed) ...[
-                          FeedActiveFlightCardWidget(
-                            flightNumber: journeyState.flightNumber ?? '',
-                            originCode: (journeyState.originCode != null &&
-                                    journeyState.originCode!.isNotEmpty)
-                                ? journeyState.originCode!
-                                : 'AMS',
-                            destinationCode:
-                                (journeyState.destinationCode != null &&
-                                        journeyState.destinationCode!.isNotEmpty)
-                                    ? journeyState.destinationCode!
-                                    : 'FRA',
-                            flightDate: journeyState.flightDate ?? '',
-                            terminal: journeyState.terminal ?? '',
-                            gate: journeyState.gate ?? '',
-                            status: (journeyState.status != null &&
-                                    journeyState.status!.isNotEmpty)
-                                ? journeyState.status!
-                                : 'On Time',
-                            onTap: () {
-                              ref
-                                  .read(navbarNotifierProvider.notifier)
-                                  .setIndex(1);
-                            },
-                          ),
-                          SizedBox(height: 12.h),
-                        ],
-                        if (filteredPosts.isEmpty)
-                          _buildEmptyState(
-                            context,
-                            feedState.selectedTab,
-                            hasBoardingPass: hasBoardingPass,
-                          )
-                        else
-                          ...filteredPosts.map(
-                            (post) => FeedCardWidget(
-                              key: ValueKey(post.id),
-                              post: post,
-                              showMyPostActions:
-                                  feedState.selectedTab == FeedTab.myPost,
-                              onToggleReal: () =>
-                                  feedNotifier.toggleRealVote(post.id),
-                              onToggleSpam: () =>
-                                  feedNotifier.toggleSpamVote(post.id),
-                              onEdit: () => _openEditPost(context, post),
-                              onDelete: () =>
-                                  _confirmDelete(context, ref, post.id),
+              // 4. Feed Post List / No Active Journey / Empty State
+              Expanded(
+                child:
+                    (!hasBoardingPass && feedState.selectedTab == FeedTab.feed)
+                    ? FeedNoActiveJourneyWidget(
+                        onScanTap: () => context.push(AppRouterName.scanScreen),
+                        onManualTap: () => context.push(
+                          AppRouterName.verifyDetailsScreen,
+                          extra: {'isManual': true},
+                        ),
+                      )
+                    : (feedState.selectedTab == FeedTab.myPost &&
+                          filteredPosts.isEmpty)
+                    ? _buildEmptyState(
+                        context,
+                        feedState.selectedTab,
+                        hasBoardingPass: hasBoardingPass,
+                      )
+                    : ListView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 100.h),
+                        children: [
+                          // Active Journey Flight Card (displayed when boarding pass is added)
+                          if (hasBoardingPass &&
+                              feedState.selectedTab == FeedTab.feed) ...[
+                            FeedActiveFlightCardWidget(
+                              flightNumber: journeyState.flightNumber ?? '',
+                              originCode:
+                                  (journeyState.originCode != null &&
+                                      journeyState.originCode!.isNotEmpty)
+                                  ? journeyState.originCode!
+                                  : 'AMS',
+                              destinationCode:
+                                  (journeyState.destinationCode != null &&
+                                      journeyState.destinationCode!.isNotEmpty)
+                                  ? journeyState.destinationCode!
+                                  : 'FRA',
+                              flightDate: journeyState.flightDate ?? '',
+                              terminal: journeyState.terminal ?? '',
+                              gate: journeyState.gate ?? '',
+                              status:
+                                  (journeyState.status != null &&
+                                      journeyState.status!.isNotEmpty)
+                                  ? journeyState.status!
+                                  : 'On Time',
+                              onTap: () {
+                                ref
+                                    .read(navbarNotifierProvider.notifier)
+                                    .setIndex(1);
+                              },
                             ),
-                          ),
-                      ],
-                    ),
-            ),
-          ],
+                            SizedBox(height: 12.h),
+                          ],
+                          if (filteredPosts.isEmpty)
+                            _buildEmptyState(
+                              context,
+                              feedState.selectedTab,
+                              hasBoardingPass: hasBoardingPass,
+                            )
+                          else
+                            ...filteredPosts.map(
+                              (post) => FeedCardWidget(
+                                key: ValueKey(post.id),
+                                post: post,
+                                showMyPostActions:
+                                    feedState.selectedTab == FeedTab.myPost,
+                                onToggleReal: () =>
+                                    feedNotifier.toggleRealVote(post.id),
+                                onToggleSpam: () =>
+                                    feedNotifier.toggleSpamVote(post.id),
+                                onEdit: () => _openEditPost(context, post),
+                                onDelete: () =>
+                                    _confirmDelete(context, ref, post.id),
+                              ),
+                            ),
+                        ],
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
