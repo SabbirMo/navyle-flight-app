@@ -90,6 +90,18 @@ class _PostLiveUpdateScreenState extends ConsumerState<PostLiveUpdateScreen> {
   }
 
   void _submit() {
+    final hasActiveFlight =
+        ref.read(flightJourneyNotifierProvider).hasActiveFlight;
+    if (!hasActiveFlight) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Active journey required to post live updates'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
     final text = _contentController.text.trim();
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(

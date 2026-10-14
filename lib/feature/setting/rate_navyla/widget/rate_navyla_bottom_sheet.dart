@@ -83,7 +83,11 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
 
     await Future.delayed(const Duration(milliseconds: 2000));
     if (mounted) {
-      Navigator.of(context).pop();
+      setState(() {
+        _experienceController.clear();
+        _showSnackBar = false;
+        _isSubmitting = false;
+      });
     }
   }
 
@@ -482,6 +486,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
               top: 10.h,
               right: 16.w,
               child: GestureDetector(
+                key: const Key('rate_navyla_close_button'),
                 onTap: () => Navigator.of(context).pop(),
                 behavior: HitTestBehavior.opaque,
                 child: Container(
@@ -517,48 +522,58 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
               bottom: _showSnackBar ? 20.h : -100.h,
               left: 16.w,
               right: 16.w,
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 250),
-                opacity: _showSnackBar ? 1.0 : 0.0,
-                child: Material(
-                  color: Colors.transparent,
-                  elevation: 8,
-                  borderRadius: BorderRadius.circular(10.r),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 14.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF22C55E),
+              child: IgnorePointer(
+                ignoring: !_showSnackBar,
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 250),
+                  opacity: _showSnackBar ? 1.0 : 0.0,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showSnackBar = false;
+                      });
+                    },
+                    child: Material(
+                      color: Colors.transparent,
+                      elevation: 8,
                       borderRadius: BorderRadius.circular(10.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.18),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 14.h,
                         ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.check_circle_rounded,
-                          color: Colors.white,
-                          size: 22,
-                        ),
-                        SizedBox(width: 10.w),
-                        Expanded(
-                          child: Text(
-                            "Thank you for sharing your experience!",
-                            style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w600,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF22C55E),
+                          borderRadius: BorderRadius.circular(10.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.18),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.check_circle_rounded,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                            SizedBox(width: 10.w),
+                            Expanded(
+                              child: Text(
+                                "Thank you for sharing your experience!",
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),

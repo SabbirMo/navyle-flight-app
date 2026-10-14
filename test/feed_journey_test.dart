@@ -9,6 +9,7 @@ import 'package:navyla_flight_app/feature/feed/widget/feed_active_flight_card_wi
 import 'package:navyla_flight_app/feature/feed/widget/feed_card_widget.dart';
 import 'package:navyla_flight_app/feature/feed/widget/feed_my_post_empty_widget.dart';
 import 'package:navyla_flight_app/feature/feed/widget/feed_no_active_journey_widget.dart';
+import 'package:navyla_flight_app/feature/feed/provider/feed_notifier.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 
 void main() {
@@ -168,6 +169,66 @@ void main() {
     expect(
       find.textContaining('Gate B24 is confirmed for flight LH215'),
       findsOneWidget,
+    );
+  });
+
+  testWidgets(
+      'FeedScreen shows FeedNoActiveJourneyWidget on both Feed and My post tabs when no boarding pass is active',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1179, 2556);
+    tester.view.devicePixelRatio = 3.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
+    await tester.pumpWidget(buildTestableFeedScreen(container: container));
+    await tester.pumpAndSettle();
+
+    // 1. Feed tab: No active journey widget is shown
+    expect(find.byType(FeedNoActiveJourneyWidget), findsOneWidget);
+    expect(find.byType(FeedCardWidget), findsNothing);
+
+    // 2. Switch to "My post" tab
+    await tester.tap(find.text('My post'));
+    await tester.pumpAndSettle();
+
+    // Both tabs show FeedNoActiveJourneyWidget and no cards or activity
+    expect(find.byType(FeedNoActiveJourneyWidget), findsOneWidget);
+    expect(find.byType(FeedCardWidget), findsNothing);
+    expect(find.byType(FeedMyPostEmptyWidget), findsNothing);
+  });
+
+  test('FeedNotifier.clearUserPosts clears user posts and vote state on sign out', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
+    // Add active flight
+    container.read(flightJourneyNotifierProvider.notifier).addBoardingPass(
+          flightNumber: 'LH215',
+          originCode: 'AMS',
+          destinationCode: 'FRA',
+        );
+
+    // Add user post
+    container.read(feedNotifierProvider.notifier).addNewPost(
+          category: 'GATE',
+          content: 'Gate changed to B28',
+        );
+
+    expect(
+      container.read(feedNotifierProvider).posts.any((p) => p.isMyPost),
+      isTrue,
+    );
+
+    // Perform sign-out clear
+    container.read(feedNotifierProvider.notifier).clearUserPosts();
+
+    // Verify all user posts are wiped clean
+    expect(
+      container.read(feedNotifierProvider).posts.any((p) => p.isMyPost),
+      isFalse,
     );
   });
 }

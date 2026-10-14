@@ -147,8 +147,7 @@ class FeedScreen extends ConsumerWidget {
 
               // 4. Feed Post List / No Active Journey / Empty State
               Expanded(
-                child:
-                    (!hasBoardingPass && feedState.selectedTab == FeedTab.feed)
+                child: !hasBoardingPass
                     ? FeedNoActiveJourneyWidget(
                         onScanTap: () => context.push(AppRouterName.scanScreen),
                         onManualTap: () => context.push(

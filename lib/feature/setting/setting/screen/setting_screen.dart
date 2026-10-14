@@ -18,6 +18,7 @@ import 'package:navyla_flight_app/feature/setting/setting/widget/subscription_pl
 import 'package:navyla_flight_app/feature/setting/rate_navyla/widget/rate_navyla_bottom_sheet.dart';
 import 'package:navyla_flight_app/core/services/app_preference_service.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
+import 'package:navyla_flight_app/feature/feed/provider/feed_notifier.dart';
 import 'package:navyla_flight_app/feature/ticket/provider/saved_tickets_provider.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
@@ -283,6 +284,9 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                                 .read(flightJourneyNotifierProvider.notifier)
                                 .removeBoardingPass();
                             ref.read(savedTicketsProvider.notifier).removeAll();
+                            ref
+                                .read(feedNotifierProvider.notifier)
+                                .clearUserPosts();
                             ref.read(navbarNotifierProvider.notifier).reset();
                             if (context.mounted) {
                               context.go(AppRouterName.loginScreen);
@@ -305,6 +309,9 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
                                 .read(flightJourneyNotifierProvider.notifier)
                                 .removeBoardingPass();
                             ref.read(savedTicketsProvider.notifier).removeAll();
+                            ref
+                                .read(feedNotifierProvider.notifier)
+                                .clearUserPosts();
                             ref.read(navbarNotifierProvider.notifier).reset();
                             if (context.mounted) {
                               context.go(AppRouterName.loginScreen);

@@ -100,8 +100,10 @@ class FeedNotifier extends Notifier<FeedState> {
       );
     }).toList();
 
-    // User's own created posts are placed at the beginning
-    final allPosts = [..._userCreatedPosts, ...mappedCommunityPosts];
+    // User's own created posts are placed at the beginning when an active flight exists
+    final allPosts = journeyState.hasActiveFlight
+        ? [..._userCreatedPosts, ...mappedCommunityPosts]
+        : const <FeedPostModel>[];
 
     return FeedState(
       posts: allPosts,
@@ -320,6 +322,10 @@ class FeedNotifier extends Notifier<FeedState> {
     required String content,
     String authorName = 'Alex Rivers (You)',
   }) {
+    final hasActiveFlight =
+        ref.read(flightJourneyNotifierProvider).hasActiveFlight;
+    if (!hasActiveFlight) return;
+
     final newPost = FeedPostModel(
       id: 'post_${DateTime.now().millisecondsSinceEpoch}',
       authorName: authorName,
@@ -342,6 +348,10 @@ class FeedNotifier extends Notifier<FeedState> {
     required String category,
     required String content,
   }) {
+    final hasActiveFlight =
+        ref.read(flightJourneyNotifierProvider).hasActiveFlight;
+    if (!hasActiveFlight) return;
+
     for (int i = 0; i < _userCreatedPosts.length; i++) {
       if (_userCreatedPosts[i].id == postId) {
         _userCreatedPosts[i] = _userCreatedPosts[i].copyWith(
@@ -367,6 +377,20 @@ class FeedNotifier extends Notifier<FeedState> {
     _userCreatedPosts.removeWhere((post) => post.id == postId);
     final updatedList = state.posts.where((post) => post.id != postId).toList();
     state = state.copyWith(posts: updatedList);
+  }
+
+  /// Clears all user created posts and vote overrides upon sign-out.
+  void clearUserPosts() {
+    _userCreatedPosts.clear();
+    _realVoteOverrides.clear();
+    _spamVoteOverrides.clear();
+    _realCountDeltas.clear();
+    _spamCountDeltas.clear();
+    state = const FeedState(
+      posts: [],
+      selectedCategory: 'All Updates',
+      selectedTab: FeedTab.feed,
+    );
   }
 }
 

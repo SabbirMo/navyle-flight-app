@@ -47,9 +47,15 @@ void main() {
     // SnackBar appears on click
     expect(find.text('Thank you for sharing your experience!'), findsOneWidget);
 
-    // After 2 seconds, snackbar completes and sheet navigates back
-    await tester.pump(const Duration(milliseconds: 2000));
+    // After delay, page remains open (no redirect to settings page)
+    await tester.pump(const Duration(milliseconds: 2600));
     await tester.pump(const Duration(milliseconds: 350));
+    expect(find.text('Submit Rating'), findsOneWidget);
+    expect(find.text('Share NAVYLA with friends & family'), findsOneWidget);
+
+    // User closes the page manually using the close button
+    await tester.tap(find.byKey(const Key('rate_navyla_close_button')));
+    await tester.pumpAndSettle();
     expect(find.text('Submit Rating'), findsNothing);
   });
 }
