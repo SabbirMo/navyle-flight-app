@@ -20,38 +20,32 @@ class RateNavylaBottomSheet extends StatefulWidget {
       barrierColor: Colors.transparent,
       builder: (ctx) {
         final bottomInset = MediaQuery.of(ctx).viewInsets.bottom;
-        return ScaffoldMessenger(
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            resizeToAvoidBottomInset: false,
-            body: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => Navigator.of(ctx).pop(),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: Colors.black.withValues(alpha: 0.20),
-                  child: AnimatedPadding(
-                    padding: EdgeInsets.only(bottom: bottomInset),
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeOut,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Flexible(
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap:
-                                () {}, // Prevent taps inside bottom sheet from dismissing
-                            child: const RateNavylaBottomSheet(),
-                          ),
-                        ),
-                      ],
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => Navigator.of(ctx).pop(),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.black.withValues(alpha: 0.20),
+              child: AnimatedPadding(
+                padding: EdgeInsets.only(bottom: bottomInset),
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeOut,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Flexible(
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap:
+                            () {}, // Prevent taps inside bottom sheet from dismissing
+                        child: const RateNavylaBottomSheet(),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -68,7 +62,7 @@ class RateNavylaBottomSheet extends StatefulWidget {
 class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
   int _selectedRating = 1;
   final TextEditingController _experienceController = TextEditingController();
-  bool _isShareExpanded = false;
+  bool _isShareExpanded = true;
 
   @override
   void dispose() {
@@ -77,41 +71,17 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
   }
 
   bool _isSubmitting = false;
+  bool _showSnackBar = false;
 
   Future<void> _onShareNavyla() async {
     if (_isSubmitting) return;
+    FocusScope.of(context).unfocus();
     setState(() {
       _isSubmitting = true;
+      _showSnackBar = true;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(
-              Icons.check_circle_rounded,
-              color: Colors.white,
-              size: 20,
-            ),
-            SizedBox(width: 8.w),
-            const Expanded(
-              child: Text(
-                "Thank you for sharing your experience!",
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: const Color(0xFF22C55E),
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(milliseconds: 1500),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.r),
-        ),
-      ),
-    );
-
-    await Future.delayed(const Duration(milliseconds: 1600));
+    await Future.delayed(const Duration(milliseconds: 2000));
     if (mounted) {
       Navigator.of(context).pop();
     }
@@ -181,7 +151,6 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                   ),
 
                   // Review Icon
-                  // SvgPicture.asset(ImageAssets.review, width: 105.w),
                   SizedBox(
                     height: 105.h,
                     child: Lottie.asset("assets/lottie/review.json"),
@@ -404,7 +373,7 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                                   ),
                                 ),
                                 AnimatedRotation(
-                                  turns: _isShareExpanded ? 0.0 : 0.5,
+                                  turns: _isShareExpanded ? 0.5 : 0.0,
                                   duration: const Duration(milliseconds: 200),
                                   child: Icon(
                                     Icons.keyboard_arrow_down_rounded,
@@ -535,6 +504,61 @@ class _RateNavylaBottomSheetState extends State<RateNavylaBottomSheet> {
                       Icons.close_rounded,
                       size: 16.sp,
                       color: isDark ? AppColors.white : const Color(0xFF64748B),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // Floating SnackBar
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCubic,
+              bottom: _showSnackBar ? 20.h : -100.h,
+              left: 16.w,
+              right: 16.w,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 250),
+                opacity: _showSnackBar ? 1.0 : 0.0,
+                child: Material(
+                  color: Colors.transparent,
+                  elevation: 8,
+                  borderRadius: BorderRadius.circular(10.r),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 14.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF22C55E),
+                      borderRadius: BorderRadius.circular(10.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.18),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.check_circle_rounded,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: Text(
+                            "Thank you for sharing your experience!",
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
