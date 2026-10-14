@@ -23,86 +23,93 @@ class FeedHeaderWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
       child: ConstrainedBox(
         constraints: BoxConstraints(minHeight: 38.w),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            // Back Button + NAVYLA FEED Brand Header
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (onBackTap != null) ...[
-                  GestureDetector(
-                    key: const Key('feed_back_button'),
-                    onTap: onBackTap,
-                    behavior: HitTestBehavior.opaque,
-                    child: Container(
-                      width: 38.w,
-                      height: 38.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isDark
-                            ? AppColors.lightGray.withValues(alpha: 0.2)
-                            : Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.2),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          color: isDark ? AppColors.white : AppColors.blackShadow,
-                          size: 18.sp,
+            // Left: Back to Home Arrow Button
+            if (onBackTap != null)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                  key: const Key('feed_back_button'),
+                  onTap: onBackTap,
+                  behavior: HitTestBehavior.opaque,
+                  child: Container(
+                    width: 38.w,
+                    height: 38.w,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isDark
+                          ? AppColors.lightGray.withValues(alpha: 0.2)
+                          : Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.2),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
                         ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: isDark ? AppColors.white : AppColors.blackShadow,
+                        size: 18.sp,
                       ),
                     ),
                   ),
-                  SizedBox(width: 12.w),
-                ],
-                SizedBox(
-                  width: 100.w,
-                  child: Image.asset(
-                    isDark ? ImageAssets.navylaWhite : ImageAssets.navyla,
+                ),
+              ),
+
+            // Center: NAVYLA Logo + "FEED" Title (centered in header)
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 100.w,
+                    child: Image.asset(
+                      isDark ? ImageAssets.navylaWhite : ImageAssets.navyla,
+                    ),
                   ),
-                ),
-                SizedBox(width: 8.w),
-                Text(
-                  'FEED',
-                  style: StyleManager.sfProBold16(
-                    isDark ? AppColors.white : AppColors.feedColor,
-                  ).copyWith(fontSize: 18.sp),
-                ),
-              ],
+                  SizedBox(width: 8.w),
+                  Text(
+                    'FEED',
+                    style: StyleManager.sfProBold16(
+                      isDark ? AppColors.white : AppColors.feedColor,
+                    ).copyWith(fontSize: 18.sp),
+                  ),
+                ],
+              ),
             ),
 
-            // Orange '+' Button
+            // Right: Orange '+' Button
             if (showAddButton)
-              GestureDetector(
-                onTap: onAddPostTap,
-                child: Container(
-                  width: 38.w,
-                  height: 38.w,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(14.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primaryColor.withValues(alpha: 0.38),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+              Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: onAddPostTap,
+                  child: Container(
+                    width: 38.w,
+                    height: 38.w,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      borderRadius: BorderRadius.circular(14.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primaryColor.withValues(alpha: 0.38),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.add_rounded,
+                        color: Colors.white,
+                        size: 26.sp,
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.add_rounded,
-                      color: Colors.white,
-                      size: 26.sp,
                     ),
                   ),
                 ),
