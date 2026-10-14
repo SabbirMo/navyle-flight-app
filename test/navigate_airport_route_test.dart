@@ -51,7 +51,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify Title in header
-    expect(find.text('EXPLORE YOUR AIRPORT'), findsOneWidget);
+    expect(find.text('NAVIGATE YOUR ROUTE'), findsOneWidget);
 
     // Verify Search bar
     expect(find.text('Search terminal'), findsOneWidget);

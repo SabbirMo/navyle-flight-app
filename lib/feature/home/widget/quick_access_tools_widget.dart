@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
+import 'package:navyla_flight_app/feature/explore_nearby/model/explore_nearby_state.dart';
 import 'package:navyla_flight_app/feature/home/model/quick_access_tool_model.dart';
 import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
@@ -69,11 +70,28 @@ class QuickAccessToolsWidget extends ConsumerWidget {
                 onTap:
                     onExploreNearbyTap ??
                     () {
-                      final hasBoardingPass = ref
-                          .read(flightJourneyNotifierProvider)
-                          .hasActiveFlight;
-                      if (hasBoardingPass) {
-                        context.push(AppRouterName.navigateAirportRoute);
+                      final journey = ref.read(flightJourneyNotifierProvider);
+                      if (journey.hasActiveFlight) {
+                        final hubs = const ExploreNearbyState().allHubs;
+                        final originCode = journey.originCode ?? 'AMS';
+                        final hub = hubs.firstWhere(
+                          (h) =>
+                              h.code.toUpperCase() == originCode.toUpperCase(),
+                          orElse: () => AirportHubItem(
+                            code: originCode,
+                            name:
+                                journey.originCity != null &&
+                                    journey.originCity!.isNotEmpty
+                                ? journey.originCity!
+                                : originCode,
+                            subtitle:
+                                '${journey.originCity ?? originCode} • Terminal ${journey.terminal ?? '1'}',
+                          ),
+                        );
+                        context.push(
+                          AppRouterName.exploreHubDetailsScreen,
+                          extra: hub,
+                        );
                       } else {
                         context.push(AppRouterName.exploreNearbyScreen);
                       }

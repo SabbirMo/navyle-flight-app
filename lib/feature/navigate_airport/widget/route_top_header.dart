@@ -83,7 +83,7 @@ class RouteTopHeader extends StatelessWidget {
                   Expanded(
                     child: Center(
                       child: Text(
-                        'EXPLORE YOUR AIRPORT',
+                        'NAVIGATE YOUR ROUTE',
                         style: GoogleFonts.inter(
                           fontSize: 14.5.sp,
                           fontWeight: FontWeight.w700,

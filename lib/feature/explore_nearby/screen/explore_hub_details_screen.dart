@@ -176,18 +176,36 @@ class _ExploreHubDetailsScreenState extends State<ExploreHubDetailsScreen> {
                 SizedBox(width: 10.w),
                 Expanded(
                   child: Center(
-                    child: Text(
-                      'EXPLORE ${_currentHub.name.toUpperCase()} (${_currentHub.code.toUpperCase()})',
-                      style: GoogleFonts.inter(
-                        fontSize: 12.5.sp,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.6,
-                        color: isDark
-                            ? AppColors.white
-                            : const Color(0xFF0F172A),
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'EXPLORE YOUR AIRPORT',
+                          style: GoogleFonts.inter(
+                            fontSize: 13.5.sp,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.8,
+                            color: isDark
+                                ? AppColors.white
+                                : const Color(0xFF0F172A),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 2.h),
+                        Text(
+                          '${_currentHub.name} (${_currentHub.code.toUpperCase()})',
+                          style: GoogleFonts.inter(
+                            fontSize: 11.5.sp,
+                            fontWeight: FontWeight.w600,
+                            color: isDark
+                                ? AppColors.primaryColor
+                                : const Color(0xFF2563EB),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ),
                 ),

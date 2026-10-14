@@ -251,17 +251,56 @@ class _ExploreNearbyScreenState extends State<ExploreNearbyScreen> {
                   ),
                   Expanded(
                     child: Center(
-                      child: Text(
-                        effectiveAirport ?? "SELECT AIRPORT",
-                        style: GoogleFonts.inter(
-                          fontSize: effectiveAirport != null ? 15.5.sp : 14.sp,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: effectiveAirport != null ? 1.5 : 1.1,
-                          color: isDark
-                              ? AppColors.white
-                              : const Color(0xFF0F172A),
-                        ),
-                      ),
+                      child: effectiveAirport != null
+                          ? Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "EXPLORE YOUR AIRPORT",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 13.5.sp,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 0.8,
+                                    color: isDark
+                                        ? AppColors.white
+                                        : const Color(0xFF0F172A),
+                                  ),
+                                ),
+                                SizedBox(height: 2.h),
+                                Text(
+                                  state.allHubs
+                                      .firstWhere(
+                                        (h) =>
+                                            h.code.toUpperCase() ==
+                                            effectiveAirport.toUpperCase(),
+                                        orElse: () => AirportHubItem(
+                                          code: effectiveAirport,
+                                          name: effectiveAirport,
+                                          subtitle: '',
+                                        ),
+                                      )
+                                      .name,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 11.5.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: isDark
+                                        ? AppColors.primaryColor
+                                        : const Color(0xFF2563EB),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Text(
+                              "SELECT AIRPORT",
+                              style: GoogleFonts.inter(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 1.1,
+                                color: isDark
+                                    ? AppColors.white
+                                    : const Color(0xFF0F172A),
+                              ),
+                            ),
                     ),
                   ),
                   SizedBox(width: 38.w), // Balance back button
