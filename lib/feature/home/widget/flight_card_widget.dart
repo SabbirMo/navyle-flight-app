@@ -35,7 +35,7 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 7000),
+      duration: const Duration(milliseconds: 6000),
     );
 
     _setupAnimation();
@@ -52,85 +52,53 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
   }
 
   void _setupAnimation() {
-    // Complete back-and-forth sway takes ~2.45s (in 2-3s range).
-    // Sways gently 2-3 times, then settles smoothly into the static tilted position (_settledTilt = 0.85).
+    // Exactly two complete back-and-forth sways (~2.6-2.7s per sway, within 2-3s range),
+    // with uniform speed throughout: the speed before stopping matches the speed at the beginning.
+    // Smoothly settles into the agreed static tilted position (_settledTilt = 0.85).
     _tiltAnimation = TweenSequence<double>([
-      // --- CYCLE 1: First complete back-and-forth sway (~2.45s) ---
-      // 1. Initial gentle glide right towards peak (+0.95)
+      // --- SWAY 1: First complete back-and-forth sway (~2.65s) ---
+      // 1. Initial gentle glide right from flat (0.0) to peak (+0.95)
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 0.0,
           end: 0.95,
         ).chain(CurveTween(curve: Curves.easeOutSine)),
-        weight: 9.0, // ~630ms
+        weight: 12.0, // ~720ms
       ),
-      // 2. Smooth, full sway left across center to opposite side (-0.55)
+      // 2. Smooth, uninterrupted sway left across center to opposite crest (-0.60)
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 0.95,
-          end: -0.55,
+          end: -0.60,
         ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 17.0, // ~1190ms
+        weight: 22.5, // ~1350ms
       ),
-      // 3. Return sway through center back towards right (+0.40)
+      // 3. Return sway through center back to right crest (+0.90) - completes 1st full sway!
       TweenSequenceItem(
         tween: Tween<double>(
-          begin: -0.55,
-          end: 0.40,
-        ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 9.0, // ~630ms
-      ),
-
-      // --- CYCLE 2: Second complete back-and-forth sway (~2.45s) ---
-      // 4. Continue smooth swing to right peak (+0.92)
-      TweenSequenceItem(
-        tween: Tween<double>(
-          begin: 0.40,
-          end: 0.92,
-        ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 9.0, // ~630ms
-      ),
-      // 5. Smooth sway across to left side (-0.45)
-      TweenSequenceItem(
-        tween: Tween<double>(
-          begin: 0.92,
-          end: -0.45,
-        ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 17.0, // ~1190ms
-      ),
-      // 6. Return sway through center towards right (+0.50)
-      TweenSequenceItem(
-        tween: Tween<double>(
-          begin: -0.45,
-          end: 0.50,
-        ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 9.0, // ~630ms
-      ),
-
-      // --- CYCLE 3: Third sway gently settling into the static tilted position (~2.10s) ---
-      // 7. Gentle crest towards right (+0.90)
-      TweenSequenceItem(
-        tween: Tween<double>(
-          begin: 0.50,
+          begin: -0.60,
           end: 0.90,
         ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 11.0, // ~770ms
+        weight: 22.5, // ~1350ms
       ),
-      // 8. Soft natural damping rebound (+0.78)
+
+      // --- SWAY 2: Second complete back-and-forth sway at the EXACT same uniform speed (~2.6s) ---
+      // 4. Smooth, uninterrupted sway left across center to opposite crest (-0.50)
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 0.90,
-          end: 0.78,
+          end: -0.50,
         ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 10.0, // ~700ms
+        weight: 21.5, // ~1290ms
       ),
-      // 9. Smoothly settle into the current tilted position (_settledTilt = 0.85)
+      // 5. Return sway at the same steady speed, settling naturally into static tilt (_settledTilt = 0.85)
       TweenSequenceItem(
         tween: Tween<double>(
-          begin: 0.78,
+          begin: -0.50,
           end: _settledTilt,
-        ).chain(CurveTween(curve: Curves.easeOutCubic)),
-        weight: 9.0, // ~630ms
+        ).chain(CurveTween(curve: Curves.easeInOutSine)),
+        weight:
+            21.5, // ~1290ms - identical uniform tempo, no speeding up before stopping
       ),
     ]).animate(_controller);
   }
@@ -417,44 +385,43 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
               clipBehavior: Clip.none,
               children: [
                 // 1. 3D Physical Extruded Card Body (Tactile thickness & depth on the tilted side)
-                if (effectiveTilt.abs() > 0.05)
-                  Positioned(
-                    left: effectiveTilt > 0 ? -extrusionOffset : 0,
-                    right: effectiveTilt < 0 ? -extrusionOffset : 0,
-                    top: 0,
-                    bottom: 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(22.r),
-                        gradient: const LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            Color(
-                              0xFFE65100,
-                            ), // Darker orange edge for physical 3D bevel
-                            Color(0xFFFA7E23), // Rich orange body
-                          ],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(
-                              0xFFFF6D00,
-                            ).withValues(alpha: isDark ? 0.25 : 0.16),
-                            blurRadius: 14,
-                            offset: Offset(-effectiveTilt * 4.5.w, 7.h),
-                          ),
-                          BoxShadow(
-                            color: Colors.black.withValues(
-                              alpha: isDark ? 0.15 : 0.08,
-                            ),
-                            blurRadius: 8,
-                            offset: Offset(-effectiveTilt * 2.0.w, 4.h),
-                          ),
+                Positioned(
+                  left: effectiveTilt > 0 ? -extrusionOffset : 0,
+                  right: effectiveTilt < 0 ? -extrusionOffset : 0,
+                  top: 0,
+                  bottom: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22.r),
+                      gradient: const LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Color(
+                            0xFFE65100,
+                          ), // Darker orange edge for physical 3D bevel
+                          Color(0xFFFA7E23), // Rich orange body
                         ],
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(
+                            0xFFFF6D00,
+                          ).withValues(alpha: isDark ? 0.25 : 0.16),
+                          blurRadius: 14,
+                          offset: Offset(-effectiveTilt * 4.5.w, 7.h),
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withValues(
+                            alpha: isDark ? 0.15 : 0.08,
+                          ),
+                          blurRadius: 8,
+                          offset: Offset(-effectiveTilt * 2.0.w, 4.h),
+                        ),
+                      ],
                     ),
                   ),
+                ),
 
                 // 2. Front Face Card (Crisp content with thin refined front outline)
                 Container(
@@ -465,24 +432,6 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
                       color: const Color(0xFFFF9233).withValues(alpha: 0.85),
                       width: 0.8.w,
                     ),
-                    boxShadow: effectiveTilt.abs() <= 0.05
-                        ? [
-                            BoxShadow(
-                              color: const Color(
-                                0xFFFF6D00,
-                              ).withValues(alpha: isDark ? 0.25 : 0.16),
-                              blurRadius: 18,
-                              offset: Offset(0, 8.h),
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withValues(
-                                alpha: isDark ? 0.10 : 0.05,
-                              ),
-                              blurRadius: 10,
-                              offset: Offset(0, 4.h),
-                            ),
-                          ]
-                        : null,
                   ),
                   child: cachedCard,
                 ),
