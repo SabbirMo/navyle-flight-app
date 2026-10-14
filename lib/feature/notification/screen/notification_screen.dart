@@ -32,11 +32,50 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
       sections.putIfAbsent(item.section, () => []).add(item);
     }
 
+    final hasUnread = notifications.any((n) => n.isUnread);
+
     return CommonScreen(
       child: Column(
         children: [
-          // Header with Back Button
-          const CustomBackButton(title: "NOTIFICATIONS", isBorder: true),
+          // Header with Back Button & optional Mark all read action
+          CustomBackButton(
+            title: "NOTIFICATIONS",
+            isBorder: true,
+            trailing: hasUnread
+                ? Tooltip(
+                    message: "Mark all as read",
+                    child: GestureDetector(
+                      onTap: () => notifier.markAllAsRead(),
+                      child: Container(
+                        width: 36.w,
+                        height: 36.w,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.white.withValues(alpha: 0.2)
+                              : AppColors.white,
+                          borderRadius: BorderRadius.circular(12.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.blackShadow.withValues(alpha: 0.12),
+                              blurRadius: 6,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.done_all_rounded,
+                            size: 18.sp,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? AppColors.white
+                                : AppColors.primaryColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : null,
+          ),
           SizedBox(height: 12.h),
 
           // Scrollable Notifications List

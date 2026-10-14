@@ -12,6 +12,7 @@ class HomeHeaderWidget extends StatelessWidget {
   final String? userName;
   final VoidCallback? onNotificationTap;
   final VoidCallback? onSettingsTap;
+  final bool hasUnread;
 
   const HomeHeaderWidget({
     super.key,
@@ -20,6 +21,7 @@ class HomeHeaderWidget extends StatelessWidget {
     this.userName,
     this.onNotificationTap,
     this.onSettingsTap,
+    this.hasUnread = false,
   });
 
   @override
@@ -114,18 +116,6 @@ class HomeHeaderWidget extends StatelessWidget {
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Positioned(
-                    top: -2,
-                    right: 0,
-                    child: Container(
-                      width: 8.w,
-                      height: 8.h,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
                   SvgPicture.asset(
                     ImageAssets.notification,
                     colorFilter: ColorFilter.mode(
@@ -133,6 +123,19 @@ class HomeHeaderWidget extends StatelessWidget {
                       BlendMode.srcIn,
                     ),
                   ),
+                  if (hasUnread)
+                    Positioned(
+                      top: -2,
+                      right: 0,
+                      child: Container(
+                        width: 8.w,
+                        height: 8.h,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),

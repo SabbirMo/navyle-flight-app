@@ -35,7 +35,7 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3200),
+      duration: const Duration(milliseconds: 7000),
     );
 
     _setupAnimation();
@@ -52,47 +52,85 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
   }
 
   void _setupAnimation() {
-    // Sway gently 2-3 times, then settle into the static position from the client's picture
+    // Complete back-and-forth sway takes ~2.45s (in 2-3s range).
+    // Sways gently 2-3 times, then settles smoothly into the static tilted position (_settledTilt = 0.85).
     _tiltAnimation = TweenSequence<double>([
-      // 1. Initial gentle sway right
+      // --- CYCLE 1: First complete back-and-forth sway (~2.45s) ---
+      // 1. Initial gentle glide right towards peak (+0.95)
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 0.0,
           end: 0.95,
         ).chain(CurveTween(curve: Curves.easeOutSine)),
-        weight: 20.0,
+        weight: 9.0, // ~630ms
       ),
-      // 2. Sway back left
+      // 2. Smooth, full sway left across center to opposite side (-0.55)
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 0.95,
+          end: -0.55,
+        ).chain(CurveTween(curve: Curves.easeInOutSine)),
+        weight: 17.0, // ~1190ms
+      ),
+      // 3. Return sway through center back towards right (+0.40)
+      TweenSequenceItem(
+        tween: Tween<double>(
+          begin: -0.55,
+          end: 0.40,
+        ).chain(CurveTween(curve: Curves.easeInOutSine)),
+        weight: 9.0, // ~630ms
+      ),
+
+      // --- CYCLE 2: Second complete back-and-forth sway (~2.45s) ---
+      // 4. Continue smooth swing to right peak (+0.92)
+      TweenSequenceItem(
+        tween: Tween<double>(
+          begin: 0.40,
+          end: 0.92,
+        ).chain(CurveTween(curve: Curves.easeInOutSine)),
+        weight: 9.0, // ~630ms
+      ),
+      // 5. Smooth sway across to left side (-0.45)
+      TweenSequenceItem(
+        tween: Tween<double>(
+          begin: 0.92,
           end: -0.45,
         ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 24.0,
+        weight: 17.0, // ~1190ms
       ),
-      // 3. Sway right (smaller amplitude)
+      // 6. Return sway through center towards right (+0.50)
       TweenSequenceItem(
         tween: Tween<double>(
           begin: -0.45,
+          end: 0.50,
+        ).chain(CurveTween(curve: Curves.easeInOutSine)),
+        weight: 9.0, // ~630ms
+      ),
+
+      // --- CYCLE 3: Third sway gently settling into the static tilted position (~2.10s) ---
+      // 7. Gentle crest towards right (+0.90)
+      TweenSequenceItem(
+        tween: Tween<double>(
+          begin: 0.50,
           end: 0.90,
         ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 22.0,
+        weight: 11.0, // ~770ms
       ),
-      // 4. Subtle oscillation
+      // 8. Soft natural damping rebound (+0.78)
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 0.90,
-          end: 0.65,
+          end: 0.78,
         ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 16.0,
+        weight: 10.0, // ~700ms
       ),
-      // 5. Smoothly settle into static tilted position
+      // 9. Smoothly settle into the current tilted position (_settledTilt = 0.85)
       TweenSequenceItem(
         tween: Tween<double>(
-          begin: 0.65,
+          begin: 0.78,
           end: _settledTilt,
         ).chain(CurveTween(curve: Curves.easeOutCubic)),
-        weight: 18.0,
+        weight: 9.0, // ~630ms
       ),
     ]).animate(_controller);
   }

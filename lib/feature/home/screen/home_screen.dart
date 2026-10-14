@@ -20,6 +20,7 @@ import 'package:navyla_flight_app/feature/home/widget/quick_access_tools_widget.
 import 'package:navyla_flight_app/feature/home/widget/travel_offers_widget.dart';
 import 'package:navyla_flight_app/feature/more/model/more_model.dart';
 import 'package:navyla_flight_app/feature/navbar/provider/navbar_notifier.dart';
+import 'package:navyla_flight_app/feature/notification/provider/notification_notifier.dart';
 import 'package:navyla_flight_app/router/app_router_name.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -48,8 +49,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
     final journeyState = ref.watch(flightJourneyNotifierProvider);
     final hasBoardingPass = journeyState.hasActiveFlight;
+    final notifications = ref.watch(notificationNotifierProvider);
+    final hasUnreadNotifications = notifications.any((n) => n.isUnread);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isStressFree = journeyState.isStressFreeActive;
 
     final scaffoldBg = isDark ? AppColors.darkBlack : const Color(0xFFF8FAFC);
 
@@ -107,14 +109,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         children: [
                           SizedBox(height: 6.h),
                           // 1. Top Header Bar (Alex + Logo + Notification) - scrolls up with content
-                          _buildActiveHeroHeader(context, isDark),
+                          _buildActiveHeroHeader(
+                            context,
+                            isDark,
+                            hasUnreadNotifications,
+                          ),
                           SizedBox(height: 12.h),
-
-                          // 2. 60-Minute Stress-Free Mode Banner (When active)
-                          if (isStressFree) ...[
-                            _buildStressFreeActiveBanner(context, isDark),
-                            SizedBox(height: 10.h),
-                          ],
 
                           // 3. Weather / City / Local Time Strip
                           const CityWeatherCard(),
@@ -186,6 +186,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             HomeHeaderWidget(
               greeting: AppString.goodMorning,
               userName: AppString.defaultUserName,
+              hasUnread: hasUnreadNotifications,
               onSettingsTap: () => context.push(AppRouterName.settingScreen),
               onNotificationTap: () =>
                   context.push(AppRouterName.notificationScreen),
@@ -232,76 +233,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  /// 60-Minute Stress-Free Mode Banner (Tappable to open dedicated page)
-  Widget _buildStressFreeActiveBanner(BuildContext context, bool isDark) {
-    return GestureDetector(
-      onTap: () => context.push(AppRouterName.boardingPassScreen),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 9.h),
-        decoration: BoxDecoration(
-          color: const Color(0xFFEAB308).withValues(alpha: 0.18),
-          borderRadius: BorderRadius.circular(14.r),
-          border: Border.all(
-            color: const Color(0xFFEAB308).withValues(alpha: 0.6),
-            width: 1.2,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFFEAB308).withValues(alpha: 0.15),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(5.w),
-              decoration: const BoxDecoration(
-                color: Color(0xFFEAB308),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(Icons.bolt_rounded, color: Colors.black, size: 14.sp),
-            ),
-            SizedBox(width: 10.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '60-MIN STRESS-FREE MODE ACTIVE',
-                    style: GoogleFonts.inter(
-                      fontSize: 11.sp,
-                      fontWeight: FontWeight.w800,
-                      color: isDark ? Colors.white : const Color(0xFF854D0E),
-                      letterSpacing: 0.6,
-                    ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    'Critical journey details prioritized • Tap for full hub',
-                    style: GoogleFonts.inter(
-                      fontSize: 9.5.sp,
-                      fontWeight: FontWeight.w500,
-                      color: isDark ? Colors.white70 : const Color(0xFF713F12),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 12.sp,
-              color: isDark ? Colors.white : const Color(0xFF854D0E),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActiveHeroHeader(BuildContext context, bool isDark) {
+  Widget _buildActiveHeroHeader(
+    BuildContext context,
+    bool isDark,
+    bool hasUnread,
+  ) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(100.r),
       child: Container(
@@ -412,20 +348,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      // Notification dot indicator
-                      Positioned(
-                        top: -1,
-                        right: -1,
-                        child: Container(
-                          width: 8.w,
-                          height: 8.w,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFF5252),
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 1.5),
+                      // Notification dot indicator (shown only when unread notifications remain)
+                      if (hasUnread)
+                        Positioned(
+                          top: -1,
+                          right: -1,
+                          child: Container(
+                            width: 8.w,
+                            height: 8.w,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFF5252),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 1.5),
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),

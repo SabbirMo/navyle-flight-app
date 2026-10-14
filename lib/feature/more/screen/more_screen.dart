@@ -64,6 +64,7 @@ class MoreContentScreen extends StatelessWidget {
         elevation: 0,
         scrolledUnderElevation: 0,
         backgroundColor: isDark ? AppColors.darkBlack : null,
+        centerTitle: true,
         title: Image.asset(
           isDark ? ImageAssets.navylaWhite : ImageAssets.navyla,
           width: 100.w,

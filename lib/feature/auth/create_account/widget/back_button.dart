@@ -15,6 +15,7 @@ class CustomBackButton extends StatelessWidget {
     this.onTap,
     this.imageSize,
     this.isBorder = false,
+    this.trailing,
   });
 
   final IconData icon;
@@ -26,6 +27,7 @@ class CustomBackButton extends StatelessWidget {
   final VoidCallback? onTap;
   final double? imageSize;
   final bool isBorder;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +123,13 @@ class CustomBackButton extends StatelessWidget {
                     ),
             ),
           ),
-          SizedBox(width: btnSize),
+          trailing != null
+              ? SizedBox(
+                  width: btnSize,
+                  height: btnSize,
+                  child: Center(child: trailing),
+                )
+              : SizedBox(width: btnSize),
         ],
       ),
     );
