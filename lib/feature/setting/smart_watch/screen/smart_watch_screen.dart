@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
+import 'package:navyla_flight_app/core/services/app_preference_service.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/core/widgets/custom_button.dart';
@@ -50,8 +51,17 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
         widget.initialWatchType ??
         (isIOS ? SmartWatchType.appleWatch : SmartWatchType.wearOs);
 
-    // 2. Open directly in the approved device state (simulated ready & connected)
-    _syncState = widget.initialState ?? SmartWatchSyncState.ready;
+    // 2. Initial setup vs subsequent visits:
+    // If widget.initialState is provided (e.g. in tests/overrides), use it.
+    // Otherwise, if setup was previously completed, open directly in ready state.
+    // For an initial setup (not yet completed), open at notPaired (connection/setup state).
+    if (widget.initialState != null) {
+      _syncState = widget.initialState!;
+    } else if (AppPreferenceService.isSmartWatchSetupCompleted) {
+      _syncState = SmartWatchSyncState.ready;
+    } else {
+      _syncState = SmartWatchSyncState.notPaired;
+    }
 
     // 3. Floating entrance animation for the device badge over the radar
     _badgeFloatController = AnimationController(
@@ -128,12 +138,51 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
     }
   }
 
-  void _onActionButtonPressed() {
+  Future<void> _openInstallApp() async {
+    final url = _isAppleWatch
+        ? "https://apps.apple.com/app/navyla"
+        : "https://play.google.com/store/apps/details?id=com.google.android.wearable.app";
+    try {
+      final uri = Uri.parse(url);
+      final launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched) {
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
+      }
+    } catch (e) {
+      debugPrint("Could not open watch install app: $e");
+    }
+  }
+
+  Future<void> _onActionButtonPressed() async {
     switch (_syncState) {
       case SmartWatchSyncState.notPaired:
-      case SmartWatchSyncState.appNotInstalled:
+        // Launch companion app and advance to detected/install state
         _openWatchApp();
+        if (mounted) {
+          setState(() {
+            _syncState = SmartWatchSyncState.appNotInstalled;
+          });
+          _badgeFloatController.reset();
+          _badgeFloatController.forward();
+        }
         break;
+
+      case SmartWatchSyncState.appNotInstalled:
+        // Launch store install, save completed setup, and advance to ready
+        _openInstallApp();
+        await AppPreferenceService.setSmartWatchSetupCompleted(true);
+        if (mounted) {
+          setState(() {
+            _syncState = SmartWatchSyncState.ready;
+          });
+          _badgeFloatController.reset();
+          _badgeFloatController.forward();
+        }
+        break;
+
       case SmartWatchSyncState.ready:
         if (Navigator.of(context).canPop()) {
           Navigator.of(context).pop();
@@ -690,6 +739,48 @@ class _SmartWatchScreenState extends State<SmartWatchScreen>
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              if (_syncState == SmartWatchSyncState.ready) ...[
+                SizedBox(height: 14.h),
+                InkWell(
+                  onTap: () async {
+                    await AppPreferenceService.setSmartWatchSetupCompleted(
+                      false,
+                    );
+                    if (mounted) {
+                      setState(() {
+                        _syncState = SmartWatchSyncState.notPaired;
+                      });
+                      _badgeFloatController.reset();
+                      _badgeFloatController.forward();
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4.h),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.refresh_rounded,
+                          size: 16.sp,
+                          color: const Color(0xFFEF4444),
+                        ),
+                        SizedBox(width: 6.w),
+                        Flexible(
+                          child: Text(
+                            "Reset Smartwatch Setup",
+                            style: GoogleFonts.inter(
+                              fontSize: 12.sp,
+                              color: const Color(0xFFEF4444),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
           actions: [

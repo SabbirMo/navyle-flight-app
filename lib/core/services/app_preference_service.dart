@@ -13,7 +13,7 @@ class AppPreferenceService {
   static SharedPreferences? _prefs;
 
   static Future<void> init() async {
-    _prefs ??= await SharedPreferences.getInstance();
+    _prefs = await SharedPreferences.getInstance();
   }
 
   // ==========================================
@@ -87,11 +87,25 @@ class AppPreferenceService {
   }
 
   // ==========================================
+  // Smartwatch Setup
+  // ==========================================
+  static const String _keySmartWatchSetupCompleted =
+      'app_smartwatch_setup_completed';
+
+  static bool get isSmartWatchSetupCompleted =>
+      _prefs?.getBool(_keySmartWatchSetupCompleted) ?? false;
+
+  static Future<void> setSmartWatchSetupCompleted(bool value) async {
+    await _prefs?.setBool(_keySmartWatchSetupCompleted, value);
+  }
+
+  // ==========================================
   // Sign Out / Delete Account Clear
   // ==========================================
   static Future<void> clearUserSession() async {
     await _prefs?.setBool(_keyIsLoggedIn, false);
     await _prefs?.remove(_keySavedTickets);
     await _prefs?.remove(_keyFlightJourney);
+    await _prefs?.remove(_keySmartWatchSetupCompleted);
   }
 }
