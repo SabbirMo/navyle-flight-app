@@ -35,7 +35,7 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 6000),
+      duration: const Duration(milliseconds: 7000),
     );
 
     _setupAnimation();
@@ -52,18 +52,15 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
   }
 
   void _setupAnimation() {
-    // Exactly two complete back-and-forth sways (~2.6-2.7s per sway, within 2-3s range),
-    // with uniform speed throughout: the speed before stopping matches the speed at the beginning.
-    // Smoothly settles into the agreed static tilted position (_settledTilt = 0.85).
     _tiltAnimation = TweenSequence<double>([
-      // --- SWAY 1: First complete back-and-forth sway (~2.65s) ---
+      // --- SWAY 1: First complete back-and-forth sway (3.5s) ---
       // 1. Initial gentle glide right from flat (0.0) to peak (+0.95)
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 0.0,
           end: 0.95,
         ).chain(CurveTween(curve: Curves.easeOutSine)),
-        weight: 12.0, // ~720ms
+        weight: 8.0, // ~800ms
       ),
       // 2. Smooth, uninterrupted sway left across center to opposite crest (-0.60)
       TweenSequenceItem(
@@ -71,7 +68,7 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
           begin: 0.95,
           end: -0.60,
         ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 22.5, // ~1350ms
+        weight: 13.5, // ~1350ms
       ),
       // 3. Return sway through center back to right crest (+0.90) - completes 1st full sway!
       TweenSequenceItem(
@@ -79,26 +76,26 @@ class _FlightCardWidgetState extends ConsumerState<FlightCardWidget>
           begin: -0.60,
           end: 0.90,
         ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 22.5, // ~1350ms
+        weight: 13.5, // ~1350ms
       ),
 
-      // --- SWAY 2: Second complete back-and-forth sway at the EXACT same uniform speed (~2.6s) ---
-      // 4. Smooth, uninterrupted sway left across center to opposite crest (-0.50)
+      // --- SWAY 2: Second complete back-and-forth sway (3.5s) ---
+      // 4. Smooth, uninterrupted sway left across center to opposite crest (-0.45)
       TweenSequenceItem(
         tween: Tween<double>(
           begin: 0.90,
-          end: -0.50,
+          end: -0.45,
         ).chain(CurveTween(curve: Curves.easeInOutSine)),
-        weight: 21.5, // ~1290ms
+        weight: 14.0, // ~1400ms
       ),
-      // 5. Return sway at the same steady speed, settling naturally into static tilt (_settledTilt = 0.85)
+      // 5. Final movement towards the static tilted position: gradually reduce speed so it settles softly
       TweenSequenceItem(
         tween: Tween<double>(
-          begin: -0.50,
+          begin: -0.45,
           end: _settledTilt,
-        ).chain(CurveTween(curve: Curves.easeInOutSine)),
+        ).chain(CurveTween(curve: Curves.easeInOutCubic)),
         weight:
-            21.5, // ~1290ms - identical uniform tempo, no speeding up before stopping
+            21.0, // ~2100ms - extended gradual deceleration tail for soft, cushioned settling
       ),
     ]).animate(_controller);
   }
