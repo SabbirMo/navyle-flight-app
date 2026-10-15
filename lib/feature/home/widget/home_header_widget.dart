@@ -5,10 +5,10 @@ import 'package:navyla_flight_app/core/app_string/app_string.dart';
 import 'package:navyla_flight_app/core/colors/app_colors.dart';
 import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
+import 'package:navyla_flight_app/core/utils/getting.dart';
 
 class HomeHeaderWidget extends StatelessWidget {
   final String? avatarUrl;
-  final String? greeting;
   final String? userName;
   final VoidCallback? onNotificationTap;
   final VoidCallback? onSettingsTap;
@@ -17,7 +17,6 @@ class HomeHeaderWidget extends StatelessWidget {
   const HomeHeaderWidget({
     super.key,
     this.avatarUrl,
-    this.greeting,
     this.userName,
     this.onNotificationTap,
     this.onSettingsTap,
@@ -59,7 +58,7 @@ class HomeHeaderWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              greeting ?? AppString.goodMorning,
+              "${Getting.getGreeting()}, ",
               style: StyleManager.interMedium12(
                 isDark ? AppColors.grayD3D3D3 : AppColors.darkGrayColor,
               ),

@@ -184,9 +184,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           children: [
             // Home Header inside scroll view so it scrolls upward naturally
             HomeHeaderWidget(
-              greeting: AppString.goodMorning,
               userName: AppString.defaultUserName,
-              hasUnread: hasUnreadNotifications,
+              hasUnread: hasBoardingPass && hasUnreadNotifications,
               onSettingsTap: () => context.push(AppRouterName.settingScreen),
               onNotificationTap: () =>
                   context.push(AppRouterName.notificationScreen),
@@ -359,7 +358,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             decoration: BoxDecoration(
                               color: const Color(0xFFFF5252),
                               shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 1.5),
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 1.5,
+                              ),
                             ),
                           ),
                         ),

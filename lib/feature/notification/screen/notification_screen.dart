@@ -8,6 +8,7 @@ import 'package:navyla_flight_app/core/image_manager/image_assets.dart';
 import 'package:navyla_flight_app/core/style_manager/style_manager.dart';
 import 'package:navyla_flight_app/core/widgets/common_screen.dart';
 import 'package:navyla_flight_app/feature/auth/create_account/widget/back_button.dart';
+import 'package:navyla_flight_app/feature/home/provider/flight_journey_notifier.dart';
 import 'package:navyla_flight_app/feature/notification/model/notification_item.dart';
 import 'package:navyla_flight_app/feature/notification/provider/notification_notifier.dart';
 import 'package:navyla_flight_app/feature/notification/widget/notification_card.dart';
@@ -23,6 +24,8 @@ class NotificationScreen extends ConsumerStatefulWidget {
 class _NotificationScreenState extends ConsumerState<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
+    final journeyState = ref.watch(flightJourneyNotifierProvider);
+    final hasActiveJourney = journeyState.hasActiveFlight;
     final notifications = ref.watch(notificationNotifierProvider);
     final notifier = ref.read(notificationNotifierProvider.notifier);
 
@@ -32,7 +35,7 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
       sections.putIfAbsent(item.section, () => []).add(item);
     }
 
-    final hasUnread = notifications.any((n) => n.isUnread);
+    final hasUnread = hasActiveJourney && notifications.any((n) => n.isUnread);
 
     return CommonScreen(
       child: Column(
@@ -56,7 +59,9 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
                           borderRadius: BorderRadius.circular(12.r),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.blackShadow.withValues(alpha: 0.12),
+                              color: AppColors.blackShadow.withValues(
+                                alpha: 0.12,
+                              ),
                               blurRadius: 6,
                               offset: const Offset(0, 2),
                             ),
@@ -66,7 +71,8 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
                           child: Icon(
                             Icons.done_all_rounded,
                             size: 18.sp,
-                            color: Theme.of(context).brightness == Brightness.dark
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
                                 ? AppColors.white
                                 : AppColors.primaryColor,
                           ),
@@ -78,9 +84,11 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
           ),
           SizedBox(height: 12.h),
 
-          // Scrollable Notifications List
+          // Scrollable Notifications List or No Active Journey
           Expanded(
-            child: notifications.isEmpty
+            child: !hasActiveJourney
+                ? _buildNoActiveJourneyState(context)
+                : notifications.isEmpty
                 ? _buildEmptyState()
                 : SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -104,6 +112,45 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
                   ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildNoActiveJourneyState(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Title
+            Text(
+              "No active journey",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w700,
+                color: isDark ? AppColors.white : const Color(0xFF1E293B),
+              ),
+            ),
+            SizedBox(height: 8.h),
+
+            // Subtitle
+            Text(
+              "Ready for your next trip? Scan or load your boarding pass to receive real-time journey notifications and flight alerts.",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w400,
+                height: 1.5,
+                color: isDark
+                    ? const Color(0xFF94A3B8)
+                    : const Color(0xFF64748B),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
