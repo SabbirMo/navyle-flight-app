@@ -1,17 +1,34 @@
-# navyla_flight_app
+# Navyla Flight App (Phase 1)
 
-A new Flutter project.
+Navyla is a modern Flutter-based flight companion and airport navigation mobile application.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📖 Documentation & Setup
+For detailed setup instructions, required tool versions, and step-by-step APK build commands, please refer to:
+* **[Setup & Build Instructions](SETUP_AND_BUILD_INSTRUCTIONS.md)**
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## 🚀 Quick Start
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Prerequisites
+* **Flutter SDK:** `3.24.x` - `3.47.x` (Stable Channel)
+* **Dart SDK:** `3.13.x` or higher
+* **JDK:** OpenJDK 17
+* **Android SDK:** API 34+
+
+### Setup Commands
+```bash
+# 1. Fetch dependencies
+flutter pub get
+
+# 2. Run app in debug mode
+flutter run
+
+# 3. Generate production release APK
+flutter build apk --release
+```
+
+The generated APK will be located at:
+`build/app/outputs/flutter-apk/app-release.apk`
